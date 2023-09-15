@@ -1,1 +1,8 @@
-# ing_sw_TruthPaper
+# TruthPaper
+### Miembros:
+* Carlos Moragón Corella
+* Orianna Milone Salas
+* Paloma Pérez de Madrid
+* Ana Fraile
+* Eugenio Pablo
+* Olivia
