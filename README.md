@@ -3,6 +3,6 @@
 * Carlos Moragón Corella
 * Orianna Milone Salas
 * Paloma Pérez de Madrid
-* Ana Fraile
-* Eugenio Pablo
-* Olivia
+* Ana Fraile Caparrós
+* Eugenio Pablo Murillo Solanas
+* Olivia Morales Quezada
