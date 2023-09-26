@@ -1,4 +1,6 @@
 from flask import Flask
+import requests
+from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 
@@ -10,6 +12,11 @@ def hello_world():  # put application's code here
 
 if __name__ == '__main__':
     app.run()
+
+#Implementando el webScrapping de antena3noticias
+antena3 = requests.get("https://www.antena3.com/noticias/")
+antena3_structure = BeautifulSoup(antena3.text, 'lxml')
+
 
 
 # Users declarations
