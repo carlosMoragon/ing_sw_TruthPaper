@@ -10,14 +10,90 @@ def hello_world():  # put application's code here
     return 'Hello World!'
 
 
-if __name__ == '__main__':
-    app.run()
+#if __name__ == '__main__':
+    #app.run()
+
+#Estructura de una Noticia
+class Notice:
+    def __init__(self, title, image, summary, url, comments, date, qualification, owner):
+        self._title = title
+        self._image = image
+        self._summary = summary
+        self._url = url
+        self._comments = comments
+        self._date = date
+        self._qualification = qualification
+        self._owner = owner
+
+    def get_title(self):
+        return self._title
+
+    def set_title(self, title):
+        self._title = title
+
+    def get_image(self):
+        return self._image
+
+    def set_image(self, image):
+        self._image = image
+
+    def get_summary(self):
+        return self._summary
+
+    def set_summary(self, summary):
+        self._summary = summary
+
+    def get_url(self):
+        return self._url
+
+    def set_url(self, url):
+        self._url = url
+
+    def get_comments(self):
+        return self._comments
+
+    def set_comments(self, comments):
+        self._comments = comments
+
+    def get_date(self):
+        return self._date
+
+    def set_date(self, date):
+        self._date = date
+
+    def get_qualification(self):
+        return self._qualification
+
+    def set_qualification(self, qualification):
+        self._qualification = qualification
+
+    def get_owner(self):
+        return self._owner
+
+    def set_owner(self, owner):
+        self._owner = owner
+
+
 
 #Implementando el webScrapping de antena3noticias
-antena3 = requests.get("https://www.antena3.com/noticias/")
-antena3_structure = BeautifulSoup(antena3.text, 'lxml')
+def get_news():
+    antena3 = requests.get("https://www.antena3.com/noticias/")
+    antena3_structure = BeautifulSoup(antena3.text, 'lxml')
 
-print(len(antena3_structure.findAll("article")))
+    # Encontrar articulos
+    articles = antena3_structure.findAll('article')
+
+    #Link a la noticia
+    link_news = [article.find('a').get('href').strip() for article in articles]
+    titles = []
+    for article in articles:
+        a_tags = article.find_all('a')
+        a_texts = [a_tag.text for a_tag in a_tags]
+        titles.append(a_texts)
+    #print(link_news)
+    print(titles)
+
+get_news()
 
 # Users declarations
 class User:
