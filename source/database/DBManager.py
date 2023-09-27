@@ -1,24 +1,18 @@
-from flask import Flask, render_template, request, url_for, redirect, jsonify
-#from flask_mysqldb import MySQL
-from app import app
 from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
+db = SQLAlchemy()
 
-# MySQL Connection
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/base_datos'
-db = SQLAlchemy(app) 
-
-#app.config['MYSQL_HOST'] = ''
-#app.config['MYSQL_USER'] = 'root'
-#app.config['MYSQL_PASSWORD'] = ''
-#app.config['MYSQL_DB'] = 'base_datos'
-#connection = MySQL(app)
-
-
-#PENDIENTE: HACER EL TEST Y LA CONEXION
-#Flask_mysql manages the opening and closing connection (No need to generate a method, to close it)
-
-
+# def test_connection():
+#     try:
+#         with db.engine.connect() as connection:
+#             result = connection.execute("SELECT * from users")
+#             print(result)
+#             print("Conexión exitosa!")
+#     except Exception as e:
+#         print("La conexión falló!")
+#         print(str(e))
+    
+#db.session to execute querys
+#db.Model  to create classes
 
 
