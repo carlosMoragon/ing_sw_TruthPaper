@@ -17,7 +17,7 @@ if __name__ == '__main__':
 antena3 = requests.get("https://www.antena3.com/noticias/")
 antena3_structure = BeautifulSoup(antena3.text, 'lxml')
 
-
+print(len(antena3_structure.findAll("article")))
 
 # Users declarations
 class User:
