@@ -10,11 +10,35 @@ def hello_world():  # put application's code here
     return 'Hello World!'
 
 
-#if __name__ == '__main__':
-    #app.run()
+# Implementando el webScrapping de antena3noticias
+def get_news():
+    antena3 = requests.get("https://www.antena3.com/noticias/")
+    antena3_structure = BeautifulSoup(antena3.text, 'lxml')
 
-#Estructura de una Noticia
-class Notice:
+    # Encontrar articulos
+    articles = antena3_structure.findAll('article')
+
+    # Link a la noticia
+    link_news = [article.find('a').get('href').strip() for article in articles]
+    titles = []
+    for article in articles:
+        a_tags = article.find_all('a')
+        a_texts = [a_tag.text for a_tag in a_tags]
+        titles.append(a_texts)
+
+    url_imgs = [article.find('img').get('src') for article in articles]
+    print(url_imgs)
+    print(link_news)
+    print(titles)
+
+
+if __name__ == '__main__':
+    get_news()
+    # app.run()
+
+
+# Estructura de una Noticia
+class News:
     def __init__(self, title, image, summary, url, comments, date, qualification, owner):
         self._title = title
         self._image = image
@@ -74,26 +98,20 @@ class Notice:
         self._owner = owner
 
 
+# Estructura de un comentario de una publicación
+class Comment:
+    def __int__(self, owner, text, date):
+        self._owner = owner
+        self._text = text
+        self._date = date
 
-#Implementando el webScrapping de antena3noticias
-def get_news():
-    antena3 = requests.get("https://www.antena3.com/noticias/")
-    antena3_structure = BeautifulSoup(antena3.text, 'lxml')
+    def __init__(self, owner, text, date, imgs):
+        self._owner = owner
+        self._text = text
+        self._date = date
+        # Lista de imgs
+        self._imgs = imgs
 
-    # Encontrar articulos
-    articles = antena3_structure.findAll('article')
-
-    #Link a la noticia
-    link_news = [article.find('a').get('href').strip() for article in articles]
-    titles = []
-    for article in articles:
-        a_tags = article.find_all('a')
-        a_texts = [a_tag.text for a_tag in a_tags]
-        titles.append(a_texts)
-    #print(link_news)
-    print(titles)
-
-get_news()
 
 # Users declarations
 class User:
