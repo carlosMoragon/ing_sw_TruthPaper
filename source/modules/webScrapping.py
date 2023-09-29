@@ -1,8 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
 
+
 # Implementando el webScrapping de antena3noticias
-def get_news():
+def get_antena3news():
     antena3 = requests.get("https://www.antena3.com/noticias/")
     antena3_structure = BeautifulSoup(antena3.text, 'lxml')
 

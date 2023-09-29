@@ -1,13 +1,15 @@
 import re
 # Declaración de clases
 
+
 def validate_date(date: str) -> bool:
     # yyyy-mm-dd
     return bool(re.match(r"^\d{4}-\d{2}-\d{2}$", date))
 
+
 # Estructura de una Noticia
 class News:
-    def __init__(self, title, image, summary, url, comments, date, qualification, owner):
+    def __init__(self, title, image, summary, url, comments, date, qualification: int, owner):
         self._title = title
         self._image = image
         self._summary = summary
@@ -97,7 +99,7 @@ class Comment:
         return self._text
 
     def set_date(self, date: str):
-        if self._validate_date(date):
+        if validate_date(date):
             self._date = date
         else:
             print("The date hasn't been set")
@@ -113,8 +115,6 @@ class Comment:
 
     def add_img(self, img: str):
         self._imgs.append(img)
-
-
 
     # owner: str, text: str, date: str, imgs:
     def __str__(self) -> str:
@@ -161,6 +161,7 @@ class User:
         return self._phone_number
 
     # username: str, password: str, email: str, profile_name: str, phone_number: str
+
     def __str__(self) -> str:
         return f"username: {self._username}, password: {self._password}, email: {self._email}, profile_name: {self._profile_name}, phone_number: {self._phone_number}"
 
