@@ -216,4 +216,4 @@ class CompanyUser(User):
         return self._company
 
     def __str__(self) -> str:
-        return f"username: {self._username}, password: {self._password}, email: {self._email}, profile_name: {self._profile_name}, phone_number: {self._phone_number}, company{self._company}"
+        return f"username: {self._username}, password: {self._password}, email: {self._email}, profile_name: {self._profile_name}, phone_number: {self._phone_number}, company: {self._company}"
