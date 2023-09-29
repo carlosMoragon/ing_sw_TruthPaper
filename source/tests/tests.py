@@ -5,8 +5,8 @@ from modules import classes as cl, webScrapping
 class TestClasses(unittest.TestCase):
     def test_news_good(self):
         self.assertEqual(
-            cl.News("titulo", "imagen", "resumen", "url", ["que guay", "hola", "que tal"], "2023-12-01", 4, "CEU").__str__()
-            , "title: titulo, image: imagen, summary: resumen, url: url, comments: ['que guay', 'hola', 'que tal'], date: 2023-12-01, qualification: 4, owner: CEU")
+            cl.News("titulo", "imagen", "resumen", "url", "2023-12-01", "CEU").__str__()
+            , "title: titulo, image: imagen, summary: resumen, url: url, comments: [], date: 2023-12-01, qualification: 0, owner: CEU")
 
     def test_news_bad(self):
         self.assertNotEqual(None, None)
