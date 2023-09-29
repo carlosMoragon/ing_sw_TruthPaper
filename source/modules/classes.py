@@ -73,11 +73,6 @@ class News:
 
 # Estructura de un comentario de una publicación
 class Comment:
-    def __int__(self, owner: str, text: str, date: str):
-        self._owner = owner
-        self._text = text
-        self._date = date
-        self._imgs = []
 
     def __init__(self, owner: str, text: str, date: str, imgs: []):
         self._owner = owner
