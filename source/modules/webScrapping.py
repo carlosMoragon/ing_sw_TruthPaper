@@ -6,6 +6,16 @@ from typing import List
 from datetime import datetime
 
 
+def build_new(titles, urls, imgs, owner: str) -> List[cl.News]:
+    news = []
+    for i in range(len(titles)):
+        news.append(cl.News(titles[i][1], imgs[i], "", urls[i], datetime.now().strftime(f"%Y-%m-%d"), owner))
+
+    print(news)
+
+    return news
+
+
 # Implementando el webScrapping de antena3noticias
 def get_antena3news() -> List[cl.News]:
     # new = cl.News(title, image, summary, url, date, owner)
@@ -13,7 +23,7 @@ def get_antena3news() -> List[cl.News]:
     antena3_structure = BeautifulSoup(antena3.text, 'lxml')
 
     # Encontrar articulos
-    articles = antena3_structure.findAll('article')
+    articles = antena3_structure.find_all('article')
 
     # Link a la noticia
     link_news = [article.find('a').get('href').strip() for article in articles]
@@ -30,18 +40,28 @@ def get_antena3news() -> List[cl.News]:
     # print(link_news)
     # print(titles)
 
-    news = []
-    for i in range(len(titles)):
-        news.append(cl.News(titles[i][1], url_imgs[i], "", link_news[i], datetime.now().strftime(f"%Y-%m-%d"), "Antena 3 Noticias").__str__())
-    # cl.News(titles, url_imgs, "", link_news, datetime.now().strftime(f"%Y-%m-%d"), "Antena 3 Noticias")
-    print(news)
-    return news
+    return build_new(titles=titles, urls=link_news, imgs=url_imgs, owner='antena3noticias')
 
 
-get_antena3news()
-
-
-def get_lasextanews():
+def get_lasextanews() -> List[cl.News]:
 
     lasexta = requests.get("https://www.lasexta.com/noticias/")
     lasexta_structure = BeautifulSoup(lasexta.text, 'lxml')
+
+    articles = lasexta_structure.find_all('article')
+    link_news = [article.find('a').get('href').strip() for article in articles]
+    url_imgs = [article.find('img').get('src') for article in articles]
+
+    titles = []
+    for article in articles:
+        h2_tags = article.find_all('h2', class_='titular t3')
+        h2_texts = [h2_tag.text for h2_tag in h2_tags]
+        titles.append(h2_texts)
+
+    print(titles)
+
+    return build_new(titles=titles, urls=link_news, imgs=url_imgs, owner='LaSexta')
+
+
+# get_antena3news():
+# get_lasextanews()
