@@ -1,9 +1,10 @@
 import classes as cl
+# from modules import classes as cl
 from typing import List
 import re
 import requests
 
-# from modules import classes as cl
+import web_scrapping as ws
 
 
 def filter_by_words(search: str, news: List[cl.News]) -> List[cl.News]:
@@ -17,7 +18,8 @@ def filter_by_words(search: str, news: List[cl.News]) -> List[cl.News]:
 def _search_title(word: str, news: List[cl.News]) -> List[cl.News]:
     matches = []
     for new in news:
-        if re.match(word, new.get_title()):
+        # Puede que new.get_title() este devolviendo una List[str]
+        if re.match(r'{}'.format(word), new.get_title()):
             matches.append(new)
 
     return matches
@@ -26,7 +28,16 @@ def _search_title(word: str, news: List[cl.News]) -> List[cl.News]:
 def _search_content(word: str, news: List[cl.News]) -> List[cl.News]:
     matches = []
     for new in news:
-        if re.match(word, requests.get(new.get_url()).text):
+        if re.match(r'{}'.format(word), requests.get(new.get_url()).text.strip()):
             matches.append(new)
 
     return matches
+
+
+lista = filter_by_words("a", ws.get_lasextanews() + ws.get_antena3news())
+if lista:
+    print("Lista no vacia\n")
+    print(lista)
+else:
+    print("lista vacia")
+
