@@ -1,5 +1,5 @@
 import unittest
-from modules import classes as cl, webScrapping
+from modules import classes as cl, web_scrapping
 
 
 class TestClasses(unittest.TestCase):
