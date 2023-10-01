@@ -20,7 +20,7 @@ def _search_title(word: str, news: List[cl.News]) -> List[cl.News]:
     matches = []
     for new in news:
         # Puede que new.get_title() este devolviendo una List[str]
-        if re.match(r'{}'.format(word), new.get_title()):
+        if re.search(word, str(new.get_title())):
             matches.append(new)
 
     return matches
@@ -29,7 +29,7 @@ def _search_title(word: str, news: List[cl.News]) -> List[cl.News]:
 def _search_content(word: str, news: List[cl.News]) -> List[cl.News]:
     matches = []
     for new in news:
-        if re.match(r'{}'.format(word), requests.get(new.get_url()).text.strip()):
+        if re.search(word, requests.get(new.get_url()).text.strip()):
             matches.append(new)
 
     return matches
