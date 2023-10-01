@@ -9,7 +9,7 @@ from datetime import datetime
 def build_news(titles, urls, imgs, owner: str) -> List[cl.News]:
     # print(f"titles.len: {len(titles)}, urls.len: {len(urls)}, imgs.len: {len(imgs)}\n")
     news = []
-    for i in range(len(titles)):
+    for i in range(len(imgs)):
         # print(f"{titles[i]}\n")
         news.append(cl.News(titles[i], imgs[i], "", urls[i], datetime.now().strftime(f"%Y-%m-%d"), owner))
 
@@ -32,8 +32,16 @@ def get_antena3news() -> List[cl.News]:
         a_texts = [a_tag.text for a_tag in a_tags[len(a_tags)-1]]
         titles.append(a_texts)
 
-    url_imgs = [article.find('img').get('src') for article in articles]
-    # [title[1] for title in titles]
+    # url_imgs = [article.find('img').get('src') for article in articles]
+    url_imgs = []
+
+    for article in articles:
+        img_tag = article.find('img')
+        if img_tag is not None:
+            src = img_tag.get('src')
+            if src is not None:
+                url_imgs.append(src)
+
     return build_news(titles=titles, urls=link_news, imgs=url_imgs, owner='antena3noticias')
 
 
