@@ -67,20 +67,17 @@
             <nav class="navbar navbar-expand-sm bg-dark p-0">
                 <ul class="navbar-nav ml-n2">
                     <li class="nav-item border-right border-secondary">
-                        <a class="nav-link text-body small" href="#"> <!-- {{current_date}}--> Current Date</a>
+                        <a class="nav-link text-body small" href="#"><span id="currentDate"></span></a>
                     </li>
                     
                     <li class="nav-item border-right border-secondary">
                         <a class="nav-link text-body small" href="#">Contacto</a> <!-- LINK!!!-->
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-body small" href="#">Login</a> <!-- LINK!!!-->
+                        <a class="nav-link text-body small" href="login.html">Login</a> <!-- LINK!!!-->
                     </li>
                 </ul>
             </nav>
-        </div>
-        <div class="col-lg-3 text-right d-none d-md-block">
-            <!-- We can put something in the upper right part of the black bar at the top of the screen -->>
         </div>
     </div>
 
@@ -119,6 +116,13 @@
             <input type="text" id="companyBox_name">  
         </div>
 
+        <label for="journalist_box"> ¿Eres un periodista? </label>
+        <input type="checkbox" id="journalist_box" name="journalist_box">
+        <div id="journalistBox_input" style="display: none;">
+            <!--Upload journalist credential -->
+            <label for="journalist_file"> Suba su credencial de periodista: </label>  
+            <input type="file" id="journalist_file" name="journalist_file"> 
+        </div>
 
         <input type="submit" value="Registrarse">
     </form>
@@ -126,5 +130,5 @@
     <p>¿Ya tienes una cuenta? <a href="login.html">Inicia Sesión</a></p>
 </div>
 
-
+<script src="../static/js/date.js"></script>
 </body>
