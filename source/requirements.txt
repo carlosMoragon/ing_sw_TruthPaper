@@ -1,4 +1,6 @@
 lxml
-request
 beautifulsoup4
+requests
 
+flask
+flask_sqlalchemy
