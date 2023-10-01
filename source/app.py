@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from modules import web_scrapping as ws
+from modules import web_scrapping as ws, filter as f
 
 app = Flask(__name__)
 
@@ -11,8 +11,9 @@ def hello_world():  # put application's code here
 
 @app.route('/pruebaArticulos')
 def prueba_articulos():
-    news = ws.get_lasextanews()
-    news = news + ws.get_antena3news()
+    news = ws.get_lasextanews() + ws.get_antena3news()
+    # all_news = ws.get_lasextanews() + ws.get_antena3news()
+    # news = f.filter_by_words("pedro",all_news)
     data = {
         'imgs' : [new.get_image() for new in news],
         'titles' : [new.get_title() for new in news],
