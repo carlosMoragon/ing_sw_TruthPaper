@@ -1,7 +1,4 @@
 lxml
+request
 beautifulsoup4
-<<<<<<< HEAD
-requests
-=======
-requests
->>>>>>> carlos
+
