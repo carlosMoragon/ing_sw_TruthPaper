@@ -42,6 +42,8 @@ def get_antena3news() -> List[cl.News]:
             src = img_tag.get('src')
             if src is not None:
                 url_imgs.append(src)
+        else:
+            url_imgs.append("./static/img/nohayfoto.avif")
 
     return build_news(titles=titles, urls=link_news, imgs=url_imgs, owner='antena3noticias')
 
