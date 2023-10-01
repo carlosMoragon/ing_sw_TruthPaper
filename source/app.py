@@ -4,8 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 from database import DBManager as manager
 
 app = Flask(__name__)
-db = manager.db
-db.init_app(app)
 
 @app.route('/')
 def hello_world():  # put application's code here
@@ -40,12 +38,12 @@ def save_data():
 @app.route('/bd')
 def basicConnection():
     try:
-            with app.connect() as connection:
-                result = users.User.query.all()
+        with db.session.begin():
+            result = users.User.query.all()
             print(result)
-            return "Conexión exitosa!"
+            print('Conexión exitosa!')
+        return "Conexión exitosa!"
     except Exception as e:
-        print("La conexión falló!")
         print(str(e))
         return "La conexión falló!"
 
@@ -53,7 +51,8 @@ def basicConnection():
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1234@localhost:3307/truthpaperprueba'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+db = manager.db
+db.init_app(app)
+
 if __name__ == '__main__':
     app.run(debug=True)
-
-#set(var_conj)
