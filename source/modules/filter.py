@@ -1,10 +1,10 @@
-import classes as cl
-# from modules import classes as cl
+# import classes as cl
+from modules import classes as cl, web_scrapping as ws
 from typing import List
 import re
 import requests
 
-import web_scrapping as ws
+# import web_scrapping as ws
 
 
 def filter_by_words(search: str, news: List[cl.News]) -> List[cl.News]:

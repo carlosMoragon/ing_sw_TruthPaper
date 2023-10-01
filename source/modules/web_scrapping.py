@@ -1,8 +1,8 @@
 import requests
 #  pip install beautifulsoup4
 from bs4 import BeautifulSoup
-# from modules import classes as cl
-import classes as cl
+from modules import classes as cl
+# import classes as cl
 from typing import List
 from datetime import datetime
 
