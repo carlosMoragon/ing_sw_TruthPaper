@@ -1,7 +1,6 @@
 lxml
 beautifulsoup4
-<<<<<<< HEAD
 requests
-=======
-requests
->>>>>>> carlos
+
+flask
+flask_sqlalchemy
