@@ -33,6 +33,7 @@ def register_funct():
     return render_template('register.html')
 
 
+
 # @app.route('/pruebaArticulos')
 # def prueba_articulos():
 
@@ -56,8 +57,8 @@ for etiq in ws.get_lasextanews():
 @app.route('/save_commonuser', methods=['POST'])
 def save_CU():
     #hashed_password = generate_password_hash(request.form['password'], method='sha256')
-    new_user = users.Commonuser(request.form['username'], request.form['password'], request.form['email'], request.form['name'], request.form['lastname'])
-    new_G_user = users.user(request.form['username'], request.form['password'], request.form['email'])
+    new_user = users.Commonuser(request.form['username'], request.form['password'], request.form['email'], request.form['c_user_name'], request.form['c_user_lastname'])
+    new_G_user = users.User(request.form['username'], request.form['password'], request.form['email'])
     db.session.add(new_G_user) 
     db.session.add(new_user)
     db.session.commit()
@@ -65,8 +66,8 @@ def save_CU():
     return "Saving a common user"
 
 
-# @app.route('/save_journalist', methods=['POST'])
-# def save_J():
+#@app.route('/save_journalist', methods=['POST'])
+#def save_J():
 #     hashed_password = generate_password_hash(request.form['password'], method='sha256')
 #     certification = 'certification' in request.form
 #     new_user = users.journalist(request.form['username'], hashed_password, request.form['email'], request.form['name'], request.form['lastname'], certification)
@@ -77,17 +78,17 @@ def save_CU():
     
 #     return "Saving a journalist"
 
-# @app.route('/save_companyuser', methods=['POST'])
-# def save_CMPU():
-#     hashed_password = generate_password_hash(request.form['password'], method='sha256')
-#     certification = 'certification' in request.form
-#     new_user = users.companyuser(request.form['username'], hashed_password, request.form['email'], request.form['company_name'], request.form['NIF'], certification)
-#     new_G_user = users.user(request.form['username'], hashed_password, request.form['email'])
-#     db.session.add(new_G_user) 
-#     db.session.add(new_user) 
-#     db.session.commit()
+@app.route('/save_companyuser', methods=['POST'])
+def save_CMPU():
+#   hashed_password = generate_password_hash(request.form['password'], method='sha256')
+#   certification = 'certification' in request.form
+    new_user = users.Companyuser(request.form['username'], request.form['password'], request.form['email'], request.form['company_name'], request.form['company_nif'])
+    new_G_user = users.User(request.form['username'], request.form['password'], request.form['email'])
+    db.session.add(new_G_user) 
+    db.session.add(new_user) 
+    db.session.commit()
     
-#     return "Saving a company user"
+    return "Saving a company user"
 
 #MySQL Connection
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1234@localhost:3307/truthpaper'

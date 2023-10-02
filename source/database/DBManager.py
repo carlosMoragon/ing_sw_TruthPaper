@@ -8,25 +8,12 @@ def login(username, password) -> bool:
     if user_db:
         #if generate_password_hash(user_db.password, password):
         if (user_db.password, password):
-            return 'Yeii'
+            return 'Redireccionar al Login'
         else:
-            return 'Nope'
+            return 'Contraseña incorrecta'
     else:
         return 'No estas registrado'
  
 
 
 
-
-#Chequear la conexión a la base de datos
-# @app.route('/bd')
-# def basicConnection():
-#     try:
-#         with db.session.begin():
-#             result = users.User.query.all()
-#             print(result)
-#             print('Conexión exitosa!')
-#         return "Conexión exitosa!"
-#     except Exception as e:
-#         print(str(e))
-#         return "La conexión falló!"
