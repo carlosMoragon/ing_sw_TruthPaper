@@ -1,4 +1,4 @@
-v<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -9,7 +9,7 @@ v<!DOCTYPE html>
     <meta content="Free HTML Templates" name="description">
 
     <!-- Icon -->
-    <link href="img/favicon.ico" rel="icon">
+    <link href="../static/img/favicon.ico" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -19,10 +19,22 @@ v<!DOCTYPE html>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="../static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
     <!-- Bootstrap Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
+    <link href="../static/css/style.css" rel="stylesheet">
+
+    <!--Other Bootstrap Libraries for the dropdown menu-->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> 
+
+    <!-- Date and Main Scripts-->
+    <script src="../static/js/date.js"></script>
+    <script src="../static/js/main.js"></script>
+
+
+
 </head>
 
 <body>
@@ -33,14 +45,14 @@ v<!DOCTYPE html>
             <nav class="navbar navbar-expand-sm bg-dark p-0">
                 <ul class="navbar-nav ml-n2">
                     <li class="nav-item border-right border-secondary">
-                        <a class="nav-link text-body small" href="#">(Poner fecha actual)</a>
+                        <a class="nav-link text-body small"> <span id="currentDate"></span></a>
                     </li>
                     
                     <li class="nav-item border-right border-secondary">
                         <a class="nav-link text-body small" href="#">Contacto</a> <!-- LINK!!!-->
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-body small" href="#">Login</a> <!-- LINK!!!-->
+                        <a class="nav-link text-body small" href="login.html">Login</a> 
                     </li>
                 </ul>
             </nav>
@@ -79,10 +91,18 @@ v<!DOCTYPE html>
         <div class="collapse navbar-collapse justify-content-between px-0 px-lg-3" id="navbarCollapse">
             <div class="navbar-nav mr-auto py-0">
                 <a href="index.html" class="nav-item nav-link active">Inicio</a>
-                <a href="category.html" class="nav-item nav-link">Categorias</a>
-                <a href="savedNews.html" class="nav-item nav-link">Noticias Guardadas</a>
-                <a href="contact.html" class="nav-item nav-link">Contacto</a>
+                <a href="category.html" class="nav-item nav-link">Noticias Guardadas</a>
+                <!--Add more items on the menu-->
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Categorias</a>
+                    <div class="dropdown-menu rounded-0 m-0">
+                        <a href="#" class="dropdown-item">Economía</a>
+                        <a href="#" class="dropdown-item">Tecnología</a>
+                        <a href="#" class="dropdown-item">Salud</a>
+                    </div>
+                </div>
             </div>
+
 
             <!-- search by keywords -->
             <div class="input-group ml-auto d-none d-lg-flex" style="max-width: 300px;">
@@ -91,23 +111,29 @@ v<!DOCTYPE html>
                     <button class="input-group-text bg-primary text-dark border-0 px-3"><i class="fa fa-search"></i></button>
                 </div>
             </div>
+
+            <!-- Icon to enter in login-->
+            <div class="login-icon">
+                    <a href="login.html" class="nav-item nav-link">
+                        <i class="fas fa-user"></i> 
+                    </a>
+            
+            </div>
         </div>
     </nav>
 </div>
 <!-- Navbar End -->
 
-
-
-    <!-- Main News Slider Start -->
-    <div class="container-fluid">
+<!-- Main News Slider Start -->
+    <!--<div class="container-fluid-recommendedNews"> -->
+    <div class="container-fluid" style="width: 90%;">
         <div class="row">
             <div class="col-lg-7 px-0">
-               <!-- Here would go some slides of important news that I still have to see how to program-->
+               <!-- Trending topic or breaking news,...-->
                 <div class="owl-carousel main-carousel position-relative">
                     <!-- Slide 1-->
-                    <!--
                     <div class="position-relative overflow-hidden" style="height: 500px;">
-                        <img class="img-fluid h-100" src="img/news-800x500-1.jpg" style="object-fit: cover;">
+                        <img class="img-fluid h-100" src="../static/img/news-800x500-1.jpg" style="object-fit: cover;">
                         <div class="overlay">
                             <div class="mb-2">
                                 <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
@@ -117,18 +143,17 @@ v<!DOCTYPE html>
                             <a class="h2 m-0 text-white text-uppercase font-weight-bold" href="">Lorem ipsum dolor sit amet elit. Proin vitae porta diam...</a>
                         </div>
                     </div>
-                    -->
+                    <!-- End Slide 1-->
                     
                 </div>
 
             </div>
             <div class="col-lg-5 px-0">
                 <div class="row mx-0">
-                    <!-- Mini Slides-->
                     <div class="col-md-6 px-0">
                         <!-- Mini Slide 1-->
                         <div class="position-relative overflow-hidden" style="height: 250px;">
-                            <img class="img-fluid w-100 h-100" src="img/news-700x435-1.jpg" style="object-fit: cover;">
+                            <img class="img-fluid w-100 h-100" src="../static/img/news-700x435-1.jpg" style="object-fit: cover;">
                             <div class="overlay">
                                 <div class="mb-2">
                                     <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
@@ -142,7 +167,7 @@ v<!DOCTYPE html>
                     <div class="col-md-6 px-0">
                         <!--Mini slide 2-->
                         <div class="position-relative overflow-hidden" style="height: 250px;">
-                            <img class="img-fluid w-100 h-100" src="img/news-700x435-2.jpg" style="object-fit: cover;">
+                            <img class="img-fluid w-100 h-100" src="../static/img/news-700x435-2.jpg" style="object-fit: cover;">
                             <div class="overlay">
                                 <div class="mb-2">
                                     <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
@@ -156,7 +181,7 @@ v<!DOCTYPE html>
                     <div class="col-md-6 px-0">
                         <!-- Mini slide 3-->
                         <div class="position-relative overflow-hidden" style="height: 250px;">
-                            <img class="img-fluid w-100 h-100" src="img/news-700x435-3.jpg" style="object-fit: cover;">
+                            <img class="img-fluid w-100 h-100" src="../static/img/news-700x435-3.jpg" style="object-fit: cover;">
                             <div class="overlay">
                                 <div class="mb-2">
                                     <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
@@ -170,7 +195,7 @@ v<!DOCTYPE html>
                     <div class="col-md-6 px-0">
                         <!-- Mini slide 4-->
                         <div class="position-relative overflow-hidden" style="height: 250px;">
-                            <img class="img-fluid w-100 h-100" src="img/news-700x435-4.jpg" style="object-fit: cover;">
+                            <img class="img-fluid w-100 h-100" src="../static/img/news-700x435-4.jpg" style="object-fit: cover;">
                             <div class="overlay">
                                 <div class="mb-2">
                                     <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
@@ -186,77 +211,48 @@ v<!DOCTYPE html>
         </div>
     </div>
     <!-- Main News Slider End -->
-<br>
-<!-- News With Sidebar Start -->
-<div class="container-fluid">
-    <div class="container">
-        <div class="row">
-            <!-- Tranding News Start -->
-            <div class="col-md-8">
-                <div class="mb-3">
-                    <div class="section-title mb-0">
-                        <h4 class="m-0 text-uppercase font-weight-bold">Noticias recomendadas</h4>
-                    </div>
-                    <div class="bg-white border border-top-0 p-3">
-                        <!-- Trending News Items -->
-                        <!-- Item 1 -->
-                        <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
-                            <img class="img-fluid" src="img/news-110x110-1.jpg" alt="">
-                            <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
-                                <div class="mb-2">
-                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
-                                    <a class="text-body" href=""><small>Jan 01, 2045</small></a>
-                                </div>
-                                <a class="h6 m-0 text-secondary text-uppercase font-weight-bold" href="">Lorem ipsum dolor sit amet elit...</a>
-                            </div>
+    <br>
+    <!-- News With Sidebar Start -->
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row">
+                <!-- Tranding News Start -->
+                <div class="col-md-8">
+                    <div class="mb-3">
+                        <div class="section-title mb-0">
+                            <h4 class="m-0 text-uppercase font-weight-bold">Noticias recomendadas</h4>
                         </div>
-                        <!-- Item 2 --><div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
-                            <img class="img-fluid" src="img/news-110x110-1.jpg" alt="">
-                            <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
-                                <div class="mb-2">
-                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
-                                    <a class="text-body" href=""><small>Jan 01, 2045</small></a>
+                        <div class="bg-white border border-top-0 p-3">
+                            <!-- Trending News Items -->
+                            <!-- Item 1 -->
+                            <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
+                                <img class="img-fluid" src="../static/img/news-110x110-1.jpg" alt="">
+                                <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
+                                    <div class="mb-2">
+                                        <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
+                                        <a class="text-body" href=""><small>Jan 01, 2045</small></a>
+                                    </div>
+                                    <a class="h6 m-0 text-secondary text-uppercase font-weight-bold" href="">Lorem ipsum dolor sit amet elit...</a>
                                 </div>
-                                <a class="h6 m-0 text-secondary text-uppercase font-weight-bold" href="">Lorem ipsum dolor sit amet elit...</a>
                             </div>
-                        </div>
-                        <!--Item 3-->
-                        <!-- Add more trending news items here as needed -->
-                    </div>
-                </div>
-            </div>
-            <!-- Tranding News End -->
-
-            <!-- Tags Start -->
-            <div class="col-md-4">
-                <div class="mb-3">
-                    <div class="section-title mb-0">
-                        <h4 class="m-0 text-uppercase font-weight-bold">Tags</h4>
-                    </div>
-                    <div class="bg-white border border-top-0 p-3">
-                        <div class="d-flex flex-wrap m-n1">
-                            <a href="" class="btn btn-sm btn-outline-secondary m-1">Política</a>
-                            <a href="" class="btn btn-sm btn-outline-secondary m-1">Economía</a>
-                            <a href="" class="btn btn-sm btn-outline-secondary m-1">Negocios</a>
-                            <a href="" class="btn btn-sm btn-outline-secondary m-1">Salud</a>
-                            <a href="" class="btn btn-sm btn-outline-secondary m-1">Educación</a>
-                            <a href="" class="btn btn-sm btn-outline-secondary m-1">Ciencia</a>
-                            <a href="" class="btn btn-sm btn-outline-secondary m-1">Deportes</a>
-                            <a href="" class="btn btn-sm btn-outline-secondary m-1">Comida</a>
-                            <a href="" class="btn btn-sm btn-outline-secondary m-1"> Cultura</a>
-                            <a href="" class="btn btn-sm btn-outline-secondary m-1"> Viajes </a>
+                            <!-- Item 2 --><div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
+                                <img class="img-fluid" src="../static/img/news-110x110-1.jpg" alt="">
+                                <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
+                                    <div class="mb-2">
+                                        <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
+                                        <a class="text-body" href=""><small>Jan 01, 2045</small></a>
+                                    </div>
+                                    <a class="h6 m-0 text-secondary text-uppercase font-weight-bold" href="">Lorem ipsum dolor sit amet elit...</a>
+                                </div>
+                            </div>
+                            <!--Item 3-->
+                            <!-- Add more trending news items here as needed -->
                         </div>
                     </div>
                 </div>
+                <!-- Tranding News End -->
             </div>
-            <!-- Tags End -->s
         </div>
     </div>
-</div>
 <!-- News With Sidebar End -->
-
-
-
-
-
 </body>
