@@ -10,6 +10,13 @@ app = Flask(__name__)
 def hello_world():  # put application's code here
      return 'Hello World!'
 
+
+@app.route('/login')
+def login():
+    manager.login(request.form['username'], request.form['password'])
+    return render_template('login.html')    
+    
+
 @app.route('/pruebaArticulos')
 def prueba_articulos():
     # news = ws.get_lasextanews() + ws.get_antena3news()
