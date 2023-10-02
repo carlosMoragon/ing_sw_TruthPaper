@@ -9,41 +9,54 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    # news = f.filter_by_words("muerto", ws.get_lasextanews() + ws.get_antena3news())
     news = ws.get_lasextanews() + ws.get_antena3news()
     data = {
         'imgs' : [new.get_image() for new in news],
         'titles' : [str(new.get_title()) for new in news],
-        'urls' : [new.get_url() for new in news]
+        'urls' : [new.get_url() for new in news],
+        'dates': [new.get_date() for new in news]
     }
 
     return render_template('indexFunc.html', data=data)
 
 
-@app.route('/login_users', methods=['POST'])
-def login_users():  
-    return manager.login(request.form['username'], request.form['password'])
+#@app.route('/login.html')
+#def start():
+#return render_template('login.html')
+#
+
+#@app.route('/login_users', methods=['POST'])
+#def login_users():
+#return manager.login(request.form['username'], request.form['password'])
+#
+@app.route('/save_keyword', methods=['post'])
+def save_keyword():
+    keyword = request.form['search']
+    news = f.filter_by_words(keyword, ws.get_lasextanews() + ws.get_antena3news())
+    data = {
+        'imgs' : [new.get_image() for new in news],
+        'titles' : [new.get_title() for new in news],
+        'urls' : [new.get_url() for new in news],
+        'keyword': keyword,
+        'dates': [new.get_date() for new in news]
+    }
+    return render_template('categoriasFunc.html', data=data)
+
+@app.route('/pruebaArticulos')
+def prueba_articulos():
+
+    news = ws.get_lasextanews() + ws.get_antena3news()
+    data = {
+        'imgs' : [new.get_image() for new in news],
+        'titles' : [new.get_title() for new in news],
+        'urls' : [new.get_url() for new in news]
+    }
     
-@app.route('/login.html')
-def start():  
-    return render_template('login.html')
-
-@app.route('/register.html')
-def register_funct():  
-    return render_template('register.html')
-
-
-
-# @app.route('/pruebaArticulos')
-# def prueba_articulos():
-
-#     #news = f.filter_by_words("muerto", ws.get_lasextanews() + ws.get_antena3news())
-#     news = ws.get_lasextanews() + ws.get_antena3news()
-#     data = {
-#         'imgs' : [new.get_image() for new in news],
-#         'titles' : [new.get_title() for new in news],
-#         'urls' : [new.get_url() for new in news]
-#     }
+    
+#@app.route('/register.html')
+#def register_funct():
+#return render_template('register.html')
+#
 
 #     return render_template('pruebaArticulosFunc.html', data=data)
 
