@@ -5,9 +5,7 @@ from typing import List
 
 def validate_date(date: str) -> bool:
     # yyyy-mm-dd
-    return bool(re.match(r"^\d{4}-\d{2}-\d{2}$", date))
-
-
+    return bool(re.match(r'^\d{4}-\d{2}-\d{2}$', date))
 
 
 # Estructura de un comentario de una publicación
@@ -20,7 +18,7 @@ class Comment:
         # Lista de imgs
         self._imgs = imgs
 
-    def get_owner(self):
+    def get_owner(self) -> str:
         return self._owner
 
     def set_owner(self, owner: str):
@@ -29,7 +27,7 @@ class Comment:
     def set_text(self, text: str):
         self._text = text
 
-    def get_text(self):
+    def get_text(self) -> str:
         return self._text
 
     def set_date(self, date: str):
@@ -38,13 +36,13 @@ class Comment:
         else:
             print("The date hasn't been set")
 
-    def get_date(self):
+    def get_date(self) -> str:
         return self._date
 
     def set_imgs(self, imgs: []):
         self._imgs = imgs
 
-    def get_imgs(self):
+    def get_imgs(self) -> str:
         return self._imgs
 
     def add_img(self, img: str):
@@ -67,31 +65,31 @@ class User:
     def set_username(self, username: str):
         self._username = username
 
-    def get_username(self):
+    def get_username(self) -> str:
         return self._username
 
     def set_password(self, password: str):
         self._password = password
 
-    def get_password(self):
+    def get_password(self) -> str:
         return self._password
 
     def set_email(self, email: str):
         self._email = email
 
-    def get_email(self):
+    def get_email(self) -> str:
         return self._email
 
     def set_profile_name(self, profile_name):
         self._profile_name = profile_name
 
-    def get_profile_name(self):
+    def get_profile_name(self) -> str:
         return self._profile_name
 
     def set_phone_number(self, phone_number):
         self._phone_number = phone_number
 
-    def get_phone_number(self):
+    def get_phone_number(self) -> str:
         return self._phone_number
 
     # username: str, password: str, email: str, profile_name: str, phone_number: str
@@ -101,7 +99,7 @@ class User:
 
 
 class CommonUser(User):
-    def __init__(self, username: str, password: str, email: str, profile_name: str, phone_number: str, interest_themes: [], iscertificate: bool):
+    def __init__(self, username: str, password: str, email: str, profile_name: str, phone_number: str, interest_themes: List[str], iscertificate: bool):
         super().__init__(username, password, email, profile_name, phone_number)
         self._interest_themes = interest_themes
         self._iscertificate = iscertificate
@@ -109,13 +107,13 @@ class CommonUser(User):
     def set_interest_themes(self, interest_themes):
         self._interest_themes = interest_themes
 
-    def get_interest_themes(self):
+    def get_interest_themes(self) -> List[str]:
         return self._interest_themes
 
     def set_certificate(self, iscertificate):
         self._iscertificate = iscertificate
 
-    def get_iscertificate(self):
+    def get_iscertificate(self) -> bool:
         return self._iscertificate
 
     def __str__(self) -> str:
@@ -131,7 +129,7 @@ class PremiumUser(User):
     def set_bank_account(self, bank_account):
         self._bank_account = bank_account
 
-    def get_bank_account(self):
+    def get_bank_account(self) -> str:
         return self._bank_account
 
     def __str__(self) -> str:
@@ -146,7 +144,7 @@ class CompanyUser(User):
     def set_company(self, company):
         self._company = company
 
-    def get_company(self):
+    def get_company(self) -> str:
         return self._company
 
     def __str__(self) -> str:
@@ -155,29 +153,29 @@ class CompanyUser(User):
 
 # Estructura de una Noticia
 class News:
-    def __init__(self, title, image, summary, url, date, owner):
-        self._title = title
+    def __init__(self, title: str, image: str, summary: str, url: str, date: str, owner: str):
+        self._title = title[0]
         self._image = image
         self._summary = summary
         self._url = url
         self._comments = []
         self._date = date
-        self._qualification = 0
+        self._qualification = -1
         self._owner = owner
 
-    def get_title(self):
+    def get_title(self) -> str:
         return self._title
 
     def set_title(self, title):
         self._title = title
 
-    def get_image(self):
+    def get_image(self) -> str:
         return self._image
 
     def set_image(self, image):
         self._image = image
 
-    def get_summary(self):
+    def get_summary(self) -> str:
         return self._summary
 
     def set_summary(self, summary):
@@ -189,25 +187,25 @@ class News:
     def set_url(self, url):
         self._url = url
 
-    def get_comments(self):
+    def get_comments(self) -> List[str]:
         return self._comments
 
     def set_comments(self, comments):
         self._comments = comments
 
-    def get_date(self):
+    def get_date(self) -> str:
         return self._date
 
     def set_date(self, date):
         self._date = date
 
-    def get_qualification(self):
+    def get_qualification(self) -> int:
         return self._qualification
 
     def set_qualification(self, qualification):
         self._qualification = qualification
 
-    def get_owner(self):
+    def get_owner(self) -> str:
         return self._owner
 
     def set_owner(self, owner):

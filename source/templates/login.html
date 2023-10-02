@@ -58,56 +58,55 @@
 </head>
 
 <body>
-    
     <!-- Topbar Start -->
-<div class="container-fluid d-none d-lg-block">
-    <div class="row align-items-center bg-dark px-lg-5">
-        <div class="col-lg-9">
-            <nav class="navbar navbar-expand-sm bg-dark p-0">
-                <ul class="navbar-nav ml-n2">
-                    <li class="nav-item border-right border-secondary">
-                        <a class="nav-link text-body small" href="#"> <!-- {{current_date}}--> Current Date</a>
-                    </li>
-                    
-                    <li class="nav-item border-right border-secondary">
-                        <a class="nav-link text-body small" href="#">Contacto</a> <!-- LINK!!!-->
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-body small" href="#">Login</a> <!-- LINK!!!-->
-                    </li>
-                </ul>
-            </nav>
+    <div class="container-fluid d-none d-lg-block">
+        <div class="row align-items-center bg-dark px-lg-5">
+            <div class="col-lg-9">
+                <nav class="navbar navbar-expand-sm bg-dark p-0">
+                    <ul class="navbar-nav ml-n2">
+                        <li class="nav-item border-right border-secondary">
+                            <a class="nav-link text-body small" href="#"><span id="currentDate"></span></a>
+                        </li>
+                        
+                        <li class="nav-item border-right border-secondary">
+                            <a class="nav-link text-body small" href="#">Contacto</a> <!-- LINK!!!-->
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-body small" href="login.html">Login</a> <!-- LINK!!!-->
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-3 text-right d-none d-md-block">
+                <!-- We can put something in the upper right part of the black bar at the top of the screen -->>
+            </div>
         </div>
-        <div class="col-lg-3 text-right d-none d-md-block">
-            <!-- We can put something in the upper right part of the black bar at the top of the screen -->>
+
+        <div class="row align-items-center bg-white py-3 px-lg-5">
+            <div class="col-lg-4">
+                <a href="index.html" class="navbar-brand p-0 d-none d-lg-block">
+                    <h1 class="m-0 display-4 text-uppercase text-primary">Truth<span class="text-secondary font-weight-normal">paper</span></h1>
+                </a>
+            </div>
+            
         </div>
     </div>
+    <!-- Topbar End -->
 
-    <div class="row align-items-center bg-white py-3 px-lg-5">
-        <div class="col-lg-4">
-            <a href="index.html" class="navbar-brand p-0 d-none d-lg-block">
-                <h1 class="m-0 display-4 text-uppercase text-primary">Truth<span class="text-secondary font-weight-normal">paper</span></h1>
-            </a>
-        </div>
-        
+    <!-- Login -->
+    <div class="container-lg">
+        <br>
+        <h2>Iniciar Sesión</h2>
+        <form action="" method="post"> <!-- add login python-->
+            <label for="username">Usuario o email:</label>
+            <input type="text" id="username" name="username" required><br>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required><br>
+            <input type="submit" value="Iniciar Sesión">
+        </form>
+        <p>¿Nuevo aquí? <a href="register.html">Regístrate</a></p>
+        <p><a href="forgotten_passwd.html">¿Olvidaste tu contraseña?</a></p>
     </div>
-</div>
-<!-- Topbar End -->
 
-<!-- Login -->
-<div class="container-lg">
-    <br>
-    <h2>Iniciar Sesión</h2>
-    <form action="" method="post"> <!-- add login python-->
-        <label for="username">Usuario o email:</label>
-        <input type="text" id="username" name="username" required><br>
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="password" required><br>
-        <input type="submit" value="Iniciar Sesión">
-    </form>
-    <p>¿Nuevo aquí? <a href="register.html">Regístrate</a></p>
-    <p><a href="forgotten_passwd.html">¿Olvidaste tu contraseña?</a></p>
-</div>
-
-
+    <script src="../static/js/date.js"></script>    
 </body>
