@@ -27,14 +27,52 @@ for etiq in ws.get_lasextanews():
     etiq.get_image()
 
 #Guardar un usuario desde la web a la base, usando el modelo de usuario
-@app.route('/save_user', methods=['POST'])
+@app.route('/save_commonuser', methods=['POST'])
 def save_data():
     hashed_password = generate_password_hash(request.form['password'], method='sha256')
-    new_user = users.User(request.form['user_name'], request.form['email'], hashed_password)
+    new_user = users.commonuser(request.form['username'], hashed_password, request.form['email'], request.form['name'], request.form['lastname'])
+    new_G_user = users.user(request.form['username'], hashed_password, request.form['email'])
+    db.session.add(new_G_user) 
+    db.session.add(new_user)
+    db.session.commit()
+    
+    return "Saving a common user"
+
+@app.route('/save_premiumuser', methods=['POST'])
+def save_data():
+    hashed_password = generate_password_hash(request.form['password'], method='sha256')
+    certification = 'certification' in request.form
+    new_user = users.premiumuser(request.form['username'], hashed_password, request.form['email'], request.form['name'], request.form['lastname'], request.form['bank_account'], certification)
+    new_G_user = users.user(request.form['username'], hashed_password, request.form['email'])
+    db.session.add(new_G_user)    
     db.session.add(new_user) 
     db.session.commit()
     
-    return "Saving a user"
+    return "Saving a premium user"
+
+@app.route('/save_journalist', methods=['POST'])
+def save_data():
+    hashed_password = generate_password_hash(request.form['password'], method='sha256')
+    certification = 'certification' in request.form
+    new_user = users.journalist(request.form['username'], hashed_password, request.form['email'], request.form['name'], request.form['lastname'], certification)
+    new_G_user = users.user(request.form['username'], hashed_password, request.form['email'])
+    db.session.add(new_G_user) 
+    db.session.add(new_user) 
+    db.session.commit()
+    
+    return "Saving a journalist"
+
+@app.route('/save_companyuser', methods=['POST'])
+def save_data():
+    hashed_password = generate_password_hash(request.form['password'], method='sha256')
+    certification = 'certification' in request.form
+    new_user = users.companyuser(request.form['username'], hashed_password, request.form['email'], request.form['company_name'], request.form['NIF'], certification)
+    new_G_user = users.user(request.form['username'], hashed_password, request.form['email'])
+    db.session.add(new_G_user) 
+    db.session.add(new_user) 
+    db.session.commit()
+    
+    return "Saving a company user"
 
 #Chequear la conexión a la base de datos
 @app.route('/bd')
