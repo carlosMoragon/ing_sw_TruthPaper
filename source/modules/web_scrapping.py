@@ -17,6 +17,15 @@ def build_news(titles, urls, imgs, owner: str) -> List[cl.News]:
     return news
 
 
+def get_content(url: str) -> str:
+    web_structure = BeautifulSoup(requests.get(url).text, 'lxml')
+    all_p = web_structure.find_all('p')
+    text = []
+    for p in all_p:
+        text.append(p.text)
+    return ''.join(text)
+
+
 def get_antena3news() -> List[cl.News]:
     # new = cl.News(title, image, summary, url, date, owner)
     antena3 = requests.get("https://www.antena3.com/noticias/")
@@ -42,6 +51,8 @@ def get_antena3news() -> List[cl.News]:
             src = img_tag.get('src')
             if src is not None:
                 url_imgs.append(src)
+        else:
+            url_imgs.append("./static/img/nohayfoto.avif")
 
     return build_news(titles=titles, urls=link_news, imgs=url_imgs, owner='antena3noticias')
 
