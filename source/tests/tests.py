@@ -1,5 +1,5 @@
 import unittest
-from modules import classes as cl, web_scrapping
+from modules import classes as cl, web_scrapping as ws
 
 
 class TestClasses(unittest.TestCase):
@@ -47,8 +47,26 @@ class TestClasses(unittest.TestCase):
 
 
 class TestWebScrapping(unittest.TestCase):
-    def test_antena3_good(self):
-        self.assertEqual(None, None)
+    def test_get_antena3news(self):
+        antena3_news = ws.get_antena3news()
+        self.assertIsInstance(antena3_news, list)
+        self.assertTrue(len(antena3_news) > 0)
+        for news in antena3_news:
+            self.assertIsInstance(news, cl.News)
+            self.assertIsNotNone(news.get_title())
+            self.assertIsNotNone(news.get_image())
+            self.assertIsNotNone(news.get_url())
+            self.assertIsNotNone(news.get_date())
+            self.assertEqual(news.get_owner(), 'antena3noticias')
 
-    def test_antena3_bad(self):
-        self.assertNotEquals(None, None)
+    def test_get_lasextanews(self):
+        lasexta_news = ws.get_lasextanews()
+        self.assertIsInstance(lasexta_news, list)
+        self.assertTrue(len(lasexta_news) > 0)
+        for news in lasexta_news:
+            self.assertIsInstance(news, cl.News)
+            self.assertIsNotNone(news.get_title())
+            self.assertIsNotNone(news.get_image())
+            self.assertIsNotNone(news.get_url())
+            self.assertIsNotNone(news.get_date())
+            self.assertEqual(news.get_owner(), 'LaSexta')
