@@ -37,14 +37,16 @@ for etiq in ws.get_lasextanews():
 
 '''
 #Guardar un usuario desde la web a la base, usando el modelo de usuario
-@app.route('/save_data', methods=['POST'])
+@app.route('/save_user', methods=['POST'])
 def save_data():
-    new_user = users.User(request.form['user_name'], request.form['email'], request.form['password'])
+    hashed_password = generate_password_hash(request.form['password'], method='sha256')
+    new_user = users.User(request.form['user_name'], request.form['email'], hashed_password)
     db.session.add(new_user) 
     db.session.commit()
     
     return "Saving a user"
 
+#Chequear la conexión a la base de datos
 @app.route('/bd')
 def basicConnection():
     try:
