@@ -11,7 +11,8 @@ def index():
     data = {
         'imgs' : [new.get_image() for new in news],
         'titles' : [str(new.get_title()) for new in news],
-        'urls' : [new.get_url() for new in news]
+        'urls' : [new.get_url() for new in news],
+        'dates': [new.get_date() for new in news]
     }
 
     return render_template('indexFunc.html', data=data)

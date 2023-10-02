@@ -1,10 +1,14 @@
 {% extends 'categorias.html' %}
 
+
 {% block noticia_primera %}
 {% for url in data.urls %}
 {% set index = loop.index0 %}
 <div class="position-relative overflow-hidden" style="height: 300px;">
-    <img class="img-fluid" src="{{data.imgs[index]}}" style="object-fit: cover;" href="{{url}}">
+    <div style=" height: 100%;" !important>
+        <img class="img-fluid" src="{{data.imgs[index]}}" href="{{url}}" style="width: 100%;" />
+    </div>
+
     <div class="overlay">
         <div class="mb-2">
             <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"

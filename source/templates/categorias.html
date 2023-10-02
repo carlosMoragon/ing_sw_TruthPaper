@@ -96,13 +96,16 @@
 
 
                 <!-- search by keywords -->
-                <div class="input-group ml-auto d-none d-lg-flex" style="max-width: 300px;">
-                    <input type="text" class="form-control border-0" placeholder="Buscar">
-                    <div class="input-group-append">
-                        <button class="input-group-text bg-primary text-dark border-0 px-3"><i
-                                class="fa fa-search"></i></button>
+                <form action="/save_keyword" method="post">
+                    <div class="input-group ml-auto d-none d-lg-flex" style="max-width: 300px;">
+                        <input type="text" class="form-control border-0" name="search" placeholder="Buscar">
+                        <div class="input-group-append">
+                            <button class="input-group-text bg-primary text-dark border-0 px-3">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>
+                </form>
 
                 <!-- Icon to enter in login-->
                 <div class="login-icon">
@@ -120,7 +123,7 @@
     <div class="container-fluid pt-5 mb-3">
         <div class="container">
             <div class="section-title">
-                <h4 class="m-0 text-uppercase font-weight-bold">Búsqueda {{data.keyword}}</h4>
+                <h4 class="m-0 text-uppercase font-weight-bold">Búsqueda "{{data.keyword}}"</h4>
             </div>
             <!--noticias -->
             <div class="owl-carousel news-carousel carousel-item-4 position-relative">
