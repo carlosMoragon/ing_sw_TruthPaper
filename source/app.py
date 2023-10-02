@@ -11,7 +11,7 @@ def index():
     news = ws.get_lasextanews() + ws.get_antena3news()
     data = {
         'imgs' : [new.get_image() for new in news],
-        'titles' : [new.get_title() for new in news],
+        'titles' : [str(new.get_title()) for new in news],
         'urls' : [new.get_url() for new in news]
     }
 
