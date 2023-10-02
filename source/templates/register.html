@@ -53,9 +53,12 @@
             margin-bottom: 10px;
         }
 
+        .register_user {
+            display: none; /* Esto oculta inicialmente el usuario */
+        }
+
     </style>
 
-    <script src="../static/js/date.js"></script>
 </head>
 
 <body>
@@ -93,43 +96,82 @@
 <!-- Topbar End -->
 
 <!-- Login -->
-<div class="container-lg" style="margin-top: 50px;">
-    <br>
-    <h2>Registrarse</h2>
-    <form action="/saveData" method="post"> <!-- add register python--> <!--"ruta para guardar"-->
-        <label for="username">Nombre de usuario:</label>
-        <input type="text" id="username" name="username" required><br>
+    <div class="container-lg">
+        <h2> Registro</h2>
+        <p> Elija el tipo de usuario con el que desea registrarse</p>
+        <div class="diff_users" styel="margin: 10%;">
+            <div class="common_user_register">
+                <button onclick="showRegister('common_user')"> Usuario Común </button>
+                <div id="common_user" class="register_user">
+                    <form action="/saveData" method="post">
+                        <label for="username">Nombre de usuario:</label>
+                        <input type="text" id="username" name="username" required><br>
+                
+                        <label for="username">Email:</label>
+                        <input type="text" id="email" name="email" required><br>
+                
+                        <label for="password">Contraseña:</label>
+                        <input type="password" id="password" name="password" required><br>
 
-        <label for="username">Email:</label>
-        <input type="text" id="email" name="email" required><br>
+                        <input type="submit" value="Registrarse"><br>
+                    </form>
+                </div>
+            </div>
 
-        <label for="password">Contraseña:</label>
-        <input type="text" id="password" name="password" required><br>
+            <div class="journalist_register">
+                <button onclick="showRegister('journalist')"> Periodista </button>
+                <div id="journalist" class="register_user">
+                    <form action="/saveData" method="post">
+                        <label for="journalist_name">Nombre:</label>
+                        <input type="text" id="journalist_name" name="journalist_name" required><br>
 
-        <label for="password">Repetir Contraseña</label>
-        <input type="password" id="password2" name="password2" required><br>
+                        <label for="journalist_lastname">Apellidos:</label>
+                        <input type="text" id="journalist_lastname" name="journalist_lastname" required><br>
 
-        <label for="company_box"> ¿Eres una empresa? </label>
-        <input type="checkbox" id="company_box" name="company_box">
-        <div id="companyBox_input" style="display: none;">
-            <label for="company_name"> Nombre de la empresa: </label>  
-            <input type="text" id="companyBox_name">  
+                        <label for="username">Nombre de usuario:</label>
+                        <input type="text" id="username" name="username" required><br>
+                    
+                        <label for="username">Email:</label>
+                        <input type="text" id="email" name="email" required><br>
+                    
+                        <label for="password">Contraseña:</label>
+                        <input type="password" id="password" name="password" required><br>
+
+                        <label for="journalist_file"> Suba su credencial de periodista: </label>  
+                        <input type="file" id="journalist_file" name="journalist_file"><br>
+
+                        <input type="submit" value="Registrarse"><br>
+                    </form>
+                </div>
+            </div>
+
+            <div class="company_register">
+                <button onclick="showRegister('company')"> Empresa </button>
+                    <div id="company" class="register_user">
+                        <form action="/saveData" method="post">
+                            <label for="username">Nombre de usuario:</label>
+                            <input type="text" id="username" name="username" required><br>
+
+                            <label for="company_name">Nombre de la empresa:</label>
+                            <input type="text" id="company_name" name="company_name" required><br>
+
+                            <label for="username">Email:</label>
+                            <input type="text" id="email" name="email" required><br>
+
+                            <label for="password">Contraseña:</label>
+                            <input type="password" id="password" name="password" required><br>
+
+                            <label for="company_nif">NIF de la empresa:</label>
+                            <input type="text" id="company_nif" name="company_nif" required><br>
+
+                            <input type="submit" value="Registrarse"><br>
+                        </form>
+                    </div>          
+                </div>
+            </div>
         </div>
+    </div>
 
-        <label for="journalist_box"> ¿Eres un periodista? </label>
-        <input type="checkbox" id="journalist_box" name="journalist_box">
-        <div id="journalistBox_input" style="display: none;">
-            <!--Upload journalist credential -->
-            <label for="journalist_file"> Suba su credencial de periodista: </label>  
-            <input type="file" id="journalist_file" name="journalist_file"> 
-        </div>
-
-        <input type="submit" value="Registrarse">
-        <!-- Agregar un boton/funcion SAVE-->
-    </form>
-    <script src="../static/js/companyScript.js"></script>
-    <p>¿Ya tienes una cuenta? <a href="login.html">Inicia Sesión</a></p>
-</div>
-
-<script src="../static/js/date.js"></script>
+    <script src="../static/js/date.js"></script>
+    <script src="../static/js/register.js"></script>
 </body>
