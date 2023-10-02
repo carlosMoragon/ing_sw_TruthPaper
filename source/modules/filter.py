@@ -1,18 +1,6 @@
-# import classes as cl
-<<<<<<< HEAD
-=======
-# import web_scrapping as ws
->>>>>>> 1965186a1491b4bc8e0ee7f0ac3fae4a14a86656
 from modules import classes as cl, web_scrapping as ws
 from typing import List
 import re
-import requests
-
-<<<<<<< HEAD
-# import web_scrapping as ws
-=======
-
->>>>>>> 1965186a1491b4bc8e0ee7f0ac3fae4a14a86656
 
 
 def filter_by_words(search: str, news: List[cl.News]) -> List[cl.News]:
