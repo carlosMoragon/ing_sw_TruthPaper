@@ -20,15 +20,19 @@ def index():
     return render_template('indexFunc.html', data=data)
 
 
-#@app.route('/login.html')
-#def start():
-#return render_template('login.html')
-#
+@app.route('/login.html')
+def start():
+    return render_template('login.html')
 
-#@app.route('/login_users', methods=['POST'])
-#def login_users():
-#return manager.login(request.form['username'], request.form['password'])
-#
+@app.route('/login_users', methods=['POST'])
+def login_users():
+    return manager.login(request.form['username'], request.form['password'])
+
+@app.route('/register.html')
+def register_funct():
+    return render_template('register.html')
+
+
 @app.route('/save_keyword', methods=['post'])
 def save_keyword():
     keyword = request.form['search']
@@ -50,21 +54,11 @@ def prueba_articulos():
         'imgs' : [new.get_image() for new in news],
         'titles' : [new.get_title() for new in news],
         'urls' : [new.get_url() for new in news]
-    }
+    }   
     
-    
-#@app.route('/register.html')
-#def register_funct():
-#return render_template('register.html')
-#
-
-#     return render_template('pruebaArticulosFunc.html', data=data)
-
-
 # Crear una etiqueta {}
 for etiq in ws.get_lasextanews():
     etiq.get_image()
-
 
 #Guardar un usuario desde la web a la base, usando el modelo de usuario
 @app.route('/save_commonuser', methods=['POST'])
@@ -77,19 +71,6 @@ def save_CU():
     db.session.commit()
     
     return "Saving a common user"
-
-
-#@app.route('/save_journalist', methods=['POST'])
-#def save_J():
-#     hashed_password = generate_password_hash(request.form['password'], method='sha256')
-#     certification = 'certification' in request.form
-#     new_user = users.journalist(request.form['username'], hashed_password, request.form['email'], request.form['name'], request.form['lastname'], certification)
-#     new_G_user = users.user(request.form['username'], hashed_password, request.form['email'])
-#     db.session.add(new_G_user) 
-#     db.session.add(new_user) 
-#     db.session.commit()
-    
-#     return "Saving a journalist"
 
 @app.route('/save_companyuser', methods=['POST'])
 def save_CMPU():
