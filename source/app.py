@@ -11,8 +11,12 @@ def hello_world():  # put application's code here
 
 @app.route('/pruebaArticulos')
 def prueba_articulos():
+<<<<<<< HEAD
     # news = ws.get_lasextanews() + ws.get_antena3news()
     news = f.filter_by_words("muerto", ws.get_lasextanews() + ws.get_antena3news())
+=======
+    news = ws.get_lasextanews() + ws.get_antena3news()
+>>>>>>> olivia
     data = {
         'imgs' : [new.get_image() for new in news],
         'titles' : [new.get_title() for new in news],
