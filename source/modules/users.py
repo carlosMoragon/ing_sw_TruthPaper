@@ -30,26 +30,6 @@ class Commonuser(db.Model):
         self.lastname = lastname
         
 
-class Premiumuser(db.Model):
-    id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
-    username = db.Column(db.String(50), nullable=False)
-    password = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.Text, nullable=True)
-    name = db.Column(db.String(50), nullable=False)
-    lastname = db.Column(db.String(50), nullable=False)
-    bank_account = db.Column(db.Integer, nullable=False)
-    certification = db.Column(db.Boolean, nullable=False)
-    
-    
-    def __init__(self, username, password, email, name, lastname, bank_account, certification):
-        self.username = username
-        self.password = password
-        self.email = email
-        self.name = name
-        self.lastname = lastname
-        self.bank_account = bank_account
-        self.certification = certification  
-        
 class Journalist(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     username = db.Column(db.String(50), nullable=False)

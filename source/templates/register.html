@@ -1,4 +1,4 @@
-{% comment %} <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -103,7 +103,7 @@
             <div class="common_user_register">
                 <button onclick="showRegister('common_user')"> Usuario Común </button>
                 <div id="common_user" class="register_user">
-                    <form action="/saveData" method="post">
+                    <form action="/save_commonuser" method="post">
                         <label for="username">Nombre de usuario:</label>
                         <input type="text" id="username" name="username" required><br>
                 
@@ -121,7 +121,7 @@
             <div class="journalist_register">
                 <button onclick="showRegister('journalist')"> Periodista </button>
                 <div id="journalist" class="register_user">
-                    <form action="/saveData" method="post">
+                    <form action="/save_J" method="post">
                         <label for="journalist_name">Nombre:</label>
                         <input type="text" id="journalist_name" name="journalist_name" required><br>
 
@@ -148,7 +148,7 @@
             <div class="company_register">
                 <button onclick="showRegister('company')"> Empresa </button>
                     <div id="company" class="register_user">
-                        <form action="/saveData" method="post">
+                        <form action="/save_CMPU" method="post">
                             <label for="username">Nombre de usuario:</label>
                             <input type="text" id="username" name="username" required><br>
 
@@ -173,4 +173,5 @@
     </div>
 
 <script src="../static/js/date.js"></script>
+<script src="../static/js/register.js"></script>
 </body>
