@@ -7,7 +7,6 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    # news = f.filter_by_words("muerto", ws.get_lasextanews() + ws.get_antena3news())
     news = ws.get_lasextanews() + ws.get_antena3news()
     data = {
         'imgs' : [new.get_image() for new in news],
@@ -17,10 +16,22 @@ def index():
 
     return render_template('indexFunc.html', data=data)
 
+@app.route('/save_keyword', methods=['post'])
+def save_keyword():
+    keyword = request.form['search']
+    news = f.filter_by_words(keyword, ws.get_lasextanews() + ws.get_antena3news())
+    data = {
+        'imgs' : [new.get_image() for new in news],
+        'titles' : [new.get_title() for new in news],
+        'urls' : [new.get_url() for new in news],
+        'keyword': keyword,
+        'dates': [new.get_date() for new in news]
+    }
+    return render_template('categoriasFunc.html', data=data)
+
 @app.route('/pruebaArticulos')
 def prueba_articulos():
 
-    #news = f.filter_by_words("muerto", ws.get_lasextanews() + ws.get_antena3news())
     news = ws.get_lasextanews() + ws.get_antena3news()
     data = {
         'imgs' : [new.get_image() for new in news],
