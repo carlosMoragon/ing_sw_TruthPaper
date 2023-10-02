@@ -2,7 +2,7 @@ from database import DBManager as manager
 
 db = manager.db
 
-class user(db.Model):
+class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     username = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(50), nullable=False)
@@ -14,7 +14,7 @@ class user(db.Model):
         self.email = email
         
 
-class commonuser(db.Model):
+class Commonuser(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     username = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(50), nullable=False)
@@ -30,7 +30,7 @@ class commonuser(db.Model):
         self.lastname = lastname
         
 
-class premiumuser(db.Model):
+class Premiumuser(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     username = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(50), nullable=False)
@@ -50,7 +50,7 @@ class premiumuser(db.Model):
         self.bank_account = bank_account
         self.certification = certification  
         
-class journalist(db.Model):
+class Journalist(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     username = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(50), nullable=False)
@@ -68,7 +68,7 @@ class journalist(db.Model):
         self.lastname = lastname
         self.certification = certification  
  
-class companyuser(db.Model):
+class Companyuser(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     username = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(50), nullable=False)
