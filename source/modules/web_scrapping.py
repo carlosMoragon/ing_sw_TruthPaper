@@ -5,6 +5,8 @@ from modules import classes as cl
 # import classes as cl
 from typing import List
 from datetime import datetime
+import os
+import html
 
 
 def build_news(titles, urls, imgs, owner: str) -> List[cl.News]:
@@ -79,3 +81,18 @@ def get_lasextanews() -> List[cl.News]:
 def get_marcanews() -> List[cl.News]:
     return None
 
+
+def save_html():
+    urls = ["https://www.lasexta.com/noticias/", "https://www.antena3.com/noticias/"]
+    day = datetime.now().strftime(f'%Y-%m-%d')
+    route = ".\\almacenTemporalHTML\\"
+    names = [f"{route}lasexta_{day}.html", f"{route}antena3_{day}.html"]
+
+    for index in range(len(urls)):
+        # Verificar si el archivo ya existe
+        if not os.path.exists(urls[index]):
+            # Definir el contenido HTML
+            content_html = requests.get(urls[index]).text
+            # Escribir en el fichero
+            with open(names[index], "w", encoding="utf-8") as archivo:
+                archivo.write(html.unescape(content_html))

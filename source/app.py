@@ -105,5 +105,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
 if __name__ == '__main__':
+    ws.save_html()
     app.run(debug=True)
+
 
