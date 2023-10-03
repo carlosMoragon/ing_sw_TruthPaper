@@ -3,6 +3,10 @@ from typing import List
 import re
 
 
+def filter_by_categories(category: str, news: List[cl.News]) -> List[cl.News]:
+    return None
+
+
 def filter_by_words(search: str, news: List[cl.News]) -> List[cl.News]:
     words = search.split(" ")
     all_news = []

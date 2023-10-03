@@ -68,10 +68,14 @@ def get_lasextanews() -> List[cl.News]:
 
     titles = []
     for article in articles:
-        #h2_tags = article.find_all('h2', class_='titular t3')
+        # h2_tags = article.find_all('h2', class_='titular t3')
         h2_tags = article.find_all('h2')
         h2_texts = [h2_tag.text.strip() for h2_tag in h2_tags]
         titles.append(h2_texts)
 
     return build_news(titles=titles, urls=link_news, imgs=url_imgs, owner='LaSexta')
+
+
+def get_marcanews() -> List[cl.News]:
+    return None
 

@@ -66,26 +66,31 @@ def prueba_articulos():
     return render_template('pruebaArticulos.html', data=data)
 
 
+# ESTE METODO Y EL SIGUIENTE ES EL MISMO ASI QUE DEBERIAN SER 1
 # Guardar un usuario desde la web a la base, usando el modelo de usuario
+# He cambiado el nombre del metodo: no puede tener mayusculas
 @app.route('/save_commonuser', methods=['POST'])
-def save_CU():
+def save_cu():
     # hashed_password = generate_password_hash(request.form['password'], method='sha256')
     new_user = users.Commonuser(request.form['username'], request.form['password'], request.form['email'], request.form['c_user_name'], request.form['c_user_lastname'])
-    new_G_user = users.User(request.form['username'], request.form['password'], request.form['email'])
-    db.session.add(new_G_user) 
+    # He cambiado el nombre de la variable: no puede tener mayusculas
+    new_g_user = users.User(request.form['username'], request.form['password'], request.form['email'])
+    db.session.add(new_g_user)
     db.session.add(new_user)
     db.session.commit()
     
     return index()
 
 
+# He cambiado el nombre del metodo: no puede tener mayusculas
 @app.route('/save_companyuser', methods=['POST'])
-def save_CMPU():
+def save_cmpu():
     # hashed_password = generate_password_hash(request.form['password'], method='sha256')
     # certification = 'certification' in request.form
     new_user = users.Companyuser(request.form['username'], request.form['password'], request.form['email'], request.form['company_name'], request.form['company_nif'])
-    new_G_user = users.User(request.form['username'], request.form['password'], request.form['email'])
-    db.session.add(new_G_user) 
+    # He cambiado el nombre de la variable: no puede tener mayusculas
+    new_g_user = users.User(request.form['username'], request.form['password'], request.form['email'])
+    db.session.add(new_g_user)
     db.session.add(new_user) 
     db.session.commit()
     
