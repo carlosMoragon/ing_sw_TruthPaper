@@ -2,70 +2,98 @@ from flask import Flask, render_template, request
 from modules import web_scrapping as ws, users, filter as f
 from flask_sqlalchemy import SQLAlchemy
 from database import DBManager as manager
-# db = manager.db
+#from werkzeug.security import generate_password_hash
+
+db = manager.db
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/index')
 def index():
-    # news = f.filter_by_words("muerto", ws.get_lasextanews() + ws.get_antena3news())
     news = ws.get_lasextanews() + ws.get_antena3news()
     data = {
         'imgs' : [new.get_image() for new in news],
         'titles' : [str(new.get_title()) for new in news],
-        'urls' : [new.get_url() for new in news]
+        'urls' : [new.get_url() for new in news],
+        'dates': [new.get_date() for new in news]
     }
 
     return render_template('indexFunc.html', data=data)
 
 
+@app.route('/')
+def start():
+    return render_template('login.html')
+
+@app.route('/login_users', methods=['POST'])
+def login_users():
+    if(manager.login(request.form['username'], request.form['password'])):
+        return index()
+    else:
+        return start()
+
+@app.route('/register.html')
+def register_funct():
+    return render_template('register.html')
+
+
+@app.route('/save_keyword', methods=['post'])
+def save_keyword():
+    keyword = request.form['search']
+    news = f.filter_by_words(keyword, ws.get_lasextanews() + ws.get_antena3news())
+    data = {
+        'imgs' : [new.get_image() for new in news],
+        'titles' : [new.get_title() for new in news],
+        'urls' : [new.get_url() for new in news],
+        'keyword': keyword,
+        'dates': [new.get_date() for new in news]
+    }
+    return render_template('categoriasFunc.html', data=data)
+
 @app.route('/pruebaArticulos')
 def prueba_articulos():
-    # news = f.filter_by_words("muerto", ws.get_lasextanews() + ws.get_antena3news())
+
     news = ws.get_lasextanews() + ws.get_antena3news()
     data = {
         'imgs' : [new.get_image() for new in news],
         'titles' : [new.get_title() for new in news],
         'urls' : [new.get_url() for new in news]
-    }
-
-    return render_template('pruebaArticulosFunc.html', data=data)
-
-
+    }   
+    
 # Crear una etiqueta {}
 for etiq in ws.get_lasextanews():
     etiq.get_image()
 
-'''
 #Guardar un usuario desde la web a la base, usando el modelo de usuario
-@app.route('/save_user', methods=['POST'])
-def save_data():
-    hashed_password = generate_password_hash(request.form['password'], method='sha256')
-    new_user = users.User(request.form['user_name'], request.form['email'], hashed_password)
+@app.route('/save_commonuser', methods=['POST'])
+def save_CU():
+    #hashed_password = generate_password_hash(request.form['password'], method='sha256')
+    new_user = users.Commonuser(request.form['username'], request.form['password'], request.form['email'], request.form['c_user_name'], request.form['c_user_lastname'])
+    new_G_user = users.User(request.form['username'], request.form['password'], request.form['email'])
+    db.session.add(new_G_user) 
+    db.session.add(new_user)
+    db.session.commit()
+    
+    return index()
+
+@app.route('/save_companyuser', methods=['POST'])
+def save_CMPU():
+#   hashed_password = generate_password_hash(request.form['password'], method='sha256')
+#   certification = 'certification' in request.form
+    new_user = users.Companyuser(request.form['username'], request.form['password'], request.form['email'], request.form['company_name'], request.form['company_nif'])
+    new_G_user = users.User(request.form['username'], request.form['password'], request.form['email'])
+    db.session.add(new_G_user) 
     db.session.add(new_user) 
     db.session.commit()
     
-    return "Saving a user"
-
-#Chequear la conexión a la base de datos
-@app.route('/bd')
-def basicConnection():
-    try:
-        with db.session.begin():
-            result = users.User.query.all()
-            print(result)
-            print('Conexión exitosa!')
-        return "Conexión exitosa!"
-    except Exception as e:
-        print(str(e))
-        return "La conexión falló!"
+    return index()
 
 #MySQL Connection
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1234@localhost:3307/truthpaperprueba'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1234@localhost:3307/truthpaper'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
 db.init_app(app)
-'''
+
 if __name__ == '__main__':
     app.run(debug=True)
 

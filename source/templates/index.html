@@ -33,8 +33,6 @@
     <script src="../static/js/date.js"></script>
     <script src="../static/js/main.js"></script>
 
-    {% block style_news %} {% endblock %}
-
 </head>
 
 <body>
@@ -107,13 +105,16 @@
 
 
                 <!-- search by keywords -->
-                <div class="input-group ml-auto d-none d-lg-flex" style="max-width: 300px;">
-                    <input type="text" class="form-control border-0" placeholder="Buscar">
-                    <div class="input-group-append">
-                        <button class="input-group-text bg-primary text-dark border-0 px-3"><i
-                                class="fa fa-search"></i></button>
+                <form action="/save_keyword" method="post">
+                    <div class="input-group ml-auto d-none d-lg-flex" style="max-width: 300px;">
+                        <input type="text" class="form-control border-0" name="search" placeholder="Buscar">
+                        <div class="input-group-append">
+                            <button class="input-group-text bg-primary text-dark border-0 px-3">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>
+                </form>
 
                 <!-- Icon to enter in login-->
                 <div class="login-icon">
