@@ -1,5 +1,5 @@
 import unittest
-from modules import classes as cl, web_scrapping as ws
+from ..modules import classes as cl, web_scrapping as ws
 
 
 class TestClasses(unittest.TestCase):
@@ -8,18 +8,11 @@ class TestClasses(unittest.TestCase):
             cl.News("titulo", "imagen", "resumen", "url", "2023-12-01", "CEU").__str__()
             , "title: titulo, image: imagen, summary: resumen, url: url, comments: [], date: 2023-12-01, qualification: 0, owner: CEU")
 
-    def test_news_bad(self):
-        self.assertNotEqual(None, None)
-
     def test_comments_good(self):
         # owner: str, text: str, date: str, imgs: []
         self.assertEqual(
             cl.Comment("owner", "text", "2023-12-01", ["que guay", "hola", "que tal"]).__str__()
             , "owner: owner, text: text, date: 2023-12-01, imgs: ['que guay', 'hola', 'que tal']")
-
-    def test_comments_bad(self):
-        self.assertNotEqual(None,None)
-
 
     def test_users_good(self):
         self.assertEqual(
@@ -38,12 +31,9 @@ class TestClasses(unittest.TestCase):
             , "username: username, password: password, email: email@gmail.com, profile_name: profile_name, phone_number: 123456789, banck_account: banck_account")
 
         self.assertEqual(
-            cl.User("username", "password", "email2gmail.com", "profile_name", "123456789", "CEU")
+            cl.CompanyUser("username", "password", "email2gmail.com", "profile_name", "123456789", "CEU")
             .__str__()
             , "username: username, password: password, email: email@gmail.com, profile_name: profile_name, phone_number: 123456789, company: company")
-
-    def test_users_bad(self):
-        self.assertNotEqual(None,None)
 
 
 class TestWebScrapping(unittest.TestCase):
