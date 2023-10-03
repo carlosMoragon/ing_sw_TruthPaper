@@ -8,6 +8,11 @@ def validate_date(date: str) -> bool:
     return bool(re.match(r'^\d{4}-\d{2}-\d{2}$', date))
 
 
+def validate_password(password: str) -> bool:
+    # Busca que tenga al menos 4 numeros, 1 mayuscula, 1 caracter especial y 8 digitos
+    return bool(re.match(r'^(?=.*\d{4,})(?=.*[A-Z])(?=.*[\W_]).{8,}$', password))
+
+
 # Estructura de un comentario de una publicación
 class Comment:
 
