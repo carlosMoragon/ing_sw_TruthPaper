@@ -12,8 +12,7 @@
 * [Inf. Viabilidad](https://ceu365-my.sharepoint.com/:w:/g/personal/oriannaalejandra_milonesalas_usp_ceu_es/EeRlQHCwtYlKq4ZRm58f3hMBCaAFYtBnDjIVXkOjEqVpHA?e=PW8ARg)
 * [Historias de usuario (requisitos) y tareas](https://ceu365-my.sharepoint.com/:x:/g/personal/oliviaaraceli_moralesquezada_usp_ceu_es/EbdMykyB4TdLtd5WQ-0y1QsB65IzKXPVvoV-ieBVqlbFHA)
 
-### Versiones utilizadas
-Python 3.9
-
-MariaDB ?
+## Versiones utilizadas
+* Python v3.9
+* MariaDB v?
 
