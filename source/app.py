@@ -2,10 +2,11 @@ from flask import Flask, render_template, request
 from modules import web_scrapping as ws, users, filter as f
 from flask_sqlalchemy import SQLAlchemy
 from database import DBManager as manager
-#from werkzeug.security import generate_password_hash
+# from werkzeug.security import generate_password_hash
 
 db = manager.db
 app = Flask(__name__)
+
 
 @app.route('/index')
 def index():
@@ -24,12 +25,15 @@ def index():
 def start():
     return render_template('login.html')
 
+
+# CAMBIAR LA RUTA
 @app.route('/login_users', methods=['POST'])
 def login_users():
-    if(manager.login(request.form['username'], request.form['password'])):
+    if manager.login(request.form['username'], request.form['password']):
         return index()
     else:
         return start()
+
 
 @app.route('/register.html')
 def register_funct():
@@ -49,6 +53,7 @@ def save_keyword():
     }
     return render_template('categoriasFunc.html', data=data)
 
+
 @app.route('/pruebaArticulos')
 def prueba_articulos():
 
@@ -58,15 +63,13 @@ def prueba_articulos():
         'titles' : [new.get_title() for new in news],
         'urls' : [new.get_url() for new in news]
     }   
-    
-# Crear una etiqueta {}
-for etiq in ws.get_lasextanews():
-    etiq.get_image()
+    return render_template('pruebaArticulos.html', data=data)
 
-#Guardar un usuario desde la web a la base, usando el modelo de usuario
+
+# Guardar un usuario desde la web a la base, usando el modelo de usuario
 @app.route('/save_commonuser', methods=['POST'])
 def save_CU():
-    #hashed_password = generate_password_hash(request.form['password'], method='sha256')
+    # hashed_password = generate_password_hash(request.form['password'], method='sha256')
     new_user = users.Commonuser(request.form['username'], request.form['password'], request.form['email'], request.form['c_user_name'], request.form['c_user_lastname'])
     new_G_user = users.User(request.form['username'], request.form['password'], request.form['email'])
     db.session.add(new_G_user) 
@@ -75,10 +78,11 @@ def save_CU():
     
     return index()
 
+
 @app.route('/save_companyuser', methods=['POST'])
 def save_CMPU():
-#   hashed_password = generate_password_hash(request.form['password'], method='sha256')
-#   certification = 'certification' in request.form
+    # hashed_password = generate_password_hash(request.form['password'], method='sha256')
+    # certification = 'certification' in request.form
     new_user = users.Companyuser(request.form['username'], request.form['password'], request.form['email'], request.form['company_name'], request.form['company_nif'])
     new_G_user = users.User(request.form['username'], request.form['password'], request.form['email'])
     db.session.add(new_G_user) 
@@ -87,7 +91,8 @@ def save_CMPU():
     
     return index()
 
-#MySQL Connection
+
+# MySQL Connection
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1234@localhost:3307/truthpaper'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
