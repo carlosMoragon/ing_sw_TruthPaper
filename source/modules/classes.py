@@ -158,7 +158,7 @@ class CompanyUser(User):
 
 # Estructura de una Noticia
 class News:
-    def __init__(self, title: str, image: str, summary: str, url: str, date: str, owner: str):
+    def __init__(self, title: List[str], image: str, summary: str, url: str, date: str, owner: str):
         self._title = title[0]
         self._image = image
         self._summary = summary

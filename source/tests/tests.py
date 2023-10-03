@@ -5,8 +5,8 @@ from ..modules import classes as cl, web_scrapping as ws
 class TestClasses(unittest.TestCase):
     def test_news_good(self):
         self.assertEqual(
-            cl.News("titulo", "imagen", "resumen", "url", "2023-12-01", "CEU").__str__()
-            , "title: titulo, image: imagen, summary: resumen, url: url, comments: [], date: 2023-12-01, qualification: 0, owner: CEU")
+            cl.News(["titulo"], "imagen", "resumen", "url", "2023-12-01", "CEU").__str__()
+            , "title: titulo, image: imagen, summary: resumen, url: url, comments: [], date: 2023-12-01, qualification: -1, owner: CEU")
 
     def test_comments_good(self):
         # owner: str, text: str, date: str, imgs: []
@@ -21,17 +21,17 @@ class TestClasses(unittest.TestCase):
             , "username: username, password: password, email: email@gmail.com, profile_name: profile_name, phone_number: 123456789")
 
         self.assertEqual(
-            cl.CommonUser("username", "password", "email2gmail.com", "profile_name", "123456789", ["terror", "Christmas"], False)
+            cl.CommonUser("username", "password", "email@gmail.com", "profile_name", "123456789", ["terror", "Christmas"], False)
             .__str__()
             , "username: username, password: password, email: email@gmail.com, profile_name: profile_name, phone_number: 123456789, interest_themes: ['terror', 'Christmas'], iscertificate: False")
 
         self.assertEqual(
-            cl.PremiumUser("username", "password", "email2gmail.com", "profile_name", "123456789", "banck_account")
+            cl.PremiumUser("username", "password", "email@gmail.com", "profile_name", "123456789", "banck_account")
             .__str__()
             , "username: username, password: password, email: email@gmail.com, profile_name: profile_name, phone_number: 123456789, banck_account: banck_account")
 
         self.assertEqual(
-            cl.CompanyUser("username", "password", "email2gmail.com", "profile_name", "123456789", "CEU")
+            cl.CompanyUser("username", "password", "email@gmail.com", "profile_name", "123456789", "CEU")
             .__str__()
             , "username: username, password: password, email: email@gmail.com, profile_name: profile_name, phone_number: 123456789, company: company")
 
