@@ -7,7 +7,7 @@ from database import DBManager as manager
 db = manager.db
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/index')
 def index():
     news = ws.get_lasextanews() + ws.get_antena3news()
     data = {
@@ -20,13 +20,16 @@ def index():
     return render_template('indexFunc.html', data=data)
 
 
-@app.route('/login.html')
+@app.route('/')
 def start():
     return render_template('login.html')
 
 @app.route('/login_users', methods=['POST'])
 def login_users():
-    return manager.login(request.form['username'], request.form['password'])
+    if(manager.login(request.form['username'], request.form['password'])):
+        return index()
+    else:
+        return start()
 
 @app.route('/register.html')
 def register_funct():
@@ -70,7 +73,7 @@ def save_CU():
     db.session.add(new_user)
     db.session.commit()
     
-    return "Saving a common user"
+    return index()
 
 @app.route('/save_companyuser', methods=['POST'])
 def save_CMPU():
@@ -82,7 +85,7 @@ def save_CMPU():
     db.session.add(new_user) 
     db.session.commit()
     
-    return "Saving a company user"
+    return index()
 
 #MySQL Connection
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1234@localhost:3307/truthpaper'

@@ -8,12 +8,11 @@ def login(username, password) -> bool:
     if user_db:
         #if generate_password_hash(user_db.password, password):
         if (user_db.password, password):
-            return 'Redireccionar al Login'
+            return True
         else:
-            return 'Contraseña incorrecta'
+            return False
     else:
-        return 'No estas registrado'
- 
+        return False
 
 
 
