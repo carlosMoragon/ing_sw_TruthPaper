@@ -17,10 +17,10 @@ def index():
 
     return render_template('indexFunc.html', data=data)
 
+
 @app.route('/pruebaArticulos')
 def prueba_articulos():
-
-    #news = f.filter_by_words("muerto", ws.get_lasextanews() + ws.get_antena3news())
+    # news = f.filter_by_words("muerto", ws.get_lasextanews() + ws.get_antena3news())
     news = ws.get_lasextanews() + ws.get_antena3news()
     data = {
         'imgs' : [new.get_image() for new in news],
