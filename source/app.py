@@ -10,7 +10,8 @@ app = Flask(__name__)
 
 @app.route('/index')
 def index():
-    news = ws.get_lasextanews() + ws.get_antena3news()
+    # news = ws.get_lasextanews() + ws.get_antena3news()
+    news = ws.get_news()
     data = {
         'imgs' : [new.get_image() for new in news],
         'titles' : [str(new.get_title()) for new in news],
