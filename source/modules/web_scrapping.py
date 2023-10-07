@@ -12,11 +12,9 @@ import re
 
 
 def _build_news(titles, urls, imgs, owner: str, date: str) -> List[cl.News]:
-    # print(f"titles.len: {len(titles)}, urls.len: {len(urls)}, imgs.len: {len(imgs)}\n")
     news = []
-    for i in range(len(imgs)):
-        # print(f"{titles[i]}\n")
-        news.append(cl.News(titles[i], imgs[i], "", urls[i], date, owner))
+    for i in range(len(urls)):
+        news.append(cl.News(titles[i][0], imgs[i], "", urls[i], date, owner))
 
     return news
 
@@ -58,7 +56,7 @@ def _make_antena3news(content : str, date: str) -> List[cl.News]:
             if src is not None:
                 url_imgs.append(src)
         else:
-            url_imgs.append("./static/img/nohayfoto.avif")
+            url_imgs.append("static\\img\\no_image.jpg")
 
     return _build_news(titles=titles, urls=link_news, imgs=url_imgs, owner='antena3noticias', date=date)
 
@@ -97,39 +95,81 @@ def _make_marcanews(content: str, date: str) -> List[cl.News]:
     return _build_news(titles=titles, urls=link_news, imgs=url_imgs, owner='LaSexta', date=date)
 
 
+def _make_nytimesnews(content: str, date: str) -> List[cl.News]:
+
+    nytimes_structure = BeautifulSoup(content, 'lxml')
+
+    articles = nytimes_structure.find_all('section', class_='story-wrapper')
+    # link_news = [article.find('a').get('href').strip() for article in articles]
+    link_news = []
+
+    for article in articles:
+        img_tag = article.find('a')
+        if img_tag is not None:
+            href = img_tag.get('href')
+            if href is not None:
+                link_news.append(href)
+
+    titles = []
+    for article in articles:
+        h3_tags = article.find_all('h3')
+        h3_texts = [h3_tag.text.strip() for h3_tag in h3_tags]
+        if h3_texts:
+            titles.append(h3_texts)
+
+    return [cl.News(titles[i][0], 'static\\img\\nytimes.png', "", link_news[i], date, "The New York Times") for i in range(len(link_news))]
+
+    # return _build_news(titles=titles, urls=link_news, imgs='static\\img\\nytimes.png', owner='The New York Times', date=date)
+
+
 def get_news() -> List[cl.News]:
+    newspapers = {
+        "antena3": _make_antena3news,
+        "lasexta": _make_lasextanews,
+        "marca": _make_marcanews,
+        "nytimes": _make_nytimesnews
+    }
     # Define el patrón de nombres de archivo como una cadena cruda
-        pattern = r"./almacenTemporalHTML/*"
+    pattern = r"./almacenTemporalHTML/*"
 
-        # Obtiene una lista de todos los archivos que coinciden con el patrón en el directorio actual
-        htmls = glob.glob(pattern)
+    # Obtiene una lista de todos los archivos que coinciden con el patrón en el directorio actual
+    htmls = glob.glob(pattern)
 
-        # Ahora puedes iterar sobre la lista de archivos y leer su contenido
-        news = []
-        for name in htmls:
-            with open(name, "r", encoding="utf-8") as archivo:
-                content = archivo.read()
-                date = re.search(r"_(\d{4}-\d{2}-\d{2})\.html", name).group(1)
+    # Ahora puedes iterar sobre la lista de archivos y leer su contenido
+    news = []
+    for file_name in htmls:
+        with open(file_name, "r", encoding="utf-8") as archivo:
+            content = archivo.read()
+            search = re.search(r"(\w+)_(\d{4}-\d{2}-\d{2})\.html", file_name)
+            date = search.group(2)
+            name = search.group(1)
+            news += newspapers[name](content, date)
+            """
             if re.search(r"antena3", name):
-                # print("match antena3")
+                print("match antena3")
                 news = news + _make_antena3news(content, date)
             elif re.search(r"lasexta", name):
-                # print("match lasexta")
+                print("match lasexta")
                 news = news + _make_lasextanews(content, date)
+            elif re.search(r"marca", name):
+                print("match marca")
+                news = news + _make_marcanews(content, date)
+            elif re.search(r"nytimes", name):
+                print("match nytimes")
+                # news = news + _make_nytimesnews(content, date)
             else:
                 print("NOT FOUND")
-
-        return news
+            """
+    return news
 
 
 def save_html() -> None:
-    urls = ["https://www.lasexta.com/noticias/", "https://www.antena3.com/noticias/", "https://www.marca.com/"]
+    urls = ["https://www.lasexta.com/noticias/", "https://www.antena3.com/noticias/", "https://www.marca.com/", "https://www.nytimes.com/international/"]
     day = datetime.now().strftime(f'%Y-%m-%d')
     route = ".\\almacenTemporalHTML\\"
     pattern = r'.(\w+).com'
-    newspapers_names = [re.search(pattern, url).group(1) if re.search(pattern, url) else "unknown" for url in urls]
+    newspapers_names = [re.search(pattern, url).group(1) for url in urls]
     names = [f"{route}{newspaper_name}_{day}.html" for newspaper_name in newspapers_names]
-    # names = [f"{route}lasexta_{day}.html", f"{route}antena3_{day}.html", f"{route}antena3_{day}.html"]
 
     for index in range(len(urls)):
         # Verificar si el archivo ya existe
@@ -139,3 +179,4 @@ def save_html() -> None:
             # Escribir en el fichero
             with open(names[index], "w", encoding="utf-8") as archivo:
                 archivo.write(html.unescape(content_html))
+

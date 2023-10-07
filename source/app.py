@@ -44,7 +44,7 @@ def register_funct():
 @app.route('/save_keyword', methods=['post'])
 def save_keyword():
     keyword = request.form['search']
-    news = f.filter_by_words(keyword, ws.get_lasextanews() + ws.get_antena3news())
+    news = f.filter_by_words(keyword, ws.get_news())
     data = {
         'imgs' : [new.get_image() for new in news],
         'titles' : [new.get_title() for new in news],
@@ -58,7 +58,7 @@ def save_keyword():
 @app.route('/pruebaArticulos')
 def prueba_articulos():
 
-    news = ws.get_lasextanews() + ws.get_antena3news()
+    news = ws.get_news()
     data = {
         'imgs' : [new.get_image() for new in news],
         'titles' : [new.get_title() for new in news],
