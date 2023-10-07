@@ -11,7 +11,7 @@ import glob
 import re
 
 
-def build_news(titles, urls, imgs, owner: str, date: str) -> List[cl.News]:
+def _build_news(titles, urls, imgs, owner: str, date: str) -> List[cl.News]:
     # print(f"titles.len: {len(titles)}, urls.len: {len(urls)}, imgs.len: {len(imgs)}\n")
     news = []
     for i in range(len(imgs)):
@@ -30,7 +30,7 @@ def get_content(url: str) -> str:
     return ''.join(text)
 
 
-def make_antena3news(content : str, date: str) -> List[cl.News]:
+def _make_antena3news(content : str, date: str) -> List[cl.News]:
     """
     # new = cl.News(title, image, summary, url, date, owner)
     antena3 = requests.get("https://www.antena3.com/noticias/")
@@ -60,10 +60,10 @@ def make_antena3news(content : str, date: str) -> List[cl.News]:
         else:
             url_imgs.append("./static/img/nohayfoto.avif")
 
-    return build_news(titles=titles, urls=link_news, imgs=url_imgs, owner='antena3noticias', date=date)
+    return _build_news(titles=titles, urls=link_news, imgs=url_imgs, owner='antena3noticias', date=date)
 
 
-def make_lasextanews(content : str, date: str) -> List[cl.News]:
+def _make_lasextanews(content : str, date: str) -> List[cl.News]:
 
     # lasexta = requests.get("https://www.lasexta.com/noticias/")
     lasexta_structure = BeautifulSoup(content, 'lxml')
@@ -79,11 +79,22 @@ def make_lasextanews(content : str, date: str) -> List[cl.News]:
         h2_texts = [h2_tag.text.strip() for h2_tag in h2_tags]
         titles.append(h2_texts)
 
-    return build_news(titles=titles, urls=link_news, imgs=url_imgs, owner='LaSexta', date=date)
+    return _build_news(titles=titles, urls=link_news, imgs=url_imgs, owner='LaSexta', date=date)
 
 
-def get_marcanews() -> List[cl.News]:
-    return None
+def _make_marcanews(content: str, date: str) -> List[cl.News]:
+    marca_structure = BeautifulSoup(content, 'lxml')
+
+    articles = marca_structure.find_all('article')
+    link_news = [article.find('a').get('href').strip() for article in articles]
+    url_imgs = [article.find('img').get('src') for article in articles]
+
+    titles = []
+    for article in articles:
+        h2_tags = article.find_all('h2')
+        h2_texts = [h2_tag.text.strip() for h2_tag in h2_tags]
+        titles.append(h2_texts)
+    return _build_news(titles=titles, urls=link_news, imgs=url_imgs, owner='LaSexta', date=date)
 
 
 def get_news() -> List[cl.News]:
@@ -101,10 +112,10 @@ def get_news() -> List[cl.News]:
                 date = re.search(r"_(\d{4}-\d{2}-\d{2})\.html", name).group(1)
             if re.search(r"antena3", name):
                 # print("match antena3")
-                news = news + make_antena3news(content, date)
+                news = news + _make_antena3news(content, date)
             elif re.search(r"lasexta", name):
                 # print("match lasexta")
-                news = news + make_lasextanews(content, date)
+                news = news + _make_lasextanews(content, date)
             else:
                 print("NOT FOUND")
 
@@ -112,10 +123,13 @@ def get_news() -> List[cl.News]:
 
 
 def save_html() -> None:
-    urls = ["https://www.lasexta.com/noticias/", "https://www.antena3.com/noticias/"]
+    urls = ["https://www.lasexta.com/noticias/", "https://www.antena3.com/noticias/", "https://www.marca.com/"]
     day = datetime.now().strftime(f'%Y-%m-%d')
     route = ".\\almacenTemporalHTML\\"
-    names = [f"{route}lasexta_{day}.html", f"{route}antena3_{day}.html"]
+    pattern = r'.(\w+).com'
+    newspapers_names = [re.search(pattern, url).group(1) if re.search(pattern, url) else "unknown" for url in urls]
+    names = [f"{route}{newspaper_name}_{day}.html" for newspaper_name in newspapers_names]
+    # names = [f"{route}lasexta_{day}.html", f"{route}antena3_{day}.html", f"{route}antena3_{day}.html"]
 
     for index in range(len(urls)):
         # Verificar si el archivo ya existe
