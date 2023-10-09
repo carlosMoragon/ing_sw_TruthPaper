@@ -1,5 +1,6 @@
 import re
 from typing import List
+from modules import web_scrapping as ws
 # Declaración de clases
 
 
@@ -158,8 +159,8 @@ class CompanyUser(User):
 
 # Estructura de una Noticia
 class News:
-    def __init__(self, title: List[str], image: str, summary: str, url: str, date: str, owner: str):
-        self._title = title[0]
+    def __init__(self, title: str , image: str, summary: str, url: str, date: str, owner: str, content: str):
+        self._title = title
         self._image = image
         self._summary = summary
         self._url = url
@@ -167,6 +168,7 @@ class News:
         self._date = date
         self._qualification = -1
         self._owner = owner
+        self._content = content
 
     def get_title(self) -> str:
         return self._title
@@ -216,5 +218,12 @@ class News:
     def set_owner(self, owner):
         self._owner = owner
 
+    def get_content(self) -> str:
+        return self._content
+
+    def set_content(self, content):
+        self._content = content
+
     def __str__(self):
         return f"title: {self._title}, image: {self._image}, summary: {self._summary}, url: {self._url}, comments: {self._comments}, date: {self._date}, qualification: {self._qualification}, owner: {self._owner}"
+

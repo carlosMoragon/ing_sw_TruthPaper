@@ -7,11 +7,24 @@ def filter_by_categories(category: str, news: List[cl.News]) -> List[cl.News]:
     return None
 
 
+def filter_by_date(search: str, news: List[cl.News]) -> List[cl.News]:
+    matches = []
+    if cl.validate_date(search):
+        for new in news:
+            if search == str(new.get_date()):
+                matches.append(new)
+
+    return matches
+
+
 def filter_by_words(search: str, news: List[cl.News]) -> List[cl.News]:
     words = search.split(" ")
     all_news = []
     for word in words:
-        all_news = all_news + _search_title(word, news)# + _search_content(word, news)
+        if cl.validate_date(word):
+            all_news += filter_by_date(search, news)
+        else:
+            all_news = all_news + _search_title(word, news)# + _search_content(word, news)
     return list(set(all_news))
 
 
