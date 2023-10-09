@@ -7,23 +7,16 @@ import os
 import html
 import glob
 import re
+from concurrent.futures import ThreadPoolExecutor
 
 
 def _build_news(titles: List[str], urls: List[str], imgs: List[str], owner: str, date: str) -> List[cl.News]:
     news = []
     for i in range(len(urls)):
-        news.append(cl.News(titles[i], imgs[i], "", urls[i], date, owner))
+        news.append(cl.News(titles[i], imgs[i], "", urls[i], date, owner, ""))
 
+    #  save_content(news)
     return news
-
-
-def get_content(url: str) -> str:
-    web_structure = BeautifulSoup(requests.get(url).text, 'lxml')
-    all_p = web_structure.find_all('p')
-    text = []
-    for p in all_p:
-        text.append(p.text)
-    return ''.join(text)
 
 
 def _make_antena3news(content: str, date: str) -> List[cl.News]:
@@ -90,7 +83,7 @@ def _make_nytimesnews(content: str, date: str) -> List[cl.News]:
         if h3_texts:
             titles.append(h3_texts)
 
-    return [cl.News(titles[i][0], 'static\\img\\nytimes.png', "", link_news[i], date, "The New York Times") for i in range(len(link_news))]
+    return [cl.News(titles[i][0], 'static\\img\\nytimes.png', "", link_news[i], date, "The New York Times", "") for i in range(len(link_news))]
 
 
 def get_news() -> List[cl.News]:
@@ -114,6 +107,29 @@ def get_news() -> List[cl.News]:
             news += newspapers[name](content, date)
 
     return news
+
+
+def save_content(news: List[cl.News]):
+    with ThreadPoolExecutor(max_workers=5) as executor:
+        content = list(executor.map(get_content, [new.get_url() for new in news]))
+        for i in range(len(news)):
+            news[i].set_content(content[i])
+    print("TERMINADO")
+
+
+def get_content(url: str) -> str:
+    try:
+        response = requests.get(url)
+        web_structure = BeautifulSoup(response.text, 'lxml')
+        response.raise_for_status()  # Verifica si la solicitud fue exitosa (código de estado 200)
+        all_p = web_structure.find_all('p')
+        text = []
+        for p in all_p:
+            text.append(p.text)
+        return ''.join(text)
+    except requests.exceptions.RequestException as e:
+        print(f"Error al obtener {url}: {e}")
+        return ""
 
 
 def save_html() -> None:

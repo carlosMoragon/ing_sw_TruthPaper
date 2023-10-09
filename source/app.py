@@ -2,15 +2,18 @@ from flask import Flask, render_template, request, flash
 from modules import web_scrapping as ws, users, filter as f, classes as cl
 from flask_sqlalchemy import SQLAlchemy
 from database import DBManager as manager
+from typing import List
 
 db = manager.db
 app = Flask(__name__)
 
 app.secret_key = '1jn21rc1#kj42h35k%@24ic1ucmo4r1cni4y1@@91ch24i5nc1248591845715'
 
+news: List[cl.News]
 
 @app.route('/index')
 def index():
+    global news
     news = ws.get_news()
     data = {
         'imgs': [new.get_image() for new in news],
@@ -44,21 +47,22 @@ def register_funct():
 @app.route('/save_keyword', methods=['post'])
 def save_keyword():
     keyword = request.form['search']
-    news = f.filter_by_words(keyword, ws.get_news())
+    global news
+    filted_news = f.filter_by_words(keyword, news)
     data = {
-        'imgs' : [new.get_image() for new in news],
-        'titles' : [new.get_title() for new in news],
-        'urls' : [new.get_url() for new in news],
+        'imgs' : [new.get_image() for new in filted_news],
+        'titles' : [new.get_title() for new in filted_news],
+        'urls' : [new.get_url() for new in filted_news],
         'keyword': keyword,
-        'dates': [new.get_date() for new in news]
+        'dates': [new.get_date() for new in filted_news]
     }
     return render_template('categoriasFunc.html', data=data)
 
 
 @app.route('/pruebaArticulos')
 def prueba_articulos():
-
-    news = ws.get_news()
+    global news
+    # news = ws.get_news()
     data = {
         'imgs' : [new.get_image() for new in news],
         'titles' : [new.get_title() for new in news],
