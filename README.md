@@ -15,4 +15,3 @@
 ## Versiones utilizadas
 * Python v3.9
 * MariaDB v?
-
