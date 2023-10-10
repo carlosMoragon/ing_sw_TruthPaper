@@ -1,0 +1,14 @@
+Usuario Administrador
+	+ Acepta/deniega periodista/empresa
+
+	+ Capacidad editar/borrar noticias y comentarios
+
+	+ Mostrar gráficas en las noticias
+
+Modo de proceder:
+- Creamos una página de inicio para Admin
+- 4 apartados:
+    + Perfil: Nombre, Apellido, cambiar contraseña?
+    + Editar comentarios 
+    + Mostrar gráficas
+    + Denegar/Aceptar periodista
