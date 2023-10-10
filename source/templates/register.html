@@ -31,11 +31,16 @@
             left: 50%;
             transform: translate(-50%, -50%);
             width: 70%;
-            max-width: 400px; /* Adjust the maximum width according to your preferences  */
-            text-align: left; /* Centers the content inside the container */
+            margin-right: 2%;
+            margin-left: 5%;
+            text-align: center; /* Centers the content inside the container */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         form label {
+            color: black;
             display: block;
             text-align: left;
             margin-bottom: 5px; /* Space between labels and input fields */
@@ -48,14 +53,36 @@
 
 
         form input {
-            width: 80%;
+            width: 90%;
             padding: 8px;
             margin-bottom: 10px;
         }
 
         .register_user {
             display: none; /* Esto oculta inicialmente el usuario */
+            position: absolute;
         }
+
+        .diff_users{
+            display: flex;
+            text-align: center;
+        }
+
+        .common_user_register,.journalist_register, .company_register{
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        button{
+            height: 250px;
+            width: 350px;
+            margin-bottom: 5%;
+        }
+
+        form{
+            align-items: center;
+        }
+
 
     </style>
 
@@ -96,12 +123,14 @@
 <!-- Topbar End -->
 
 <!-- Login -->
-    <div class="container-lg">
+    <div class="container-lg" style="margin-top: 10%;">
         <h2> Registro</h2>
         <p> Elija el tipo de usuario con el que desea registrarse</p>
         <div class="diff_users" style="margin: 10%;">
+            <!-- Usuario Común-->
             <div class="common_user_register">
                 <button onclick="showRegister('common_user')"> Usuario Común </button>
+                <p> El usuario común permite ver noticias desde diferentes puntos de vista y comentar </p>
                 <div id="common_user" class="register_user">
                     <form action="/save_commonuser" method="post">
                         <label for="c_user_name">Nombre:</label>
@@ -123,9 +152,13 @@
                     </form>
                 </div>
             </div>
+            <!-- -->
 
+            <!--Usuario PERIODISTA-->
             <div class="journalist_register">
                 <button onclick="showRegister('journalist')"> Periodista </button>
+                <p> El usuario periodista permite certificar las opiniones y reseñas de profesional </p>
+                <p> Este usuario debe ser certificado por TruthPaper </p>
                 <div id="journalist" class="register_user">
                     <form action="/save_J" method="post">
                         <label for="journalist_name">Nombre:</label>
@@ -153,6 +186,8 @@
 
             <div class="company_register">
                 <button onclick="showRegister('company')"> Empresa </button>
+                <p> El usuario empresa permite darse de alta como compañia y publicar noticias </p>
+                <p> Este usuario debe ser certificado por TruthPaper </p>
                     <div id="company" class="register_user">
                         <form action="/save_companyuser" method="post">
                             <label for="username">Nombre de usuario:</label>
@@ -177,7 +212,19 @@
             </div>
         </div>
     </div>
+<<<<<<< HEAD
+    <script src="../static/js/date.js"></script>
+    <script src="../static/js/register.js"></script>
+</body>
+
+<!-- Bajar el container-lg
+    display: none
+    averiguar como cuando vuleves a pulsar reaparecen el resto
+    hacer que position: absolute pero display:flex    
+-->
+=======
 
 <script src="../static/js/date.js"></script>
 <script src="../static/js/register.js"></script>
 </body>
+>>>>>>> 902b1c54bf562dafc213aa1427871f6153fc3668
