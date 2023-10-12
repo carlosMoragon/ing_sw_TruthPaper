@@ -20,7 +20,7 @@ def _build_news(titles: List[str], urls: List[str], imgs: List[str], owner: str,
 
 
 def _make_antena3news(content: str, date: str) -> List[cl.News]:
-
+    _category_antena3(content=content)
     antena3_structure = BeautifulSoup(content, 'lxml')
     articles = antena3_structure.find_all('article')
 
@@ -44,6 +44,12 @@ def _make_antena3news(content: str, date: str) -> List[cl.News]:
 
     return _build_news(titles=titles, urls=link_news, imgs=url_imgs, owner='antena3noticias', date=date)
 
+
+def _category_antena3(content: str) -> List[str]:
+    structure = BeautifulSoup(content, 'lxml')
+    categories = structure.find_all('li', 'menu-main__item menu-main__item--level2')
+    print(categories)
+    return categories
 
 def _make_lasexta_marca_news(content: str, date: str) -> List[cl.News]:
 
@@ -112,7 +118,6 @@ def get_news() -> List[cl.News]:
             date = search.group(2)
             name = search.group(1)
             news += newspapers[name](content, date)
-
     return news
 
 
