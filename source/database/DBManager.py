@@ -10,3 +10,4 @@ def login(username, password) -> bool:
         db.password == password
     else:
         return False
+

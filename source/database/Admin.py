@@ -4,12 +4,15 @@ from flask import Flask
 app = Flask(__name__)
 
 from database import DBManager as manager
-# clase que crea un usuario administrador
+from modules import users
 
 db = manager.db
+lista_admin = []
+lista_admin = users.load_admin()
 
 
-class AdministratorUser(db.Model):
+
+class Journalist(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     username = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(50), nullable=False)
@@ -19,20 +22,13 @@ class AdministratorUser(db.Model):
         self.username = username
         self.password = password
         self.email = email
-
-
-lista_registros = []
-
-# Cargar todos los usarios de la tabla "admin"
-def load_admin():
-    admin_data = AdministratorUser.query.all()
-    for usuario in admin_data:
-        lista_registros.append([usuario.username, usuario.password, usuario.email]) # Añade a la lista los datos de cada usuario
+def journalist_name():
+    journalist_data = Journalist.query.all()
+    for usuario in journalist_data:
+        lista_registros.append([usuario.username, usuario.password, usuario.email])
     for i, registro in enumerate(lista_registros, 1):
-        print(f"Registro {i}: {registro}" )    # Imprime los datos de cada usuario
+        print(f"Registro {i}: {registro}" )
     return None
-
-load_admin()
 
 
 
