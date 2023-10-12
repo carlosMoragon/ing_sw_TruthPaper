@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, flash
 from modules import web_scrapping as ws, users, filter as f, classes as cl
 from flask_sqlalchemy import SQLAlchemy
-from database import DBManager as manager
+from database import DBManager as manager, Admin
 from typing import List
 
 db = manager.db
@@ -114,14 +114,23 @@ def save_cmpu():
 
 
 # MySQL Connection
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1234@localhost:3307/truthpaper'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@localhost:3307/truthpaper'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
 db.init_app(app)
 
+print(Admin.load_admin())
+
 if __name__ == '__main__':
     ws.save_html()
     app.run(debug=True)
+
+@app.route('/save_admin', methods=['POST'])
+def save_admin():
+        new_g_user = Admin.admin(request.form['username'], request.form['password'], request.form['email'])
+        db.session.add(new_g_user)
+        db.session.commit()
+        return register_funct()
 
 
