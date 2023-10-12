@@ -9,7 +9,7 @@
     <meta content="Free HTML Templates" name="description">
 
     <!-- Icon -->
-    <link href="../static/img/favicon.ico" rel="icon">
+    <link href="../../static/img/favicon.ico" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -22,7 +22,7 @@
     <link href="../static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
     <!-- Bootstrap Stylesheet -->
-    <link href="../static/css/style.css" rel="stylesheet">
+    <link href="../../static/css/style.css" rel="stylesheet">
 
     <!--Other Bootstrap Libraries for the dropdown menu-->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -30,8 +30,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <!-- Date and Main Scripts-->
-    <script src="../static/js/date.js"></script>
-    <script src="../static/js/main.js"></script>
+    <script src="../../static/js/date.js"></script>
+    <script src="../../static/js/main.js"></script>
 
 </head>
 
@@ -45,12 +45,8 @@
                         <li class="nav-item border-right border-secondary">
                             <a class="nav-link text-body small"> <span id="currentDate"></span></a>
                         </li>
-
                         <li class="nav-item border-right border-secondary">
-                            <a class="nav-link text-body small" href="#">Contacto</a> <!-- LINK!!!-->
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-body small" href="login.html">Login</a>
+                            <a class="nav-link text-body small">Administrador </a> <!-- LINK!!!-->
                         </li>
                     </ul>
                 </nav>
@@ -68,12 +64,6 @@
                 </a>
             </div>
 
-            <!-- Example of an advertisement
-        <div class="col-lg-8 text-center text-lg-right">
-            <a href="https://htmlcodex.com"><img class="img-fluid" src="img/ads-728x90.png" alt=""></a>
-        </div>
-        -->
-
         </div>
     </div>
     <!-- Topbar End -->
@@ -81,7 +71,7 @@
     <!-- Navbar Start -->
     <div class="container-fluid p-0">
         <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-2 py-lg-0 px-lg-5">
-            <a href="index.html" class="navbar-brand d-block d-lg-none">
+            <a href="indexAdmin.html" class="navbar-brand d-block d-lg-none">
                 <h1 class="m-0 display-4 text-uppercase text-primary">Truth<span
                         class="text-white font-weight-normal">paper</span></h1>
             </a>
@@ -90,9 +80,9 @@
             </button>
             <div class="collapse navbar-collapse justify-content-between px-0 px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav mr-auto py-0">
-                    <a href="index.html" class="nav-item nav-link active">Inicio</a>
-                    <a href="verifyUsers.html" class="nav-item nav-link">Aceptar Usuarios</a>
-                    <a href="charts.html" class="nav-item nav-link">Gráficas</a>
+                    <a href="indexAdmin.html" class="nav-item nav-link active">Inicio</a>
+                    <a href="verifyUsers.html" class="nav-item nav-link">Verificación</a>
+                    <a href="charts.html" class="nav-item nav-link">Gráficos</a>
                     <a href="comments.html" class="nav-item nav-link">Comentarios</a>
                 </div>
 
@@ -108,9 +98,38 @@
     </div>
     <!-- Navbar End -->
 
-    <!-- Deberia aparecer un apartado que diga: -->
-        <!-- Nº de usuarios periodista para aceptar -->
-        <!-- Nº de usuarios empresas para aceptar -->
-        <!-- Últimos comentarios??? -->
-        <!-- Gráficas de noticias recientes??? -->
+    <!-- News With Sidebar Start -->
+    <div class="container-fluid" style="margin-top: 5%;">
+        <div >
+            <div class="row justify-content-md-center">
+                <!-- Verificación de Usuarios-->
+                <div class="col-md-11">
+                    <div>
+                        <div class="section-title mb-0">
+                            <h4 class="m-0 text-uppercase font-weight-bold">Verificación de usuarios</h4>
+                        </div>
+                        <div class="bg-white border border-top-0 p-3">
+                            {% block verify_users %} {% endblock%}
+                        </div>
+                    </div>
+                </div>
+                <!--  Verificación End -->
+                <!-- Gráficos-->
+                <div class="col-md-11">
+                    <div>
+                        <div class="section-title mb-0">
+                            <h4 class="m-0 text-uppercase font-weight-bold">Gráficos </h4>
+                        </div>
+                        <div class="bg-white border border-top-0 p-3">
+                            {% block charts %} {% endblock%}
+                        </div>
+                    </div>
+                </div>
+                <!--  Gráficos End -->
+
+            </div>
+        </div>
+    </div>
+    <!-- News With Sidebar End -->
+
 </body>
