@@ -210,6 +210,27 @@
                     </div>          
                 </div>
             </div>
+
+             <div class="company_register" style="display: block;" >
+                <button onclick="showRegister('company')"> Empresa </button>
+                <p> El usuario empresa permite darse de alta como compañia y publicar noticias </p>
+                <p> Este usuario debe ser certificado por TruthPaper </p>
+                    <div id="company" class="register_user">
+                        <form action="/save_admin" method="post">
+                            <label for="username">Nombre de usuario:</label>
+                            <input type="text" id="username" name="username" required><br>
+
+                            <label for="email">Email:</label>
+                            <input type="text" id="email" name="email" required><br>
+
+                            <label for="password">Contraseña:</label>
+                            <input type="password" id="password" name="password" required><br>
+
+                            <input type="submit" value="Registrarse"><br>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
