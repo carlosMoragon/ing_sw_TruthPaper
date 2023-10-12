@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from modules import classes as cl
-from typing import List
+from typing import List, Dict
 from datetime import datetime
 import os
 import html
@@ -44,12 +44,26 @@ def _make_antena3news(content: str, date: str) -> List[cl.News]:
 
     return _build_news(titles=titles, urls=link_news, imgs=url_imgs, owner='antena3noticias', date=date)
 
-
-def _category_antena3(content: str) -> List[str]:
+def _category_antena3(content: str) -> (List[str], List[str]):
     structure = BeautifulSoup(content, 'lxml')
     categories = structure.find_all('li', 'menu-main__item menu-main__item--level2')
-    print(categories)
-    return categories
+    a_tags = [category.find('a') for category in categories]
+    urls = [a_tag.get('href').strip() for a_tag in a_tags]
+    names = [a_tag.text.strip() for a_tag in a_tags]
+    return urls, names
+
+
+def _category_marca(content: str) -> (List[str], List[str]):
+    return None
+
+
+def _category_lasexta(content: str) -> (List[str], List[str]):
+    return None
+
+
+def _category_nytimes(content: str) -> (List[str], List[str]):
+    return None
+
 
 def _make_lasexta_marca_news(content: str, date: str) -> List[cl.News]:
 
@@ -106,11 +120,15 @@ def get_news() -> List[cl.News]:
         "marca": _make_lasexta_marca_news,
         "nytimes": _make_nytimesnews
     }
+
     pattern = r"./almacenTemporalHTML/*"
 
     htmls = glob.glob(pattern)
 
     news = []
+    urls_categories = []
+    names_categories = []
+
     for file_name in htmls:
         with open(file_name, "r", encoding="utf-8") as archivo:
             content = archivo.read()
@@ -119,6 +137,17 @@ def get_news() -> List[cl.News]:
             name = search.group(1)
             news += newspapers[name](content, date)
     return news
+
+
+def get_news_categories(urls: List[str], names: List[str]) -> Dict[str, List[str]]:
+    dict: Dict[str, List[str]] = {}
+    categories_html = [requests.get(url).text for url in urls]
+    # List of List
+    lists_news = [_make_antena3news(content=html, date=datetime.now().strftime(f'%Y-%m-%d')) for html in categories_html]
+    for i in range(len(names)):
+        dict[names[i]] = lists_news[i]
+
+    return dict
 
 
 def save_content(news: List[cl.News]):
@@ -144,8 +173,7 @@ def get_content(url: str) -> str:
         return ""
 
 
-def save_html() -> None:
-    urls = ["https://www.lasexta.com/noticias/", "https://www.antena3.com/noticias/", "https://www.marca.com/", "https://www.nytimes.com/international/"]
+def save_html(urls: List[str]) -> None:
     day = datetime.now().strftime(f'%Y-%m-%d')
     route = ".\\almacenTemporalHTML\\"
     pattern = r'.(\w+).com'
