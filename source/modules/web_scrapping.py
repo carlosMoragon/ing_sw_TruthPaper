@@ -15,7 +15,7 @@ def _build_news(titles: List[str], urls: List[str], imgs: List[str], owner: str,
     for i in range(len(urls)):
         news.append(cl.News(titles[i], imgs[i], "", urls[i], date, owner, ""))
 
-    #  save_content(news)
+    # zsave_content(news)
     return news
 
 
@@ -50,8 +50,15 @@ def _make_lasexta_marca_news(content: str, date: str) -> List[cl.News]:
     lasexta_structure = BeautifulSoup(content, 'lxml')
     articles = lasexta_structure.find_all('article')
     link_news = [article.find('a').get('href').strip() for article in articles]
-    url_imgs = [article.find('img').get('src') for article in articles]
-
+    url_imgs = []
+    for article in articles:
+        img_tag = article.find('img')
+        if img_tag is not None:
+            src = img_tag.get('src')
+            if src is not None:
+                url_imgs.append(src)
+        else:
+            url_imgs.append("static\\img\\no_image.jpg")
     titles = []
     for article in articles:
         h2_tags = article.find_all('h2')
