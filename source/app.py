@@ -1,19 +1,24 @@
-from flask import Flask, render_template, request
-from modules import web_scrapping as ws, users, filter as f
+from flask import Flask, render_template, request, flash
+from modules import web_scrapping as ws, users, filter as f, classes as cl
 from flask_sqlalchemy import SQLAlchemy
 from database import DBManager as manager
-#from werkzeug.security import generate_password_hash
+from typing import List
 
 db = manager.db
 app = Flask(__name__)
 
+app.secret_key = '1jn21rc1#kj42h35k%@24ic1ucmo4r1cni4y1@@91ch24i5nc1248591845715'
+
+news: List[cl.News]
+
 @app.route('/index')
 def index():
-    news = ws.get_lasextanews() + ws.get_antena3news()
+    global news
+    news = ws.get_news()
     data = {
-        'imgs' : [new.get_image() for new in news],
-        'titles' : [str(new.get_title()) for new in news],
-        'urls' : [new.get_url() for new in news],
+        'imgs': [new.get_image() for new in news],
+        'titles': [str(new.get_title()) for new in news],
+        'urls': [new.get_url() for new in news],
         'dates': [new.get_date() for new in news]
     }
 
@@ -24,12 +29,15 @@ def index():
 def start():
     return render_template('login.html')
 
+
+# CAMBIAR LA RUTA
 @app.route('/login_users', methods=['POST'])
 def login_users():
-    if(manager.login(request.form['username'], request.form['password'])):
+    if manager.login(request.form['username'], request.form['password']):
         return index()
     else:
         return start()
+
 
 @app.route('/register.html')
 def register_funct():
@@ -39,55 +47,73 @@ def register_funct():
 @app.route('/save_keyword', methods=['post'])
 def save_keyword():
     keyword = request.form['search']
-    news = f.filter_by_words(keyword, ws.get_lasextanews() + ws.get_antena3news())
+    global news
+    filted_news = f.filter_by_words(keyword, news)
     data = {
-        'imgs' : [new.get_image() for new in news],
-        'titles' : [new.get_title() for new in news],
-        'urls' : [new.get_url() for new in news],
+        'imgs' : [new.get_image() for new in filted_news],
+        'titles' : [new.get_title() for new in filted_news],
+        'urls' : [new.get_url() for new in filted_news],
         'keyword': keyword,
-        'dates': [new.get_date() for new in news]
+        'dates': [new.get_date() for new in filted_news]
     }
     return render_template('categoriasFunc.html', data=data)
 
+
 @app.route('/pruebaArticulos')
 def prueba_articulos():
-
-    news = ws.get_lasextanews() + ws.get_antena3news()
+    global news
+    # news = ws.get_news()
     data = {
         'imgs' : [new.get_image() for new in news],
         'titles' : [new.get_title() for new in news],
         'urls' : [new.get_url() for new in news]
     }   
-    
-# Crear una etiqueta {}
-for etiq in ws.get_lasextanews():
-    etiq.get_image()
+    return render_template('pruebaArticulos.html', data=data)
 
-#Guardar un usuario desde la web a la base, usando el modelo de usuario
+
+# ESTE METODO Y EL SIGUIENTE ES EL MISMO ASI QUE DEBERIAN SER 1
+# Guardar un usuario desde la web a la base, usando el modelo de usuario
+# He cambiado el nombre del metodo: no puede tener mayusculas
 @app.route('/save_commonuser', methods=['POST'])
-def save_CU():
-    #hashed_password = generate_password_hash(request.form['password'], method='sha256')
-    new_user = users.Commonuser(request.form['username'], request.form['password'], request.form['email'], request.form['c_user_name'], request.form['c_user_lastname'])
-    new_G_user = users.User(request.form['username'], request.form['password'], request.form['email'])
-    db.session.add(new_G_user) 
-    db.session.add(new_user)
-    db.session.commit()
+def save_cu():
+    if cl.validate_password(request.form['password']):
+        # hashed_password = generate_password_hash(request.form['password'], method='sha256')
+        new_user = users.Commonuser(request.form['username'], request.form['password'], request.form['email'], request.form['c_user_name'], request.form['c_user_lastname'])
+        # He cambiado el nombre de la variable: no puede tener mayusculas
+        new_g_user = users.User(request.form['username'], request.form['password'], request.form['email'])
+        db.session.add(new_g_user)
+        db.session.add(new_user)
+        db.session.commit()
     
-    return index()
+        return index()
+    else:
+        print("CONTRASEÑA DÉBIL")
+        flash('CONTRASEÑA DÉBIL', 'WARNING')
+        return register_funct()
 
+
+# He cambiado el nombre del metodo: no puede tener mayusculas
 @app.route('/save_companyuser', methods=['POST'])
-def save_CMPU():
-#   hashed_password = generate_password_hash(request.form['password'], method='sha256')
-#   certification = 'certification' in request.form
-    new_user = users.Companyuser(request.form['username'], request.form['password'], request.form['email'], request.form['company_name'], request.form['company_nif'])
-    new_G_user = users.User(request.form['username'], request.form['password'], request.form['email'])
-    db.session.add(new_G_user) 
-    db.session.add(new_user) 
-    db.session.commit()
-    
-    return index()
+def save_cmpu():
+    if cl.validate_password(request.form['password']):
+        # hashed_password = generate_password_hash(request.form['password'], method='sha256')
+        # certification = 'certification' in request.form
+        new_user = users.Companyuser(request.form['username'], request.form['password'], request.form['email'], request.form['company_name'], request.form['company_nif'])
+        # He cambiado el nombre de la variable: no puede tener mayusculas
+        new_g_user = users.User(request.form['username'], request.form['password'], request.form['email'])
+        db.session.add(new_g_user)
+        db.session.add(new_user)
+        db.session.commit()
 
-#MySQL Connection
+        return index()
+
+    else:
+        print("CONTRASEÑA DÉBIL")
+        flash('CONTRASEÑA DÉBIL', 'WARNING')
+        return register_funct()
+
+
+# MySQL Connection
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1234@localhost:3307/truthpaper'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -95,5 +121,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
 if __name__ == '__main__':
+    ws.save_html()
     app.run(debug=True)
+
 
