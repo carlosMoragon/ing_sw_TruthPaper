@@ -4,6 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 from database import DBManager as manager
 from typing import List
 
+#BORRAR:
+import requests as rq
+
 db = manager.db
 app = Flask(__name__)
 
@@ -11,10 +14,13 @@ app.secret_key = '1jn21rc1#kj42h35k%@24ic1ucmo4r1cni4y1@@91ch24i5nc1248591845715
 
 news: List[cl.News]
 
+
 @app.route('/index')
 def index():
     global news
-    news = ws.get_news()
+    # news = ws.get_news()
+    urls, names = ws._category_antena3(rq.get("https://www.antena3.com/noticias/").text)
+    news = next(iter(ws.get_news_categories(urls, names).values()), None)
     data = {
         'imgs': [new.get_image() for new in news],
         'titles': [str(new.get_title()) for new in news],
@@ -121,7 +127,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
 if __name__ == '__main__':
-    ws.save_html()
+    ws.save_html(["https://www.lasexta.com/noticias/", "https://www.antena3.com/noticias/", "https://www.marca.com/", "https://www.nytimes.com/international/"])
     app.run(debug=True)
 
 
