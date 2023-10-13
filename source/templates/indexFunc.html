@@ -9,7 +9,7 @@
     <div class="overlay">
         <div class="mb-2">
             <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                href="">Business</a>
+                href="">{{ data.categories[0] }}</a>
             <a class="text-white" href="">{{data.dates[0]}}</a>
         </div>
         <a class="h2 m-0 text-white text-uppercase font-weight-bold" href="{{ data.urls[0] }}">{{ data.titles[0] }}</a>
@@ -26,7 +26,7 @@
     <div class="overlay">
         <div class="mb-2">
             <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                href="">BusinessS</a>
+                href="">{{ data.categories[1] }}</a>
             <a class="text-white" href="">{{ data.dates[1] }}</a>
         </div>
         <a class="h2 m-0 text-white text-uppercase font-weight-bold" href="{{ data.urls[1] }}">{{ data.titles[1] }}</a>
@@ -43,7 +43,7 @@
         <div class="overlay">
             <div class="mb-2">
                 <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                    href="">Business</a>
+                    href="">{{ data.categories[i] }}</a>
                 <a class="text-white" href=""><small>{{data.dates[i]}}</small></a>
             </div>
             <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="{{data.urls[i]}}"> {{data.titles[i]}}</a>
@@ -64,7 +64,7 @@
         class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0" style="height: 50px; width: auto;">
         <div class="mb-2">
             <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2"
-                href="">Business</a>
+                href="">{{ data.categories[i] }}</a>
             <a class="text-body" href=""><small>{{data.dates[i]}}</small></a>
         </div>
         <a class="h6 m-0 text-secondary text-uppercase font-weight-bold" href="{{data.urls[i]}}">{{data.titles[i]}}</a>

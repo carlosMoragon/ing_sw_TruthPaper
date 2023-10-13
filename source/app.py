@@ -4,8 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 from database import DBManager as manager, Admin
 from typing import List
 
-#BORRAR:
-import requests as rq
 
 db = manager.db
 app = Flask(__name__)
@@ -18,14 +16,13 @@ news: List[cl.News]
 @app.route('/index')
 def index():
     global news
-    # news = ws.get_news()
-    urls, names = ws._category_antena3(rq.get("https://www.antena3.com/noticias/").text)
-    news = next(iter(ws.get_news_categories(urls, names).values()), None)
+    news = ws.get_news()
     data = {
         'imgs': [new.get_image() for new in news],
         'titles': [str(new.get_title()) for new in news],
         'urls': [new.get_url() for new in news],
-        'dates': [new.get_date() for new in news]
+        'dates': [new.get_date() for new in news],
+        'categories': [new.get_category() for new in news]
     }
 
     return render_template('indexFunc.html', data=data)
@@ -60,21 +57,10 @@ def save_keyword():
         'titles' : [new.get_title() for new in filted_news],
         'urls' : [new.get_url() for new in filted_news],
         'keyword': keyword,
-        'dates': [new.get_date() for new in filted_news]
+        'dates': [new.get_date() for new in filted_news],
+        'categories': [new.get_category() for new in filted_news]
     }
     return render_template('categoriasFunc.html', data=data)
-
-
-@app.route('/pruebaArticulos')
-def prueba_articulos():
-    global news
-    # news = ws.get_news()
-    data = {
-        'imgs' : [new.get_image() for new in news],
-        'titles' : [new.get_title() for new in news],
-        'urls' : [new.get_url() for new in news]
-    }   
-    return render_template('pruebaArticulos.html', data=data)
 
 
 # ESTE METODO Y EL SIGUIENTE ES EL MISMO ASI QUE DEBERIAN SER 1
