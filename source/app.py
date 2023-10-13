@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, flash
-from modules import web_scrapping as ws, users, filter as f, classes as cl
+from modules import web_scrapping as ws, filter as f, classes as cl
+from modules import users, Companyuser
+from database import Admin as adminU
 from flask_sqlalchemy import SQLAlchemy
 from database import DBManager as manager, Admin
 from typing import List
@@ -126,17 +128,15 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
-print(Admin.load_admin())
-
 if __name__ == '__main__':
-    ws.save_html(["https://www.lasexta.com/noticias/", "https://www.antena3.com/noticias/", "https://www.marca.com/", "https://www.nytimes.com/international/"])
+    #ws.save_html(["https://www.lasexta.com/noticias/", "https://www.antena3.com/noticias/", "https://www.marca.com/", "https://www.nytimes.com/international/"])
     app.run(debug=True)
 
-@app.route('/save_admin', methods=['POST'])
-def save_admin():
-        new_g_user = Admin.admin(request.form['username'], request.form['password'], request.form['email'])
-        db.session.add(new_g_user)
-        db.session.commit()
-        return register_funct()
+@app.route('/verifyUsers', methods=['GET', 'POST'])
+def mostrar_usuarios():
+    print("company")
+    #journalist_users = users.query(journalistuser).all() --> falta método en users.py
+    company_users = users.Companyuser.query(companyuser).all() #progrmación a ciegas
 
-
+    #return render_template('userAdmin/verifyUsers.html', journalist_users=journalist_users, company_users=company_users)
+    return render_template('userAdmin/verifyUsers.html')

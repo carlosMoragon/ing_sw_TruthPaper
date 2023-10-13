@@ -1,29 +1,25 @@
 from flask import Flask
 from database import DBManager as manager
-from modules import users
-app = Flask(__name__)
-db = manager.db
-lista_admin = []
-lista_admin = users.load_admin()
-
-
-
-class Journalist(db.Model):
-
-# clase que crea un usuario administrador
+from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
 db = manager.db
 
+# Definir el modelo
+Base = declarative_base()
+
+lista_registros = []
+
+# Cargar todos los usarios de la tabla "admin"
 '''
-def journalist_name():
-    journalist_data = Journalist.query.all()
-    for usuario in journalist_data:
-        lista_registros.append([usuario.username, usuario.password, usuario.email])
+def load_admin():
+    admin_data = AdministratorUser.query.all()
+
+    for usuario in admin_data:
+        lista_registros.append([usuario.username, usuario.password, usuario.email]) # Añade a la lista los datos de cada usuario
+
     for i, registro in enumerate(lista_registros, 1):
-        print(f"Registro {i}: {registro}" )
-    return None
+            print(f"Registro {i}: {registro}" )    # COMPROBACIÓN
+    return lista_registros
 '''
-
-
-
-
