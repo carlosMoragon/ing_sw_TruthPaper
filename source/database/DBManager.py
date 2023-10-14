@@ -11,3 +11,9 @@ def login(username, password) -> bool:
     else:
         return False
 
+
+# CONSULTA A LA BBDD PARA QUE TE COJA LAS NOTICIAS -> SE VA A LLAMAR A ESTA FUNCION DESDE APP.PY ANTES DE INICIAR
+"""
+def get_news_db() -> List[cl.News]:
+    return None
+"""

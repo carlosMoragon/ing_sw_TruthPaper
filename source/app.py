@@ -3,7 +3,7 @@ from modules import web_scrapping as ws, users, filter as f, classes as cl
 from flask_sqlalchemy import SQLAlchemy
 from database import DBManager as manager#, Admin
 from typing import List
-
+import threading
 
 db = manager.db
 app = Flask(__name__)
@@ -11,12 +11,15 @@ app = Flask(__name__)
 app.secret_key = '1jn21rc1#kj42h35k%@24ic1ucmo4r1cni4y1@@91ch24i5nc1248591845715'
 
 news: List[cl.News]
+init_news = threading.Thread(target=manager.get_news_db)
 
 
 @app.route('/index')
 def index():
     global news
-    news = ws.get_news()
+    # AQUI YA TIENE QUE HABER NOTICIAS EN NEWS -> SINO ESTA MAL
+    # news = ws.get_news()
+    init_news.join()
     data = {
         'imgs': [new.get_image() for new in news],
         'titles': [str(new.get_title()) for new in news],
@@ -24,13 +27,25 @@ def index():
         'dates': [new.get_date() for new in news],
         'categories': [new.get_category() for new in news]
     }
-
     return render_template('indexFunc.html', data=data)
 
 
 @app.route('/')
 def start():
+    global news
+    if news is None:
+        # ESTA ES LA DE LAS BBDD QUE SON LAS QUE MAS RAPIDO TIENEN QUE IR
+        init_news.start()
+
+        # ESTAS SON LAS QUE SON NUEVAS QUE SE VAN A IR AÑADIENDO A LO LARGO DE LA EJECUCION
+        threading.Thread(target=_add_news_background).start()
+
     return render_template('login.html')
+
+
+def _add_news_background():
+    global news
+    news += ws.get_news
 
 
 # CAMBIAR LA RUTA
@@ -115,8 +130,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # print(Admin.load_admin())
 
 if __name__ == '__main__':
-    ws.save_html(["https://www.lasexta.com/noticias/", "https://www.antena3.com/noticias/", "https://www.marca.com/", "https://www.nytimes.com/international/"])
+
+    # BORRAR ->  ws.save_html(["https://www.lasexta.com/noticias/", "https://www.antena3.com/noticias/", "https://www.marca.com/", "https://www.nytimes.com/international/"])
     app.run(debug=True)
+
 
 """
 @app.route('/save_admin', methods=['POST'])
