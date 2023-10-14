@@ -103,7 +103,7 @@
             <div class="common_user_register">
                 <button onclick="showRegister('common_user')"> Usuario Común </button>
                 <div id="common_user" class="register_user">
-                    <form action="/save_commonuser" method="post">
+                    <form action="/save_commonuser" method="post" enctype="multipart/form-data">
                         <label for="c_user_name">Nombre:</label>
                         <input type="text" id="c_user_name" name="c_user_name" required><br>
 
@@ -118,7 +118,10 @@
                 
                         <label for="password">Contraseña:</label>
                         <input type="password" id="password" name="password" required><br>
-
+                        
+                        <label for="photo">Foto:</label>
+                        <input type="file" id="photo" name="photo" accept="image/*" required><br>
+                        <!--El required obliga a que cargue la foto, se puede quitar-->
                         <input type="submit" value="Registrarse"><br>
                     </form>
                 </div>
