@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, flash
 from modules import web_scrapping as ws, filter as f, classes as cl
-from modules import users, Companyuser
+from modules import users
 from flask_sqlalchemy import SQLAlchemy
 from database import DBManager as manager, admin
 from typing import List

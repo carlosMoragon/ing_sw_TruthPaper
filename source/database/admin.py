@@ -1,11 +1,12 @@
 from flask import Flask
-import DBManager as manager
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String, Enum, create_engine
 from sqlalchemy.ext.declarative import declarative_base
+from flask_sqlalchemy import SQLAlchemy
 
-db = manager.db
-url_bbdd = 'mysql+pymysql://root:root@localhost/truthpaper' #importar a app.py en el futuro
+db = SQLAlchemy()
+nombre_bbdd = "truthpaper"
+url_bbdd = "mysql+pymysql://root:root@localhost/" + nombre_bbdd #importar a app.py en el futuro
 
 #utilizaremos sessions de sqlalchemy para poder hacer consultas a la base de datos
 Session = sessionmaker(bind=db)
@@ -37,7 +38,7 @@ company_users = session.query(CompanyUser).all()
 user_list = []
 for user in company_users:
     user_dict = {
-        f'companyuser{user.companyuser_id}': (user.name, user.nif, , user.is_company)
+        f'companyuser{user.companyuser_id}': (user.name, user.nif, user.is_company)
     }
     user_list.append(user_dict)
 

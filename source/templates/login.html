@@ -102,12 +102,14 @@
             <input type="text" id="username" name="username" required><br>
             <label for="password">Contraseña:</label>
             <input type="password" id="password" name="password" required><br>
+            <label for="terms">Acepta los <a href="termsCondition.html"> Términos y condiciones: </a></label>
+            <input type="checkbox" name="terms" value="terms" style=" float: right; margin-left: 30px;" required><br>
             <input type="submit" value="Iniciar Sesión"> 
         </form>
         <p>¿Nuevo aquí? <a href="register.html">Regístrate</a></p>
         <p><a href="forgotten_passwd.html">¿Olvidaste tu contraseña?</a></p>
         
-        <!-- BOTÓN PARA QUE ME LLEVE AL ADMIN Y PODER TRABAJAR >>> BORRAR EN EL FUTURO-->
+        <!-- BOTÓN PARA QUE ME LLEVE AL ADMIN Y PODER TRABAJAR >>> BORRAR EN EL FUTURO -->
         <form action="/verifyUsers" method="post"> 
             <input type="submit" value="Entrar al admin">
         </form>

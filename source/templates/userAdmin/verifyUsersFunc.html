@@ -16,7 +16,10 @@
             <a class="h6 m-0 text-secondary text-uppercase font-weight-bold">{{user.name}}</a>
             <p> Email del usuario: {{user.email}}</p>
             <!-- Este botón abre un lector de pdf-->
-            <button type="button" class="btn btn-primary" style="width: 100px;">Certificado Periodista</button>
+            <form action="pdfreader.html" method="post">
+                <input type="hidden" name="pdf_url" value="{{journalist_user.pdf}}">
+                <input type="submit" value="Abrir Certificado del periodista">
+            </form>
             <form action="/verify_users" method="post">
                 <input type="submit" value="Aceptar" class="btn btn-primary" style="width: 100px; color: green;">
                 <input type="submit" value="Denegar" class="btn btn-primary" style="width: 100px; color: red;">
