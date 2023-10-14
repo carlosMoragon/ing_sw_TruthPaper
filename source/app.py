@@ -1,16 +1,15 @@
 from flask import Flask, render_template, request, flash
 from modules import web_scrapping as ws, users, filter as f, classes as cl
-from modules.admin import AdminUser
+#from modules.admin import AdminUser
 from flask_sqlalchemy import SQLAlchemy
 from database import DBManager as manager
 from typing import List
 
 db = manager.db
-admin_user = AdminUser('admin', '1234', 'adminUser@truthpaper.com', True, True, True)
+#admin_user = AdminUser('admin', '1234', 'adminUser@truthpaper.com', True, True, True)
 
 app = Flask(__name__)
 
-app.secret_key = '1jn21rc1#kj42h35k%@24ic1ucmo4r1cni4y1@@91ch24i5nc1248591845715'
 
 news: List[cl.News]
 
@@ -117,13 +116,13 @@ def prueba_articulos():
 
 
 # MySQL Connection
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1234@localhost:3307/truthpaper'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://administrador_truthpaper:Periodico55deVerdad@truthpaper-server.mysql.database.azure.com:3306/truthpaper?ssl-mode=require'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
 db.init_app(app)
 
-print(admin_user.loadUncheckedUsers())
+#print(admin_user.loadUncheckedUsers())
 
 if __name__ == '__main__':
     #ws.save_html()
