@@ -1,14 +1,13 @@
 from flask import Flask, render_template, request, flash
 from modules import web_scrapping as ws, users, filter as f, classes as cl
+from modules.admin import AdminUser
 from flask_sqlalchemy import SQLAlchemy
 from database import DBManager as manager
 from typing import List
-from PIL import Image
-import os
-import base64
-
 
 db = manager.db
+admin_user = AdminUser()
+
 app = Flask(__name__)
 
 app.secret_key = '1jn21rc1#kj42h35k%@24ic1ucmo4r1cni4y1@@91ch24i5nc1248591845715'
@@ -78,58 +77,43 @@ def prueba_articulos():
 # ESTE METODO Y EL SIGUIENTE ES EL MISMO ASI QUE DEBERIAN SER 1
 # Guardar un usuario desde la web a la base, usando el modelo de usuario
 # He cambiado el nombre del metodo: no puede tener mayusculas
-@app.route('/save_commonuser', methods=['POST'])
-def save_cu():
-    if cl.validate_password(request.form['password']):
-        # hashed_password = generate_password_hash(request.form['password'], method='sha256')
-        # Obtener el archivo de imagen cargado en el formulario
-        photo = request.files['photo']
-        # Leer el contenido del archivo
-        photo_content = photo.read()
-        # Codificar el contenido de la imagen en base64
-        photo_base64 = base64.b64encode(photo_content)
-        new_user = users.Commonuser(request.form['username'], request.form['password'], request.form['email'], request.form['c_user_name'], request.form['c_user_lastname'],  photo_base64)
-        # He cambiado el nombre de la variable: no puede tener mayusculas
-        new_g_user = users.User(request.form['username'], request.form['password'], request.form['email'],  photo_base64)
-        db.session.add(new_g_user)
-        db.session.add(new_user)
-        db.session.commit()
-       
-            
-        return index()
-    else:
-        print("CONTRASEÑA DÉBIL")
-        flash('CONTRASEÑA DÉBIL', 'WARNING')
-        return register_funct()
+# @app.route('/save_commonuser', methods=['POST'])
+# def save_cu():
+#     if cl.validate_password(request.form['password']):
+#         # hashed_password = generate_password_hash(request.form['password'], method='sha256')
+#         new_user = users.Commonuser(request.form['username'], request.form['password'], request.form['email'], request.form['c_user_name'], request.form['c_user_lastname'])
+#         # He cambiado el nombre de la variable: no puede tener mayusculas
+#         new_g_user = users.User(request.form['username'], request.form['password'], request.form['email'])
+#         db.session.add(new_g_user)
+#         db.session.add(new_user)
+#         db.session.commit()
+    
+#         return index()
+#     else:
+#         print("CONTRASEÑA DÉBIL")
+#         flash('CONTRASEÑA DÉBIL', 'WARNING')
+#         return register_funct()
 
 
-# @app.route('/upload', methods=['POST'])
-# def upload():
-#     photo = request.files['photo']
-#     image = Image.open(photo)
-#     # Do something with the image...
-#     return 'Imagen cargada con éxito!'
+# # He cambiado el nombre del metodo: no puede tener mayusculas
+# @app.route('/save_companyuser', methods=['POST'])
+# def save_cmpu():
+#     if cl.validate_password(request.form['password']):
+#         # hashed_password = generate_password_hash(request.form['password'], method='sha256')
+#         # certification = 'certification' in request.form
+#         new_user = users.Companyuser(request.form['username'], request.form['password'], request.form['email'], request.form['company_name'], request.form['company_nif'])
+#         # He cambiado el nombre de la variable: no puede tener mayusculas
+#         new_g_user = users.User(request.form['username'], request.form['password'], request.form['email'])
+#         db.session.add(new_g_user)
+#         db.session.add(new_user)
+#         db.session.commit()
 
+#         return index()
 
-# He cambiado el nombre del metodo: no puede tener mayusculas
-@app.route('/save_companyuser', methods=['POST'])
-def save_cmpu():
-    if cl.validate_password(request.form['password']):
-        # hashed_password = generate_password_hash(request.form['password'], method='sha256')
-        # certification = 'certification' in request.form
-        new_user = users.Companyuser(request.form['username'], request.form['password'], request.form['email'], request.form['company_name'], request.form['company_nif'])
-        # He cambiado el nombre de la variable: no puede tener mayusculas
-        new_g_user = users.User(request.form['username'], request.form['password'], request.form['email'])
-        db.session.add(new_g_user)
-        db.session.add(new_user)
-        db.session.commit()
-
-        return index()
-
-    else:
-        print("CONTRASEÑA DÉBIL")
-        flash('CONTRASEÑA DÉBIL', 'WARNING')
-        return register_funct()
+#     else:
+#         print("CONTRASEÑA DÉBIL")
+#         flash('CONTRASEÑA DÉBIL', 'WARNING')
+#         return register_funct()
 
 
 # MySQL Connection
@@ -139,18 +123,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
+admin_user.loadUncheckedUsers()
+
 if __name__ == '__main__':
-    # ws.save_html()
+    #ws.save_html()
     app.run(debug=True)
 
 
-# # To insert a BLOB into the database:
-# with open('path/to/your/blob', 'rb') as f:
-#     blob_data = f.read()
-# new_row = MyTable(my_blob=blob_data)
-# db.session.add(new_row)
-# db.session.commit()
-
-# # To retrieve a BLOB from the database:
-# row = MyTable.query.filter_by(id=1).first()
-# blob_data = row.my_blob

@@ -8,62 +8,43 @@ class User(db.Model):
     username = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(50), nullable=False)
     email = db.Column(db.Text, nullable=True)
-    profilephoto = db.Column(db.Binary, nullable=True)
+    #profilephoto = db.Column(db.Binary, nullable=True)
+    is_checked = db.Column(db.Boolean, nullable=False)
     
-    def __init__(self, username, password, email, profilephoto):
+    def __init__(self, username, password, email, is_checked):
         self.username = username
         self.password = password
         self.email = email
-        self.profilephoto = profilephoto
-
+        #self.profilephoto = profilephoto
+        self.is_checked = False
+        
 class Commonuser(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
-    username = db.Column(db.String(50), nullable=False)
-    password = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.Text, nullable=True)
     name = db.Column(db.String(50), nullable=False)
     lastname = db.Column(db.String(50), nullable=False)
-    photo = db.Column(db.Binary, nullable=True)
+    bank_account = db.Column(db.String(50), nullable=False)
+    is_premium = db.Column(db.Boolean, nullable=False)
+
     
-    def __init__(self, username, password, email, name, lastname, photo):
-        self.username = username
-        self.password = password
-        self.email = email
+    def __init__(self, name, lastname, bank_account, is_premium):
         self.name = name
         self.lastname = lastname
-        self.photo = photo
+        self.bank_account = bank_account
+        self.is_premium = is_premium
 
 
 class Companyuser(db.Model):
 
-    def __init__(self, username, password, email, company_name, NIF):
-        self.username = username
-        self.password = password
-        self.email = email
-        self.company_name = company_name
-        self.NIF = NIF
-        # self.certification = certification
-
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
-    username = db.Column(db.String(50), nullable=False)
-    password = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.Text, nullable=True)
-    company_name = db.Column(db.String(50), nullable=False)
+    name = db.Column(db.String(50), nullable=False)
     NIF = db.Column(db.String(50), nullable=False)
-    # certification = db.Column(db.Boolean, nullable=False)
-
- 
-# class AdministratorUser(db.Model):
-#     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
-#     username = db.Column(db.String(50), nullable=False)
-#     password = db.Column(db.String(50), nullable=False)
-#     email = db.Column(db.Text, nullable=True)
+    is_company = db.Column(db.Boolean, nullable=False)
     
-#     def __init__(self, username, password, email):
-#         self.username = username
-#         self.password = password
-#         self.email = email
-  
+    def __init__(self, name, NIF, is_company):
+        self.name = name
+        self.NIF = NIF
+        self.is_company = is_company
+
 
 # class Journalist(db.Model):
 #     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
