@@ -1,5 +1,4 @@
 from database import DBManager as manager
-
 db = manager.db
 
 
