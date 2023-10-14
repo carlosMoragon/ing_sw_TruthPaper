@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request, flash
 from modules import web_scrapping as ws, filter as f, classes as cl
 from modules import users, Companyuser
-from database import Admin as adminU
 from flask_sqlalchemy import SQLAlchemy
-from database import DBManager as manager, Admin
+from database import DBManager as manager, admin
 from typing import List
+
 
 #BORRAR:
 import requests as rq
@@ -133,10 +133,6 @@ if __name__ == '__main__':
     app.run(debug=True)
 
 @app.route('/verifyUsers', methods=['GET', 'POST'])
-def mostrar_usuarios():
-    print("company")
-    #journalist_users = users.query(journalistuser).all() --> falta método en users.py
-    company_users = users.Companyuser.query(companyuser).all() #progrmación a ciegas
-
-    #return render_template('userAdmin/verifyUsers.html', journalist_users=journalist_users, company_users=company_users)
-    return render_template('userAdmin/verifyUsers.html')
+def show_users():
+    company_users = admin.user_list
+    return render_template('verifyUsers.html', company_users=company_users)
