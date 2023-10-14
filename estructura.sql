@@ -85,7 +85,6 @@ CREATE TABLE `commonuser` (
   `name` varchar(30) NOT NULL,
   `lastname` varchar(30) NOT NULL,
   `bankaccount` varchar(70) DEFAULT '',
-  `isPremium` enum('N','Y') DEFAULT 'N',
   PRIMARY KEY (`commonuser_id`),
   CONSTRAINT `commonuser_ibfk_1` FOREIGN KEY (`commonuser_id`) REFERENCES `userclient` (`client_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
@@ -111,7 +110,6 @@ CREATE TABLE `companyuser` (
   `companyuser_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
   `nif` int(11) NOT NULL,
-  `is_company` enum('N','Y') DEFAULT 'N',
   `banckaccount` varchar(70) DEFAULT '',
   PRIMARY KEY (`companyuser_id`),
   CONSTRAINT `companyuser_ibfk_1` FOREIGN KEY (`companyuser_id`) REFERENCES `userclient` (`client_id`)
@@ -272,6 +270,7 @@ DROP TABLE IF EXISTS `userclient`;
 CREATE TABLE `userclient` (
   `client_id` int(11) NOT NULL AUTO_INCREMENT,
   `photo` blob DEFAULT NULL,
+  `is_checked` enum('N','Y') DEFAULT 'N',
   PRIMARY KEY (`client_id`),
   CONSTRAINT `userclient_ibfk_1` FOREIGN KEY (`client_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;

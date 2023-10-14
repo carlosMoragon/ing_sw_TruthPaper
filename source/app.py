@@ -106,7 +106,7 @@ def save_cmpu():
 
 
 # MySQL Connection
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@localhost:3307/truthpaper'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1234@localhost:3307/truthpaper'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 

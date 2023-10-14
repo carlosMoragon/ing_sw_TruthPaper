@@ -1,14 +1,14 @@
-from flask import Flask
-from database import DBManager as manager
-from modules import users
-app = Flask(__name__)
-db = manager.db
-lista_admin = []
-lista_admin = users.load_admin()
+#from flask import Flask
+#from database import DBManager as manager
+#from modules import users
+#app = Flask(__name__)
+#db = manager.db
+#lista_admin = []
+#lista_admin = users.load_admin()
 
 
 
-class Journalist(db.Model):
+#class Journalist(db.Model):
 
 # clase que crea un usuario administrador
 
