@@ -11,15 +11,15 @@ app = Flask(__name__)
 app.secret_key = '1jn21rc1#kj42h35k%@24ic1ucmo4r1cni4y1@@91ch24i5nc1248591845715'
 
 news: List[cl.News]
-init_news = threading.Thread(target=manager.get_news_db)
+# init_news = threading.Thread(target=manager.get_news_db)
 
 
 @app.route('/index')
 def index():
     global news
     # AQUI YA TIENE QUE HABER NOTICIAS EN NEWS -> SINO ESTA MAL
-    # news = ws.get_news()
-    init_news.join()
+    news = ws.get_news()
+    # init_news.join()
     data = {
         'imgs': [new.get_image() for new in news],
         'titles': [str(new.get_title()) for new in news],
@@ -32,13 +32,13 @@ def index():
 
 @app.route('/')
 def start():
-    global news
-    if news is None:
+    # global news
+    # if news is None:
         # ESTA ES LA DE LAS BBDD QUE SON LAS QUE MAS RAPIDO TIENEN QUE IR
-        init_news.start()
+        # init_news.start()
 
         # ESTAS SON LAS QUE SON NUEVAS QUE SE VAN A IR AÑADIENDO A LO LARGO DE LA EJECUCION
-        threading.Thread(target=_add_news_background).start()
+        # threading.Thread(target=_add_news_background).start()
 
     return render_template('login.html')
 

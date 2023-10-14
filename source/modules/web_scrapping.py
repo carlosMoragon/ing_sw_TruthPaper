@@ -16,7 +16,8 @@ def _build_news(titles: List[str], urls: List[str], imgs: List[str], owner: str,
     news = []
 
     for i in range(len(urls)):
-        news.append(cl.News(titles[i], imgs[i], "", urls[i], [], date, owner, "", category))
+
+        news.append(cl.News(-1, owner, titles[i], imgs[i], urls[i], "",-1, -1, date, category))
 
     return news
 
@@ -87,8 +88,7 @@ def _make_nytimesnews(structure: BeautifulSoup, category: str, date: str) -> Lis
         h3_texts = [h3_tag.text.strip() for h3_tag in h3_tags]
         if h3_texts:
             titles.append(h3_texts)
-
-    return [cl.News(titles[i][0], 'static\\img\\nytimes.png', "", link_news[i], [], date, "The New York Times", "", category) for i in range(len(link_news))]
+    return [cl.News(-1,"The New York Times", titles[i][0], 'static\\img\\nytimes.png',link_news[i], "",-1,-1, date,category) for i in range(len(link_news))]
 
 
 # --- CATEGORIES ---

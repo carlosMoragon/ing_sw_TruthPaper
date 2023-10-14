@@ -312,7 +312,7 @@ class Note:
 
 # Estructura de una Noticia
 class News:
-    def __init__(self, id: int, owner: str, title: str, image: str, url: str, content: str, container: int, journalist: int, date: str):
+    def __init__(self, id: int, owner: str, title: str, image: str, url: str, content: str, container: int, journalist: int, date: str, category: str):
         self._id = id
         self._owner = owner
         self._title = title
@@ -322,8 +322,14 @@ class News:
         self._container = container
         self._journalist = journalist
         self._date = date
+        self._category = category
 
     # Getters y Setters
+    def get_category(self) -> str:
+        return self._category
+
+    def set_category(self, category):
+        self._category = category
 
     def get_id(self) -> int:
         return self._id
