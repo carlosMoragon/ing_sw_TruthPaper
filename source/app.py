@@ -6,7 +6,7 @@ from database import DBManager as manager
 from typing import List
 
 db = manager.db
-admin_user = AdminUser()
+admin_user = AdminUser('admin', '1234', 'adminUser@truthpaper.com', True, True, True)
 
 app = Flask(__name__)
 
@@ -123,7 +123,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
-admin_user.loadUncheckedUsers()
+print(admin_user.loadUncheckedUsers())
 
 if __name__ == '__main__':
     #ws.save_html()
