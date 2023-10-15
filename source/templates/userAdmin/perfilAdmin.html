@@ -3,13 +3,13 @@
 
 <head>
     <meta charset="utf-8">
-    <title>TruthPaper Administrador</title>
+    <title>TruthPaper</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
 
-    <!-- Icon -->
-    <link href="../../static/img/favicon.ico" rel="icon">
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -19,20 +19,14 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
-    <link href="../static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
-    <!-- Bootstrap Stylesheet -->
+    <!-- Customized Bootstrap Stylesheet -->
     <link href="../../static/css/style.css" rel="stylesheet">
 
-    <!--Other Bootstrap Libraries for the dropdown menu-->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <!-- Date and Main Scripts-->
+      <!-- Date and Main Scripts-->
     <script src="../../static/js/date.js"></script>
     <script src="../../static/js/main.js"></script>
-
 </head>
 
 <body>
@@ -67,7 +61,7 @@
     </div>
     <!-- Topbar End -->
 
-    <!-- Navbar Start -->
+<!-- Navbar Start -->
     <div class="container-fluid p-0">
         <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-2 py-lg-0 px-lg-5">
             <a href="indexAdmin.html" class="navbar-brand d-block d-lg-none">
@@ -79,10 +73,10 @@
             </button>
             <div class="collapse navbar-collapse justify-content-between px-0 px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav mr-auto py-0">
-                    <a href="indexAdmin.html" class="nav-item nav-link">Inicio</a>
+                    <a href="indexAdmin.html" class="nav-item nav-link active">Inicio</a>
                     <a href="verifyUsers.html" class="nav-item nav-link">Verificación</a>
                     <a href="charts.html" class="nav-item nav-link">Gráficos</a>
-                    <a href="comments.html" class="nav-item nav-link active">Comentarios</a>
+                    <a href="comments.html" class="nav-item nav-link">Comentarios</a>
                     <a href="editUsers.html" class="nav-item nav-link">Editar Usuarios</a>
                 </div>
 
@@ -98,27 +92,70 @@
     </div>
     <!-- Navbar End -->
 
-    <!-- News With Sidebar Start -->
-    <div class="container-fluid" style="margin-top: 5%;">
-        <div >
+    <!-- Contact Start -->
+    <div class="container-fluid mt-5 pt-3">
+        <div class="container">
             <div class="row justify-content-md-center">
-                <!-- Verificación de Usuarios-->
-                <div class="col-md-11">
-                    <div>
-                        <div class="section-title mb-0">
-                            <h4 class="m-0 text-uppercase font-weight-bold">Comentarios</h4>
-                        </div>
-                        <div class="bg-white border border-top-0 p-3">
-                          
+                <div class="col-lg-8">
+                    <div class="section-title mb-0">
+                        <h4 class="m-0 text-uppercase font-weight-bold">Administrador José Ramirez </h4>
+                    </div>
+                    <div class="bg-white border border-top-0 p-4 mb-3">
+                        <div class="mb-4">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col col-lg-3">
+                                        <img class="img-fluid" src="../../static/img/User-Profile.png"
+                                            style="object-fit: cover; margin-bottom: 10%;">
+                                    </div>
+                                    <div class="col">
+                                        <h6 class="text-uppercase font-weight-bold">Descripción</h6>
+                                        <p class="mb-4"> Administrador con todos los permisos
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fa fa-map-marker-alt text-primary mr-2"></i>
+                                    <h6 class="font-weight-bold mb-0">Dirección</h6>
+                                </div>
+                                <p class="m-0">123 Street, New York, USA</p>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fa fa-envelope-open text-primary mr-2"></i>
+                                    <h6 class="font-weight-bold mb-0">Email</h6>
+                                </div>
+                                <p class="m-0">info@example.com</p>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fa fa-phone-alt text-primary mr-2"></i>
+                                    <h6 class="font-weight-bold mb-0">Teléfono</h6>
+                                </div>
+                                <p class="m-0">+012 345 6789</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <!--  Verificación End -->
-
-
             </div>
         </div>
     </div>
-    <!-- News With Sidebar End -->
+    <!-- Contact End -->
 
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-primary btn-square back-to-top"><i class="fa fa-arrow-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
 </body>
+
+</html>

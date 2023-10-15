@@ -33,6 +33,38 @@
     <script src="../../static/js/date.js"></script>
     <script src="../../static/js/main.js"></script>
 
+
+    <style>
+       .section-title mb-0 {
+            position: absolute;
+            margin-top: 5%;
+           margin-bottom: 30%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70%;
+            max-width: 400px; /* Adjust the maximum width according to your preferences  */
+            text-align: left; /* Centers the content inside the container */
+        }
+
+        form label {
+            display: block;
+            text-align: left;
+            margin-bottom: 5px; /* Space between labels and input fields */
+        }
+
+        form input[type="submit"] {
+            width: auto; /* Set the width according to the content */
+            margin-bottom: 10px;
+        }
+
+
+        form input {
+            width: 80%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 
 <body>
@@ -82,8 +114,8 @@
                     <a href="indexAdmin.html" class="nav-item nav-link">Inicio</a>
                     <a href="verifyUsers.html" class="nav-item nav-link">Verificación</a>
                     <a href="charts.html" class="nav-item nav-link">Gráficos</a>
-                    <a href="comments.html" class="nav-item nav-link active">Comentarios</a>
-                    <a href="editUsers.html" class="nav-item nav-link">Editar Usuarios</a>
+                    <a href="comments.html" class="nav-item nav-link">Comentarios</a>
+                     <a href="editUsers.html" class="nav-item nav-link active">Editar Usuarios</a>
                 </div>
 
                 <!-- Icon to enter in login-->
@@ -102,19 +134,64 @@
     <div class="container-fluid" style="margin-top: 5%;">
         <div >
             <div class="row justify-content-md-center">
-                <!-- Verificación de Usuarios-->
+                <!-- Editar de Usuarios-->
                 <div class="col-md-11">
-                    <div>
                         <div class="section-title mb-0">
-                            <h4 class="m-0 text-uppercase font-weight-bold">Comentarios</h4>
+                            <h4 class="m-0 text-uppercase font-weight-bold">Editar usuario</h4>
                         </div>
                         <div class="bg-white border border-top-0 p-3">
-                          
+                            <form action="/edit_user" method="post">
+                                <label for="username">Nombre de Usuario:</label>
+                                <input type="text" id="username" name="username" required><br>
+
+                                <label for="password">Contraseña:</label>
+                                <input type="password" id="password" name="password" required><br>
+
+                                <label for="email">Email:</label>
+                                <input type="email" id="email" name="email" required><br>
+
+                                <input type="submit" value="Editar Usuario">
+                            </form>
                         </div>
                     </div>
-                </div>
-                <!--  Verificación End -->
+                <!--  Editar End -->
+                <!-- Borrar de Usuarios-->
+                <div class="col-md-11">
+                        <div class="section-title mb-0">
+                            <h4 class="m-0 text-uppercase font-weight-bold">Borrar usuarios</h4>
+                        </div>
+                        <div class="bg-white border border-top-0 p-3">
+                        <form action="/delete-user" method="post">
+                            <label for="username_delete">Username:</label>
+                            <input type="text" id="username_delete" name="username_delete" required><br>
 
+                            <input type="submit" value="Borrar Usuario">
+                            </form>
+                         </div>
+                </div>
+                <!--  Borrar End -->
+
+                <!-- Crear de Usuarios-->
+                <div class="col-md-11">
+                        <div class="section-title mb-0">
+                            <h4 class="m-0 text-uppercase font-weight-bold">Crear usuarios</h4>
+                        </div>
+                        <div class="bg-white border border-top-0 p-3">
+                            <form action="/create_user" method="post">
+                                <label for="username_new">Nombre de Usuario:</label>
+                                <input type="text" id="username_new" name="username_new" required> <br>
+
+                                <label for="password_new">Contraseña:</label>
+                                <input type="password" id="password_new" name="password_new" required><br>
+
+                                <label for="email_new">Email:</label>
+                                <input type="email" id="email_new" name="email_new" required><br>
+
+                                <input type="submit" value="Crear Usuario">
+                            </form>
+                        </div>
+                </div>
+                <!--  Crear End -->
 
             </div>
         </div>
