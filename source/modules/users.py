@@ -7,16 +7,12 @@ class User(db.Model):
     username = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(50), nullable=False)
     email = db.Column(db.Text, nullable=True)
-    #profilephoto = db.Column(db.Binary, nullable=True)
-    is_checked = db.Column(db.Boolean, nullable=False)
     
-    def __init__(self, username, password, email, is_checked):
+    def __init__(self, username, password, email):
         self.username = username
         self.password = password
         self.email = email
-        #self.profilephoto = profilephoto
-        self.is_checked = False
-        
+
 class Commonuser(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     name = db.Column(db.String(50), nullable=False)
