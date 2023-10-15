@@ -72,18 +72,32 @@ def prueba_articulos():
 #Aun en PROCESO se MEJORA y DEPURACIÓN
 @app.route('/save_commonuser', methods=['POST'])
 def register_user():
-    if manager.save_commonuser():
-        return index()
-    else:
+    result = manager.save_user() 
+    if result == False: 
         return render_template('fail_register.html')
-   
-@app.route('/save_companyuser', methods=['POST'])
-def register_Cuser():
-    if manager.save_cmpu():
-        return index()
     else:
-        return render_template('fail_register.html')
+        if manager.save_commonuser(result):
+            return index()
 
+
+@app.route('/save_companyUser', methods=['POST'])
+def register_CompanyUser():
+    result = manager.save_user() 
+    if result == False: 
+        return render_template('fail_register.html')
+    else:
+        if manager.save_companyuser(result):
+            return index()
+    
+    
+@app.route('/save_journalistUser', methods=['POST'])
+def register_JournalistUser():
+    result = manager.save_user() 
+    if result == False: 
+        return render_template('fail_register.html')
+    else:
+        if manager.save_journalistuser(result):
+            return index()
 
 
 # MySQL Connection
@@ -93,7 +107,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
-#print(admin_user.loadUncheckedUsers())
 
 if __name__ == '__main__':
     #ws.save_html()

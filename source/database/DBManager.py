@@ -10,10 +10,8 @@ def login(username, password) -> bool:
     else:
         return False
 
-def type_of_user():
-    return True 
 
-def save_commonuser() -> bool:
+def save_user():
     if cl.validate_password(request.form['password']):
        #Si el nombre de usuario ya existe, no se puede registrar
         newUser = users.User(
@@ -23,9 +21,9 @@ def save_commonuser() -> bool:
         
         db.session.add(newUser)
         db.session.commit()
-
-        # Obtiene el ID del nuevo usuario
-        new_user_id = newUser.id
+        
+        new_user_id = newUser.id  
+        
         newUserClient = users.Userclient(
             client_id=new_user_id,
             is_checked=True,
@@ -33,53 +31,41 @@ def save_commonuser() -> bool:
         )
         db.session.add(newUserClient)
         db.session.commit()
-
+        
+        return new_user_id
+    else:
+        print("CONTRASEÑA DÉBIL")
+        return False
+    
+def save_commonuser(new_user_id) -> bool:
         newCommonUser = users.Commonuser(
-            commonuser_id=new_user_id, 
-            name=request.form['c_user_name'],
-            lastname=request.form['c_user_lastname'],
-            bankaccount=request.form['bankaccount']
+            commonuser_id = new_user_id, 
+            name = request.form['c_user_name'],
+            lastname = request.form['c_user_lastname'],
+            bankaccount = request.form['bankaccount']
         )
         db.session.add(newCommonUser)
         db.session.commit()
-
         return True
-    else:
-        print("CONTRASEÑA DÉBIL")
-        #flash('CONTRASEÑA DÉBIL', 'WARNING')
-        return False
-   
-def save_cmpu():
-    if cl.validate_password(request.form['password']):
-        newUser = users.User(
-                username=request.form['username'], 
-                password=request.form['password'], 
-                email=request.form['email'])
-            
-        db.session.add(newUser)
-        db.session.commit()
-
-        new_user_id = newUser.id
-        newUserClient = users.Userclient(
-                client_id=new_user_id,
-                is_checked=True,
-                photo=None  
-            )
-        db.session.add(newUserClient)
-        db.session.commit()
-
-        newCompanyUser = users.Commonuser(
-                commonuser_id=new_user_id, 
-                name=request.form['c_user_name'],
-                NIF=request.form['NIF'],
-                bankaccount=request.form['bankaccount']
+    
+def save_companyuser(new_user_id) -> bool:
+        newCompanyUser = users.Companyuser(
+                companyuser_id = new_user_id, 
+                name = request.form['company_name'],
+                bankaccount = request.form['bankaccount'],
+                NIF = request.form['company_nif']
             )
         db.session.add(newCompanyUser)
         db.session.commit()
-
         return True
 
-    else:
-      print("CONTRASEÑA DÉBIL")
-      #flash('CONTRASEÑA DÉBIL', 'WARNING')
-      return False
+def save_journalistuser(new_user_id) -> bool:
+        newJournalistUser = users.Journalistuser(
+                journalistuser_id = new_user_id, 
+                name = request.form['journalist_name'],
+                lastname = request.form['journalist_lastname'],
+                certificate = None
+            )
+        db.session.add(newJournalistUser)
+        db.session.commit()
+        return True

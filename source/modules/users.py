@@ -47,15 +47,14 @@ class Companyuser(db.Model):
         self.NIF = NIF
         self.bankaccount = bankaccount
 
-
-class Journalist(db.Model):
+class Journalistuser(db.Model):
     journalistuser_id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     name = db.Column(db.String(50), nullable=False)
     lastname = db.Column(db.String(50), nullable=False)
-    certification = db.Column(db.LargeBinary, nullable=True)
+    certificate = db.Column(db.LargeBinary, nullable=True)
     
-    def __init__(self, journalistuser_id, name, lastname, certification):
+    def __init__(self, journalistuser_id, name, lastname, certificate):
         self.journalistuser_id = journalistuser_id
         self.name = name
         self.lastname = lastname
-        self.certification = certification    
+        self.certificate = certificate    
