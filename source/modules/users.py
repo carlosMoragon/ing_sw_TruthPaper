@@ -44,6 +44,7 @@ class Companyuser(db.Model):
     def __init__(self, companyuser_id, name, NIF, bankaccount):
         self.companyuser_id = companyuser_id
         self.name = name
+
         self.NIF = NIF
         self.bankaccount = bankaccount
 

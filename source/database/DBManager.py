@@ -6,9 +6,11 @@ from flask import request
 def login(username, password) -> bool:
     user_db = users.User.query.filter_by(username=username).first()
     if user_db:
-        return user_db.password == password
+        return user
+        db.password == password
     else:
         return False
+
 
 def type_of_user():
     return True 
