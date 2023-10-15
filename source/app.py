@@ -69,66 +69,21 @@ def prueba_articulos():
     }   
     return render_template('pruebaArticulos.html', data=data)
 
-
+#Aun en PROCESO se MEJORA y DEPURACIÓN
 @app.route('/save_commonuser', methods=['POST'])
-def save_cu():
-    if cl.validate_password(request.form['password']):
-       
-       #Si el nombre de usuario ya existe, no se puede registrar
-        newUser = users.User(
-            username=request.form['username'], 
-            password=request.form['password'], 
-            email=request.form['email'])
-        
-        db.session.add(newUser)
-        db.session.commit()
-
-        # Obtiene el ID del nuevo usuario
-        new_user_id = newUser.id
-        newUserClient = users.Userclient(
-            client_id=new_user_id,
-            is_checked=True,
-            photo=None  
-        )
-        db.session.add(newUserClient)
-        db.session.commit()
-
-        newCommonUser = users.Commonuser(
-            commonuser_id=new_user_id, 
-            name=request.form['c_user_name'],
-            lastname=request.form['c_user_lastname'],
-            bankaccount=request.form['bankaccount']
-        )
-        db.session.add(newCommonUser)
-        db.session.commit()
-
+def register_user():
+    if manager.save_commonuser():
         return index()
     else:
-        print("CONTRASEÑA DÉBIL")
-        #flash('CONTRASEÑA DÉBIL', 'WARNING')
         return render_template('fail_register.html')
    
+@app.route('/save_companyuser', methods=['POST'])
+def register_Cuser():
+    if manager.save_cmpu():
+        return index()
+    else:
+        return render_template('fail_register.html')
 
-
-# # He cambiado el nombre del metodo: no puede tener mayusculas
-# @app.route('/save_companyuser', methods=['POST'])
-# def save_cmpu():
-#     if cl.validate_password(request.form['password']):
-#         # hashed_password = generate_password_hash(request.form['password'], method='sha256')
-#         # certification = 'certification' in request.form
-#         new_user = users.Companyuser(request.form['username'], request.form['password'], request.form['email'], request.form['company_name'], request.form['company_nif'])
-#         # He cambiado el nombre de la variable: no puede tener mayusculas
-#         new_g_user = users.User(request.form['username'], request.form['password'], request.form['email'])
-#         db.session.add(new_g_user)
-#         db.session.add(new_user)
-#         db.session.commit()
-
-#         return index()
-
-#     else:
-#         print("CONTRASEÑA DÉBIL")
-#         flash('CONTRASEÑA DÉBIL', 'WARNING')
-#         return register_funct()
 
 
 # MySQL Connection

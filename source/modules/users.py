@@ -35,47 +35,27 @@ class Commonuser(db.Model):
         self.lastname = lastname
         self.bankaccount = bankaccount
 
-
-
 class Companyuser(db.Model):
-
-    id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
-    name = db.Column(db.String(50), nullable=False)
-    NIF = db.Column(db.String(50), nullable=False)
-    is_company = db.Column(db.Boolean, nullable=False)
+    companyuser_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(30), nullable=False)
+    NIF = db.Column(db.Integer, nullable=False)
+    bankaccount = db.Column(db.String(70), nullable=False)
     
-    def __init__(self, name, NIF, is_company):
+    def __init__(self, companyuser_id, name, NIF, bankaccount):
+        self.companyuser_id = companyuser_id
         self.name = name
         self.NIF = NIF
-        self.is_company = is_company
+        self.bankaccount = bankaccount
 
 
-# class Journalist(db.Model):
-#     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
-#     username = db.Column(db.String(50), nullable=False)
-#     password = db.Column(db.String(50), nullable=False)
-#     email = db.Column(db.Text, nullable=True)
-#     name = db.Column(db.String(50), nullable=False)
-#     lastname = db.Column(db.String(50), nullable=False)
-#     certification = db.Column(db.Boolean, nullable=False)
+class Journalist(db.Model):
+    journalistuser_id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
+    name = db.Column(db.String(50), nullable=False)
+    lastname = db.Column(db.String(50), nullable=False)
+    certification = db.Column(db.LargeBinary, nullable=True)
     
-    
-#     def __init__(self, username, password, email, name, lastname, certification):
-#         self.username = username
-#         self.password = password
-#         self.email = email
-#         self.name = name
-#         self.lastname = lastname
-#         self.certification = certification    
-
-# @app.route('/save_journalist', methods=['POST'])
-# def save_J():
-#     hashed_password = generate_password_hash(request.form['password'], method='sha256')
-#     certification = 'certification' in request.form
-#     new_user = users.journalist(request.form['username'], hashed_password, request.form['email'], request.form['name'], request.form['lastname'], certification)
-#     new_G_user = users.user(request.form['username'], hashed_password, request.form['email'])
-#     db.session.add(new_G_user) 
-#     db.session.add(new_user) 
-#     db.session.commit()
-    
-#     return "Saving a journalist"
+    def __init__(self, journalistuser_id, name, lastname, certification):
+        self.journalistuser_id = journalistuser_id
+        self.name = name
+        self.lastname = lastname
+        self.certification = certification    
