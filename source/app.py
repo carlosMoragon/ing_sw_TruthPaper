@@ -36,8 +36,7 @@ def login_users():
     if manager.login(request.form['username'], request.form['password']):
         return index()
     else:
-        return start()
-
+        return render_template('error_login.html')
 
 @app.route('/register.html')
 def register_funct():
@@ -71,25 +70,44 @@ def prueba_articulos():
     return render_template('pruebaArticulos.html', data=data)
 
 
-# ESTE METODO Y EL SIGUIENTE ES EL MISMO ASI QUE DEBERIAN SER 1
-# Guardar un usuario desde la web a la base, usando el modelo de usuario
-# He cambiado el nombre del metodo: no puede tener mayusculas
-# @app.route('/save_commonuser', methods=['POST'])
-# def save_cu():
-#     if cl.validate_password(request.form['password']):
-#         # hashed_password = generate_password_hash(request.form['password'], method='sha256')
-#         new_user = users.Commonuser(request.form['username'], request.form['password'], request.form['email'], request.form['c_user_name'], request.form['c_user_lastname'])
-#         # He cambiado el nombre de la variable: no puede tener mayusculas
-#         new_g_user = users.User(request.form['username'], request.form['password'], request.form['email'])
-#         db.session.add(new_g_user)
-#         db.session.add(new_user)
-#         db.session.commit()
-    
-#         return index()
-#     else:
-#         print("CONTRASEÑA DÉBIL")
-#         flash('CONTRASEÑA DÉBIL', 'WARNING')
-#         return register_funct()
+@app.route('/save_commonuser', methods=['POST'])
+def save_cu():
+    if cl.validate_password(request.form['password']):
+       
+       #Si el nombre de usuario ya existe, no se puede registrar
+        newUser = users.User(
+            username=request.form['username'], 
+            password=request.form['password'], 
+            email=request.form['email'])
+        
+        db.session.add(newUser)
+        db.session.commit()
+
+        # Obtiene el ID del nuevo usuario
+        new_user_id = newUser.id
+        newUserClient = users.Userclient(
+            client_id=new_user_id,
+            is_checked=True,
+            photo=None  
+        )
+        db.session.add(newUserClient)
+        db.session.commit()
+
+        newCommonUser = users.Commonuser(
+            commonuser_id=new_user_id, 
+            name=request.form['c_user_name'],
+            lastname=request.form['c_user_lastname'],
+            bankaccount=request.form['bankaccount']
+        )
+        db.session.add(newCommonUser)
+        db.session.commit()
+
+        return index()
+    else:
+        print("CONTRASEÑA DÉBIL")
+        #flash('CONTRASEÑA DÉBIL', 'WARNING')
+        return render_template('fail_register.html')
+   
 
 
 # # He cambiado el nombre del metodo: no puede tener mayusculas
@@ -115,11 +133,8 @@ def prueba_articulos():
 
 # MySQL Connection
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://administrador_truthpaper:Periodico55deVerdad@truthpaper-server.mysql.database.azure.com:3306/truthpaper_ddbb?charset=utf8mb4&ssl_ca=DigiCertGlobalRootCA.crt.pem'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://administrador_truthpaper:Periodico55deVerdad@truthpaper-server.mysql.database.azure.com:3306/truthpaper_ddbb?charset=utf8mb4&ssl_ca=C:\\Orianna\\CEU San Pablo\\5Semestre5\\IngSoft\\ing_sw_TruthPaper\\source\\DigiCertGlobalRootCA.crt.pem'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://administrador_truthpaper:Periodico55deVerdad@truthpaper-server.mysql.database.azure.com:3306/truthpaper_ddbb?charset=utf8mb4&ssl_ca=source\\DigiCertGlobalRootCA.crt.pem'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-# tiene menú contextual
 
 db.init_app(app)
 

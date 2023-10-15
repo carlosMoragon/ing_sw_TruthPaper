@@ -4,8 +4,8 @@ db = manager.db
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
-    username = db.Column(db.String(50), nullable=False)
-    password = db.Column(db.String(50), nullable=False)
+    username = db.Column(db.String(30), nullable=False)
+    password = db.Column(db.String(30), nullable=False)
     email = db.Column(db.Text, nullable=True)
     
     def __init__(self, username, password, email):
@@ -13,19 +13,28 @@ class User(db.Model):
         self.password = password
         self.email = email
 
-class Commonuser(db.Model):
-    id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
-    name = db.Column(db.String(50), nullable=False)
-    lastname = db.Column(db.String(50), nullable=False)
-    bank_account = db.Column(db.String(50), nullable=False)
-    is_premium = db.Column(db.Boolean, nullable=False)
-
+class Userclient(db.Model):
+    client_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    photo = db.Column(db.LargeBinary, nullable=True)
+    is_checked = db.Column(db.Boolean, nullable=False)
     
-    def __init__(self, name, lastname, bank_account, is_premium):
+    def __init__(self, client_id, photo, is_checked):
+        self.client_id = client_id
+        self.photo = photo
+        self.is_checked = is_checked   
+        
+class Commonuser(db.Model):
+    commonuser_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(30), nullable=False)
+    lastname = db.Column(db.String(30), nullable=False)
+    bankaccount = db.Column(db.String(70), nullable=False)
+    
+    def __init__(self, commonuser_id, name, lastname, bankaccount):
+        self.commonuser_id = commonuser_id
         self.name = name
         self.lastname = lastname
-        self.bank_account = bank_account
-        self.is_premium = is_premium
+        self.bankaccount = bankaccount
+
 
 
 class Companyuser(db.Model):
