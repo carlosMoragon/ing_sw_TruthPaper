@@ -114,9 +114,10 @@ def save_cmpu():
 
 
 # MySQL Connection
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1234@localhost:3307/truthpaper'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://administrador_truthpaper:Periodico55deVerdad@truthpaper-server.mysql.database.azure.com:3306/truthpaper_ddbb?charset=utf8mb4&ssl_ca=DigiCertGlobalRootCA.crt.pem'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+# tiene menú contextual
 
 db.init_app(app)
 
