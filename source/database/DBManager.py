@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
-from modules import users, classes as cl
+from modules import users, classes as cl, web_scrapping as ws
+from typing import List, Dict
 db = SQLAlchemy()
 
 
@@ -14,6 +15,6 @@ def login(username, password) -> bool:
 
 # CONSULTA A LA BBDD PARA QUE TE COJA LAS NOTICIAS -> SE VA A LLAMAR A ESTA FUNCION DESDE APP.PY ANTES DE INICIAR
 """
-def get_news_db() -> List[cl.News]:
-    return None
+def get_news_db() -> (List[cl.News], Dict[int, List[cl.News]]):
+    return None, ws.split_news(news)
 """

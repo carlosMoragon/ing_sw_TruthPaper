@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, flash
 from modules import web_scrapping as ws, users, filter as f, classes as cl
 from flask_sqlalchemy import SQLAlchemy
 from database import DBManager as manager#, Admin
-from typing import List
+from typing import List, Dict
 import threading
 
 db = manager.db
@@ -11,6 +11,7 @@ app = Flask(__name__)
 app.secret_key = '1jn21rc1#kj42h35k%@24ic1ucmo4r1cni4y1@@91ch24i5nc1248591845715'
 
 news: List[cl.News]
+containers: Dict[int, List[cl.News]]
 # init_news = threading.Thread(target=manager.get_news_db)
 
 
@@ -19,6 +20,8 @@ def index():
     global news
     # AQUI YA TIENE QUE HABER NOTICIAS EN NEWS -> SINO ESTA MAL
     news = ws.get_news()
+    # containers = ws.get_containers(news)
+    # ESTO ES PARA ESPERAR A QUE SE CARGUEN LAS NOTICIAS DE LA BASE DE DATOS
     # init_news.join()
     data = {
         'imgs': [new.get_image() for new in news],
@@ -27,15 +30,18 @@ def index():
         'dates': [new.get_date() for new in news],
         'categories': [new.get_category() for new in news]
     }
+    print(news[0].get_image())
     return render_template('indexFunc.html', data=data)
 
 
 @app.route('/')
 def start():
-    # global news
+    # global news, containers
     # if news is None:
         # ESTA ES LA DE LAS BBDD QUE SON LAS QUE MAS RAPIDO TIENEN QUE IR
-        # init_news.start()
+        # results = init_news.start()
+        # news = results[0]
+        # containers = results[1]
 
         # ESTAS SON LAS QUE SON NUEVAS QUE SE VAN A IR AÑADIENDO A LO LARGO DE LA EJECUCION
         # threading.Thread(target=_add_news_background).start()
@@ -44,8 +50,9 @@ def start():
 
 
 def _add_news_background():
-    global news
-    news += ws.get_news
+    global news, containers
+    news += ws.get_news()
+    containers = ws.get_containers(news)
 
 
 # CAMBIAR LA RUTA

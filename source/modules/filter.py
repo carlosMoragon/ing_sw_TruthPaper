@@ -1,5 +1,5 @@
 from modules import classes as cl
-from typing import List
+from typing import List, Dict
 import re
 
 
@@ -57,3 +57,13 @@ def filter_by_date(search: str, news: List[cl.News]) -> List[cl.News]:
                 matches.append(new)
 
     return matches
+
+
+def filter_by_container(container: int, news: List[cl.News]) -> List[cl.News]:
+    matches = []
+    for new in news:
+        if container == new.get_container():
+            matches.append(new)
+
+    return matches
+

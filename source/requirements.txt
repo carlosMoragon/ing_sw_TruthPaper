@@ -4,3 +4,7 @@ requests
 pymysql
 flask
 flask_sqlalchemy
+scikit-learn
+numpy
+nltk
+sklearn

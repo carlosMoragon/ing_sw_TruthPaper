@@ -390,3 +390,6 @@ class News:
 
     def __eq__(self, other):
         return self._id == other.get_id() and self._owner == other.get_owner() and self._title == other.get_title() and self._image == other.get_image() and self._url == other.get_url() and self._content == other.get_content() and self._container == other.get_container() and self._journalist == other.get_journalist() and self._date == other.get_date()
+
+    def __hash__(self):
+        return hash(self._id)
