@@ -1,13 +1,8 @@
 from flask import Flask, render_template, request, flash
-from modules import web_scrapping as ws, filter as f, classes as cl
-from modules import users
+from modules import web_scrapping as ws, users, filter as f, classes as cl
 from flask_sqlalchemy import SQLAlchemy
-from database import DBManager as manager, admin
+from database import DBManager as manager
 from typing import List
-
-
-#BORRAR:
-import requests as rq
 
 db = manager.db
 app = Flask(__name__)
@@ -16,13 +11,10 @@ app.secret_key = '1jn21rc1#kj42h35k%@24ic1ucmo4r1cni4y1@@91ch24i5nc1248591845715
 
 news: List[cl.News]
 
-
 @app.route('/index')
 def index():
     global news
-    # news = ws.get_news()
-    urls, names = ws._category_antena3(rq.get("https://www.antena3.com/noticias/").text)
-    news = next(iter(ws.get_news_categories(urls, names).values()), None)
+    news = ws.get_news()
     data = {
         'imgs': [new.get_image() for new in news],
         'titles': [str(new.get_title()) for new in news],
@@ -122,17 +114,13 @@ def save_cmpu():
 
 
 # MySQL Connection
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@localhost:3307/truthpaper'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1234@localhost:3307/truthpaper'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
 db.init_app(app)
 
 if __name__ == '__main__':
-    #ws.save_html(["https://www.lasexta.com/noticias/", "https://www.antena3.com/noticias/", "https://www.marca.com/", "https://www.nytimes.com/international/"])
+    ws.save_html()
     app.run(debug=True)
 
-@app.route('/verifyUsers', methods=['GET', 'POST'])
-def show_users():
-    company_users = admin.user_list
-    return render_template('verifyUsers.html', company_users=company_users)

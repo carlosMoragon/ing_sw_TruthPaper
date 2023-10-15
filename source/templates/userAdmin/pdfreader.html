@@ -58,7 +58,7 @@
 
         <div class="row align-items-center bg-white py-3 px-lg-5">
             <div class="col-lg-4">
-                <img src="../static/img/logos/high_res/logo_color_tbg_hd.png" alt="" class="img-fluid" width="200" href="indexAdmin.html">
+                <img src="../../static/img/logos/high_res/logo_color_tbg_hd.png" alt="" class="img-fluid" width="200" href="indexAdmin.html">
             </div>
 
         </div>
@@ -111,11 +111,13 @@
                                     document.addEventListener('DOMContentLoaded', function() {
                                         var urlParams = new URLSearchParams(window.location.search);
                                         var pdfUrl = urlParams.get('pdf_url');
+                                        //var pdfUrl = "pdfPrueba.pdf";
                                         
                                         if (pdfUrl) {
                                             var pdfContainer = document.getElementById('pdfContainer');
                                             var embedTag = document.createElement('embed');
-                                            embedTag.src = pdfUrl;
+                                            embedTag.src = "data:application/pdf;base64," + pdfContent; // Usa data URI para mostrar el pdf
+                                            //embedTag.src = pdfUrl;
                                             embedTag.type = 'application/pdf';
                                             embedTag.width = '100%';
                                             embedTag.height = '600px';
