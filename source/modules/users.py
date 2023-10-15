@@ -13,6 +13,7 @@ class User(db.Model):
         self.password = password
         self.email = email
 
+
 class Userclient(db.Model):
     client_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     photo = db.Column(db.LargeBinary, nullable=True)
@@ -22,7 +23,8 @@ class Userclient(db.Model):
         self.client_id = client_id
         self.photo = photo
         self.is_checked = is_checked   
-        
+
+
 class Commonuser(db.Model):
     commonuser_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(30), nullable=False)
@@ -35,6 +37,7 @@ class Commonuser(db.Model):
         self.lastname = lastname
         self.bankaccount = bankaccount
 
+
 class Companyuser(db.Model):
     companyuser_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(30), nullable=False)
@@ -44,8 +47,10 @@ class Companyuser(db.Model):
     def __init__(self, companyuser_id, name, NIF, bankaccount):
         self.companyuser_id = companyuser_id
         self.name = name
+
         self.NIF = NIF
         self.bankaccount = bankaccount
+
 
 class Journalistuser(db.Model):
     journalistuser_id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
@@ -58,3 +63,72 @@ class Journalistuser(db.Model):
         self.name = name
         self.lastname = lastname
         self.certificate = certificate    
+
+
+#----------PALOMA--------- (es borrable)
+class AdministratorUser(db.Model):
+    id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
+    username = db.Column(db.String(50), nullable=False)
+    password = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.Text, nullable=True)
+
+    def _init_(self, username, password, email):
+        self.username = username
+        self.password = password
+        self.email = email
+
+
+lista_registros = []
+
+# Cargar todos los usarios de la tabla "admin"
+def load_admin():
+    admin_data = AdministratorUser.query.all()
+    for usuario in admin_data:
+        lista_registros.append([usuario.username, usuario.password, usuario.email]) # Añade a la lista los datos de cada usuario
+    for i, registro in enumerate(lista_registros, 1):
+        print(f"Registro {i}: {registro}" )    # Imprime los datos de cada usuario
+    return lista_registros
+
+"""
+class AdministratorUser(db.Model):
+    id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
+    username = db.Column(db.String(50), nullable=False)
+    password = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.Text, nullable=True)
+
+    def _init_(self, username, password, email):
+        self.username = username
+        self.password = password
+        self.email = email
+"""
+
+class New(db.Model):
+    __tablename__ = 'new'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    owner = db.Column(db.String(50), nullable=False)
+    title = db.Column(db.String(255), nullable=False)
+    image = db.Column(db.String(255), nullable=False)
+    url = db.Column(db.String(255), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    container = db.Column(db.Integer, nullable=False)
+    journalistuser_id = db.Column(db.Integer)
+    date = db.Column(db.Date, nullable=False)
+    category = db.Column(db.String(30), nullable=False)
+
+    def __init__(self, owner, title, image, url, content, container, journalistuser_id, date, category):
+        self.owner = owner
+        self.title = title
+        self.image = image
+        self.url = url
+        self.content = content
+        self.container = container
+        self.journalistuser_id = journalistuser_id
+        self.date = date
+        self.category = category
+
+
+def insert_new(owner, title, image, url, content, container, journalistuser_id, date, category):
+    new = New(owner=owner, title=title, image=image, url=url, content=content, container=container, journalistuser_id=journalistuser_id, date=date, category=category)
+    db.session.add(new)
+    db.session.commit()
+

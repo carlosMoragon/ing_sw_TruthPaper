@@ -1,6 +1,6 @@
 import re
 from typing import List
-from modules import web_scrapping as ws
+# from modules import web_scrapping as ws
 # Declaración de clases
 
 
@@ -17,56 +17,61 @@ def validate_password(password: str) -> bool:
 # Estructura de un comentario de una publicación
 class Comment:
 
-    def __init__(self, owner: str, text: str, date: str, imgs: []):
-        self._owner = owner
-        self._text = text
-        self._date = date
-        # Lista de imgs
-        self._imgs = imgs
+    def __init__(self, id: int, likes: int, views: int, content: str, img: str, userclient_id: int):
+        self._id = id
+        self._likes = likes
+        self._views = views
+        self._content = content
+        self._img = img
+        self._userclient_id = userclient_id
 
-    def get_owner(self) -> str:
-        return self._owner
+    def get_id(self) -> int:
+        return self._id
 
-    def set_owner(self, owner: str):
-        self._owner = owner
+    def set_id(self, id):
+        self._id = id
 
-    def set_text(self, text: str):
-        self._text = text
+    def get_likes(self) -> int:
+        return self._likes
 
-    def get_text(self) -> str:
-        return self._text
+    def set_likes(self, likes):
+        self._likes = likes
 
-    def set_date(self, date: str):
-        if validate_date(date):
-            self._date = date
-        else:
-            print("The date hasn't been set")
+    def get_views(self) -> int:
+        return self._views
 
-    def get_date(self) -> str:
-        return self._date
+    def set_views(self, views):
+        self._views = views
 
-    def set_imgs(self, imgs: []):
-        self._imgs = imgs
+    def get_content(self) -> str:
+        return self._content
 
-    def get_imgs(self) -> str:
-        return self._imgs
+    def set_content(self, content):
+        self._content = content
 
-    def add_img(self, img: str):
-        self._imgs.append(img)
+    def get_img(self) -> str:
+        return self._img
 
-    # owner: str, text: str, date: str, imgs:
+    def set_img(self, img):
+        self._img = img
+
+    def get_userclient_id(self) -> int:
+        return self._userclient_id
+
+    def set_userclient_id(self, userclient_id):
+        self._userclient_id = userclient_id
+
     def __str__(self) -> str:
-        return f"owner: {self._owner}, text: {self._text}, date: {self._date}, imgs: {self._imgs}"
+        return f"id: {self._id}, likes: {self._likes}, views: {self._views}, content: {self._content}, img: {self._img}, userclient_id: {self._userclient_id}"
 
 
 # Users declarations
 class User:
-    def __init__(self, username: str, password: str, email: str, profile_name: str, phone_number: str):
+    def __init__(self, id: int, username: str, password: str, email: str):
+        self._id = id
         self._username = username
         self._password = password
         self._email = email
-        self._profile_name = profile_name
-        self._phone_number = phone_number
 
     def set_username(self, username: str):
         self._username = username
@@ -86,89 +91,257 @@ class User:
     def get_email(self) -> str:
         return self._email
 
-    def set_profile_name(self, profile_name):
-        self._profile_name = profile_name
+    def __str__(self) -> str:
+        return f"id: {self._id}, username: {self._username}, password: {self._password}, email: {self._email}"
 
-    def get_profile_name(self) -> str:
-        return self._profile_name
+    def __eq__(self, other):
+        return self._id == other.get_id()
 
-    def set_phone_number(self, phone_number):
-        self._phone_number = phone_number
 
-    def get_phone_number(self) -> str:
-        return self._phone_number
+class UserClient(User):
 
-    # username: str, password: str, email: str, profile_name: str, phone_number: str
+    def __init__(self, id: int, username: str, password: str, email: str, photo, is_checked: bool):
+        super().__init__(id, username, password, email)
+        self._photo = photo
+        self._is_checked = is_checked
+
+    def set_photo(self, photo):
+        self._photo = photo
+
+    def get_photo(self):
+        return self._photo
+
+    def set_is_checked(self, is_checked):
+        self._is_checked = is_checked
+
+    def get_is_checked(self):
+        return self._is_checked
+
+    def __str__(self):
+        return f"id: {self._id}, username: {self._username}, password: {self._password}, email: {self._email}, photo: {self._photo}, is_checked: {self._is_checked}"
+
+
+class AdministratorUser(User):
+    def __init__(self, username: str, password: str, email: str, can_create: bool, can_delete: bool, can_edit: bool):
+        super().__init__(username, password, email)
+        self._can_create = can_create
+        self._can_delete = can_delete
+        self._can_edit = can_edit
+
+    def get_can_create(self):
+        return self._can_create
+
+    def get_can_delete(self):
+        return self._can_delete
+
+    def get_can_edit(self):
+        return self._can_edit
+
+    def __str__(self):
+        return f"username: {self._username}, password: {self._password}, email: {self._email}, can_create: {self._can_create}, can_delete: {self._can_delete}, can_edit: {self._can_edit}"
+
+
+class CommonUser(UserClient):
+    def __init__(self, id: int, username: str, password: str, email: str, photo, is_checked: bool, name: str, lastname: str, banckaccount: str):
+        super().__init__(id, username, password, email, photo, is_checked)
+        self._name = name
+        self._lastname = lastname
+        self._banckaccount = banckaccount
+
+    def set_name(self, name):
+        self._name = name
+
+    def get_name(self):
+        return self._name
+
+    def set_lastname(self, lastname):
+        self._lastname = lastname
+
+    def get_lastname(self):
+        return self._lastname
+
+    def set_banckaccount(self, banckaccount):
+        self._banckaccount = banckaccount
+
+    def get_banckaccount(self):
+        return self._banckaccount
+
+    def __str__(self):
+        return f"id: {self._id}, username: {self._username}, password: {self._password}, email: {self._email}, photo: {self._photo}, is_checked: {self._is_checked}, name: {self._name}, lastname: {self._lastname}, banckaccount: {self._banckaccount}"
+
+
+class CompanyUser(UserClient):
+    def __init__(self, id: int, username: str, password: str, email: str, photo, is_checked: bool, company_name: str, NIF: str, certification: bool):
+        super().__init__(id, username, password, email, photo, is_checked)
+        self._company_name = company_name
+        self._NIF = NIF
+        self._certification = certification
+
+    def set_company_name(self, company_name):
+        self._company_name = company_name
+
+    def get_company_name(self):
+        return self._company_name
+
+    def set_NIF(self, NIF):
+        self._NIF = NIF
+
+    def get_NIF(self):
+        return self._NIF
+
+    def set_certification(self, certification):
+        self._certification = certification
+
+    def get_certification(self):
+        return self._certification
+
+    def __str__(self):
+        return f"id: {self._id}, username: {self._username}, password: {self._password}, email: {self._email}, photo: {self._photo}, is_checked: {self._is_checked}, company_name: {self._company_name}, NIF: {self._NIF}, certification: {self._certification}"
+
+class Journalist(UserClient):
+    def __init__(self,id: int, username: str, password: str, email: str, photo, is_checked: bool, name: str, lastname: str, certification: bool):
+        super().__init__(id, username, password, email, photo, is_checked)
+        self._name = name
+        self._lastname = lastname
+        self._certification = certification
+
+    def set_name(self, name):
+        self._name = name
+
+    def get_name(self):
+        return self._name
+
+    def set_lastname(self, lastname):
+        self._lastname = lastname
+
+    def get_lastname(self):
+        return self._lastname
+
+    def set_certification(self, certification):
+        self._certification = certification
+
+    def get_certification(self):
+        return self._certification
+
+    def __str__(self):
+        return f"id: {self._id}, username: {self._username}, password: {self._password}, email: {self._email}, photo: {self._photo}, is_checked: {self._is_checked}, name: {self._name}, lastname: {self._lastname}, certification: {self._certification}"
+
+
+class advertisement:
+    def __init__(self, id: int, image, content: str, url: str, views: int, companyuser_id: int):
+        self._id = id
+        self._image = image
+        self._content = content
+        self._url = url
+        self._views = views
+        self._companyuser_id = companyuser_id
+
+    def get_id(self) -> int:
+        return self._id
+
+    def set_id(self, id):
+        self._id = id
+
+    def get_image(self):
+        return self._image
+
+    def set_image(self, image):
+        self._image = image
+
+    def get_content(self) -> str:
+        return self._content
+
+    def set_content(self, content):
+        self._content = content
+
+    def get_url(self) -> str:
+        return self._url
+
+    def set_url(self, url):
+        self._url = url
+
+    def get_views(self) -> int:
+        return self._views
+
+    def set_views(self, views):
+        self._views = views
+
+    def get_companyuser_id(self) -> int:
+        return self._companyuser_id
+
+    def set_companyuser_id(self, companyuser_id):
+        self._companyuser_id = companyuser_id
 
     def __str__(self) -> str:
-        return f"username: {self._username}, password: {self._password}, email: {self._email}, profile_name: {self._profile_name}, phone_number: {self._phone_number}"
+        return f"id: {self._id}, image: {self._image}, content: {self._content}, url: {self._url}, views: {self._views}, companyuser_id: {self._companyuser_id}"
+
+    def __eq__(self, other):
+        return self._id == other.get_id()
 
 
-class CommonUser(User):
-    def __init__(self, username: str, password: str, email: str, profile_name: str, phone_number: str, interest_themes: List[str], iscertificate: bool):
-        super().__init__(username, password, email, profile_name, phone_number)
-        self._interest_themes = interest_themes
-        self._iscertificate = iscertificate
+class Note:
+    def __init__(self, id: int, content: str, userclient_id: int):
+        self._id = id
+        self._content = content
+        self._userclient_id = userclient_id
 
-    def set_interest_themes(self, interest_themes):
-        self._interest_themes = interest_themes
+    def get_id(self) -> int:
+        return self._id
 
-    def get_interest_themes(self) -> List[str]:
-        return self._interest_themes
+    def set_id(self, id):
+        self._id = id
 
-    def set_certificate(self, iscertificate):
-        self._iscertificate = iscertificate
+    def get_content(self) -> str:
+        return self._content
 
-    def get_iscertificate(self) -> bool:
-        return self._iscertificate
+    def set_content(self, content):
+        self._content = content
 
-    def __str__(self) -> str:
-        # interest_themes: [], iscertificate: bool
-        return f"username: {self._username}, password: {self._password}, email: {self._email}, profile_name: {self._profile_name}, phone_number: {self._phone_number}, interest_themes: {self._interest_themes}, iscertificate: {self._iscertificate}"
+    def get_userclient_id(self) -> int:
+        return self._userclient_id
 
-
-class PremiumUser(User):
-    def __init__(self, username: str, password: str, email: str, profile_name: str, phone_number: str, bank_account: str):
-        super().__init__(username, password, email, profile_name, phone_number)
-        self._bank_account = bank_account
-
-    def set_bank_account(self, bank_account):
-        self._bank_account = bank_account
-
-    def get_bank_account(self) -> str:
-        return self._bank_account
+    def set_userclient_id(self, userclient_id):
+        self._userclient_id = userclient_id
 
     def __str__(self) -> str:
-        return f"username: {self._username}, password: {self._password}, email: {self._email}, profile_name: {self._profile_name}, phone_number: {self._phone_number}, banck_account{self._bank_account}"
+        return f"id: {self._id}, content: {self._content}, userclient_id: {self._userclient_id}"
 
-
-class CompanyUser(User):
-    def __init__(self, username, password, email, profile_name, phone_number, company):
-        super().__init__(username, password, email, profile_name, phone_number)
-        self._company = company
-
-    def set_company(self, company):
-        self._company = company
-
-    def get_company(self) -> str:
-        return self._company
-
-    def __str__(self) -> str:
-        return f"username: {self._username}, password: {self._password}, email: {self._email}, profile_name: {self._profile_name}, phone_number: {self._phone_number}, company: {self._company}"
+    def __eq__(self, other):
+        return self._id == other.get_id()
 
 
 # Estructura de una Noticia
 class News:
-    def __init__(self, title: str , image: str, summary: str, url: str, date: str, owner: str, content: str):
+    def __init__(self, id: int, owner: str, title: str, image: str, url: str, content: str, container: int, journalist: int, date: str, category: str):
+        self._id = id
+        self._owner = owner
         self._title = title
         self._image = image
-        self._summary = summary
         self._url = url
-        self._comments = []
-        self._date = date
-        self._qualification = -1
-        self._owner = owner
         self._content = content
+        self._container = container
+        self._journalist = journalist
+        self._date = date
+        self._category = category
+
+    # Getters y Setters
+    def get_category(self) -> str:
+        return self._category
+
+    def set_category(self, category):
+        self._category = category
+
+    def get_id(self) -> int:
+        return self._id
+
+    def set_id(self, id):
+        self._id = id
+
+    def get_owner(self) -> str:
+        return self._owner
+
+    def set_owner(self, owner):
+        self._owner = owner
 
     def get_title(self) -> str:
         return self._title
@@ -182,41 +355,11 @@ class News:
     def set_image(self, image):
         self._image = image
 
-    def get_summary(self) -> str:
-        return self._summary
-
-    def set_summary(self, summary):
-        self._summary = summary
-
-    def get_url(self):
+    def get_url(self) -> str:
         return self._url
 
     def set_url(self, url):
         self._url = url
-
-    def get_comments(self) -> List[str]:
-        return self._comments
-
-    def set_comments(self, comments):
-        self._comments = comments
-
-    def get_date(self) -> str:
-        return self._date
-
-    def set_date(self, date):
-        self._date = date
-
-    def get_qualification(self) -> int:
-        return self._qualification
-
-    def set_qualification(self, qualification):
-        self._qualification = qualification
-
-    def get_owner(self) -> str:
-        return self._owner
-
-    def set_owner(self, owner):
-        self._owner = owner
 
     def get_content(self) -> str:
         return self._content
@@ -224,6 +367,29 @@ class News:
     def set_content(self, content):
         self._content = content
 
-    def __str__(self):
-        return f"title: {self._title}, image: {self._image}, summary: {self._summary}, url: {self._url}, comments: {self._comments}, date: {self._date}, qualification: {self._qualification}, owner: {self._owner}"
+    def get_container(self) -> int:
+        return self._container
 
+    def set_container(self, container):
+        self._container = container
+
+    def get_journalist(self) -> int:
+        return self._journalist
+
+    def set_journalist(self, journalist):
+        self._journalist = journalist
+
+    def get_date(self) -> str:
+        return self._date
+
+    def set_date(self, date):
+        self._date = date
+
+    def __str__(self) -> str:
+        return f"id: {self._id}, owner: {self._owner}, title: {self._title}, image: {self._image}, url: {self._url}, content: {self._content}, container: {self._container}, journalist: {self._journalist}, date: {self._date}"
+
+    def __eq__(self, other):
+        return self._id == other.get_id() and self._owner == other.get_owner() and self._title == other.get_title() and self._image == other.get_image() and self._url == other.get_url() and self._content == other.get_content() and self._container == other.get_container() and self._journalist == other.get_journalist() and self._date == other.get_date()
+
+    def __hash__(self):
+        return hash(self._id)

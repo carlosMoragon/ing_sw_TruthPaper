@@ -22,7 +22,11 @@
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="../static/css/style.css" rel="stylesheet">
+    <link href="../../static/css/style.css" rel="stylesheet">
+
+      <!-- Date and Main Scripts-->
+    <script src="../../static/js/date.js"></script>
+    <script src="../../static/js/main.js"></script>
 </head>
 
 <body>
@@ -35,12 +39,8 @@
                         <li class="nav-item border-right border-secondary">
                             <a class="nav-link text-body small"> <span id="currentDate"></span></a>
                         </li>
-
                         <li class="nav-item border-right border-secondary">
-                            <a class="nav-link text-body small" href="#">Contacto</a> <!-- LINK!!!-->
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-body small" href="login.html">Login</a>
+                            <a class="nav-link text-body small">Administrador </a> <!-- LINK!!!-->
                         </li>
                     </ul>
                 </nav>
@@ -52,24 +52,19 @@
 
         <div class="row align-items-center bg-white py-3 px-lg-5">
             <div class="col-lg-4">
-                <img src="../static/img/logos/high_res/logo_color_tbg_hd.png" alt="" class="img-fluid" width="200" href="index.html">
-            </div>>
-
-            <!-- Example of an advertisement
-        <div class="col-lg-8 text-center text-lg-right">
-            <a href="https://htmlcodex.com"><img class="img-fluid" src="img/ads-728x90.png" alt=""></a>
-        </div>
-        -->
+                <div class="col-lg-4">
+                    <img src="../../static/img/logos/high_res/logo_color_tbg_hd.png" alt="" class="img-fluid" width="200" href="indexAdmin.html">
+                </div>
+            </div>
 
         </div>
     </div>
     <!-- Topbar End -->
 
-
-    <!-- Navbar Start -->
+<!-- Navbar Start -->
     <div class="container-fluid p-0">
         <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-2 py-lg-0 px-lg-5">
-            <a href="index.html" class="navbar-brand d-block d-lg-none">
+            <a href="indexAdmin.html" class="navbar-brand d-block d-lg-none">
                 <h1 class="m-0 display-4 text-uppercase text-primary">Truth<span
                         class="text-white font-weight-normal">paper</span></h1>
             </a>
@@ -78,32 +73,16 @@
             </button>
             <div class="collapse navbar-collapse justify-content-between px-0 px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav mr-auto py-0">
-                    <a href="index.html" class="nav-item nav-link">Inicio</a>
-                    <a href="category.html" class="nav-item nav-link">Noticias Guardadas</a>
-                    <!--Add more items on the menu-->
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Categorias</a>
-                        <div class="dropdown-menu rounded-0 m-0">
-                            <a href="#" class="dropdown-item">Economía</a>
-                            <a href="#" class="dropdown-item">Tecnología</a>
-                            <a href="#" class="dropdown-item">Salud</a>
-                        </div>
-                    </div>
-                </div>
-
-
-                <!-- search by keywords -->
-                <div class="input-group ml-auto d-none d-lg-flex" style="max-width: 300px;">
-                    <input type="text" class="form-control border-0" placeholder="Buscar">
-                    <div class="input-group-append">
-                        <button class="input-group-text bg-primary text-dark border-0 px-3"><i
-                                class="fa fa-search"></i></button>
-                    </div>
+                    <a href="indexAdmin.html" class="nav-item nav-link active">Inicio</a>
+                    <a href="verifyUsers.html" class="nav-item nav-link">Verificación</a>
+                    <a href="charts.html" class="nav-item nav-link">Gráficos</a>
+                    <a href="comments.html" class="nav-item nav-link">Comentarios</a>
+                    <a href="editUsers.html" class="nav-item nav-link">Editar Usuarios</a>
                 </div>
 
                 <!-- Icon to enter in login-->
                 <div class="login-icon">
-                    <a href="login.html" class="nav-item nav-link">
+                    <a href="perfilAdmin.html" class="nav-item nav-link">
                         <i class="fas fa-user"></i>
                     </a>
 
@@ -113,26 +92,25 @@
     </div>
     <!-- Navbar End -->
 
-
     <!-- Contact Start -->
     <div class="container-fluid mt-5 pt-3">
         <div class="container">
             <div class="row justify-content-md-center">
                 <div class="col-lg-8">
                     <div class="section-title mb-0">
-                        <h4 class="m-0 text-uppercase font-weight-bold">Olivia Araceli Morales Quezada</h4>
+                        <h4 class="m-0 text-uppercase font-weight-bold">Administrador José Ramirez </h4>
                     </div>
                     <div class="bg-white border border-top-0 p-4 mb-3">
                         <div class="mb-4">
                             <div class="container">
                                 <div class="row">
                                     <div class="col col-lg-3">
-                                        <img class="img-fluid" src="../static/img/User-Profile.png"
+                                        <img class="img-fluid" src="../../static/img/User-Profile.png"
                                             style="object-fit: cover; margin-bottom: 10%;">
                                     </div>
                                     <div class="col">
                                         <h6 class="text-uppercase font-weight-bold">Descripción</h6>
-                                        <p class="mb-4"> Busco poder comparar noticias porque me encanta leer y encuentro las noticias demasiado polarizadas. Esta aplición me sirve para contrastar mejor las noticias y por eso estoy aquí :)</p>
+                                        <p class="mb-4"> Administrador con todos los permisos
                                     </div>
                                 </div>
                             </div>

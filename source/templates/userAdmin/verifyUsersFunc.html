@@ -1,0 +1,58 @@
+{% extends 'verifyUsers.html' %}
+
+{% block journalist_users  %}
+    {% for user in journalist_users %}
+    <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
+        <div style=" height: 110px; width: 155px;">
+            <img class="img-fluid" src="{{data.imgs[i]}}"/>
+        </div>
+        
+        <div
+            class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0" style="height: 50px; width: auto;">
+            <div class="mb-2">
+                <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2"
+                    href="">Periodista</a>
+            </div>
+            <a class="h6 m-0 text-secondary text-uppercase font-weight-bold">{{user.name}}</a>
+            <p> Email del usuario: {{user.email}}</p>
+            <!-- Este botón abre un lector de pdf-->
+            <form action="pdfreader.html" method="post">
+                <input type="hidden" name="pdf_url" value="{{journalist_user.pdf}}">
+                <input type="submit" value="Abrir Certificado del periodista">
+            </form>
+            <form action="/verify_users" method="post">
+                <input type="submit" value="Aceptar" class="btn btn-primary" style="width: 100px; color: green;">
+                <input type="submit" value="Denegar" class="btn btn-primary" style="width: 100px; color: red;">
+            </form>
+            <!-- Si se pulsa aceptar/denegar >> enviar correo -->
+        </div>  
+    </div>
+    {% endfor %}
+
+{% endblock %}
+
+{% block company_users  %}
+    {% for user_dict in company_users %}
+        {% for key, value in user_dict.items() %}
+        <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
+            <div
+                class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0" style="height: 50px; width: auto;">
+                <div class="mb-2">
+                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2"
+                        href="">Empresa</a>
+                </div>
+                <a class="h6 m-0 text-secondary text-uppercase font-weight-bold">{{ value[0] }}</a>
+                <p> NIF: {{value}}[1]</p>
+                <form action="/verify_users" method="post">
+                    <input type="submit" value="Aceptar" class="btn btn-primary" style="width: 100px; color: green;">
+                    <input type="submit" value="Denegar" class="btn btn-primary" style="width: 100px; color: red;">
+                </form>
+                <!-- Si se pulsa aceptar/denegar >> enviar correo + reescribir registro-->
+            </div>
+        </div>
+    {% endfor %}
+    {% endfor %}
+
+{% endblock %}
+
+

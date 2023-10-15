@@ -31,31 +31,58 @@
             left: 50%;
             transform: translate(-50%, -50%);
             width: 70%;
-            max-width: 400px; /* Adjust the maximum width according to your preferences  */
-            text-align: left; /* Centers the content inside the container */
+            margin-right: 2%;
+            margin-left: 1%;
+            text-align: center; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         form label {
+            color: black;
             display: block;
             text-align: left;
-            margin-bottom: 5px; /* Space between labels and input fields */
+            margin-bottom: 5px; 
         }
 
         form input[type="submit"] {
-            width: auto; /* Set the width according to the content */
+            width: auto; 
             margin-bottom: 10px;
         }
 
 
         form input {
-            width: 80%;
+            width: 90%;
             padding: 8px;
             margin-bottom: 10px;
         }
 
         .register_user {
-            display: none; /* Esto oculta inicialmente el usuario */
+            display: none;
+            position: absolute;
         }
+
+        .diff_users{
+            display: flex;
+            text-align: center;
+        }
+
+        .common_user_register,.journalist_register, .company_register{
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        button{
+            height: 250px;
+            width: 350px;
+            margin-bottom: 5%;
+        }
+
+        form{
+            align-items: center;
+        }
+
 
     </style>
 
@@ -86,9 +113,7 @@
 
     <div class="row align-items-center bg-white py-3 px-lg-5">
         <div class="col-lg-4">
-            <a href="index.html" class="navbar-brand p-0 d-none d-lg-block">
-                <h1 class="m-0 display-4 text-uppercase text-primary">Truth<span class="text-secondary font-weight-normal">paper</span></h1>
-            </a>
+            <img src="../static/img/logos/high_res/logo_color_tbg_hd.png" alt="" class="img-fluid" width="200" href="login.html">
         </div>
         
     </div>
@@ -96,12 +121,14 @@
 <!-- Topbar End -->
 
 <!-- Login -->
-    <div class="container-lg">
+    <div class="container-lg" style="margin-top: 10%;">
         <h2> Registro</h2>
         <p> Elija el tipo de usuario con el que desea registrarse</p>
         <div class="diff_users" style="margin: 10%;">
+            <!-- Usuario Común-->
             <div class="common_user_register">
                 <button onclick="showRegister('common_user')"> Usuario Común </button>
+                <p> El usuario común permite ver noticias desde diferentes puntos de vista y comentar </p>
                 <div id="common_user" class="register_user">
                     <form action="/save_commonuser" method="post" enctype="multipart/form-data">
                         <label for="c_user_name">Nombre:</label>
@@ -122,16 +149,25 @@
                         <label for="bankaccount">Número de cuenta:</label>
                         <input type="bankaccount" id="bankaccount" name="bankaccount" required><br>
 
+
                         <label for="photo">Foto:</label>
                         <input type="file" id="photo" name="photo" accept="image/*"><br>
                         <!--El required obliga a que cargue la foto, se puede quitar-->
+
+                        <label for="terms">Acepta los <a href="termsCondition.html"> Términos y condiciones: </a></label>
+                        <input type="checkbox" name="terms" value="terms" style=" float: right; margin-left: 30px; " required><br>
+
                         <input type="submit" value="Registrarse"><br>
                     </form>
                 </div>
             </div>
+            <!-- -->
 
+            <!--Usuario PERIODISTA-->
             <div class="journalist_register">
                 <button onclick="showRegister('journalist')"> Periodista </button>
+                <p> El usuario periodista permite certificar las opiniones y reseñas de profesional </p>
+                <p> Este usuario debe ser certificado por TruthPaper </p>
                 <div id="journalist" class="register_user">
                     <form action="/save_journalistUser" method="post">
                         <label for="journalist_name">Nombre:</label>
@@ -152,6 +188,9 @@
                         <label for="certificate"> Suba su credencial de periodista: </label>  
                         <input type="file" id="certificate" name="certificate"><br>
 
+                        <label for="terms">Acepta los <a href="termsCondition.html"> Términos y condiciones: </a></label>
+                        <input type="checkbox" name="terms" value="terms" style=" float: right; margin-left: 30px;" required><br>
+
                         <input type="submit" value="Registrarse"><br>
                     </form>
                 </div>
@@ -159,6 +198,8 @@
 
             <div class="company_register">
                 <button onclick="showRegister('company')"> Empresa </button>
+                <p> El usuario empresa permite darse de alta como compañia y publicar noticias </p>
+                <p> Este usuario debe ser certificado por TruthPaper </p>
                     <div id="company" class="register_user">
                         <form action="/save_companyUser" method="post">
                             <label for="username">Nombre de usuario:</label>
@@ -179,6 +220,9 @@
                             <label for="company_nif">NIF de la empresa:</label>
                             <input type="text" id="company_nif" name="company_nif" required><br>
 
+                            <label for="terms">Acepta los <a href="termsCondition.html"> Términos y condiciones: </a></label>
+                            <input type="checkbox" name="terms" value="terms" style=" float: right; margin-left: 30px;" required><br>
+
                             <input type="submit" value="Registrarse"><br>
                         </form>
                     </div>          
@@ -187,6 +231,6 @@
         </div>
     </div>
 
-<script src="../static/js/date.js"></script>
-<script src="../static/js/register.js"></script>
+    <script src="../static/js/date.js"></script>
+    <script src="../static/js/register.js"></script>
 </body>

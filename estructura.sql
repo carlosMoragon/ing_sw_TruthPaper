@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 -- MariaDB dump 10.19-11.3.0-MariaDB, for Win64 (AMD64)
 --
 -- Host: localhost    Database: truthpaper
@@ -85,7 +87,6 @@ CREATE TABLE `commonuser` (
   `name` varchar(30) NOT NULL,
   `lastname` varchar(30) NOT NULL,
   `bankaccount` varchar(70) DEFAULT '',
-  `isPremium` enum('N','Y') DEFAULT 'N',
   PRIMARY KEY (`commonuser_id`),
   CONSTRAINT `commonuser_ibfk_1` FOREIGN KEY (`commonuser_id`) REFERENCES `userclient` (`client_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
@@ -111,7 +112,6 @@ CREATE TABLE `companyuser` (
   `companyuser_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
   `nif` int(11) NOT NULL,
-  `is_company` enum('N','Y') DEFAULT 'N',
   `banckaccount` varchar(70) DEFAULT '',
   PRIMARY KEY (`companyuser_id`),
   CONSTRAINT `companyuser_ibfk_1` FOREIGN KEY (`companyuser_id`) REFERENCES `userclient` (`client_id`)
@@ -272,6 +272,7 @@ DROP TABLE IF EXISTS `userclient`;
 CREATE TABLE `userclient` (
   `client_id` int(11) NOT NULL AUTO_INCREMENT,
   `photo` blob DEFAULT NULL,
+  `is_checked` enum('N','Y') DEFAULT 'N',
   PRIMARY KEY (`client_id`),
   CONSTRAINT `userclient_ibfk_1` FOREIGN KEY (`client_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
@@ -295,4 +296,6 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+
 -- Dump completed on 2023-10-12 19:35:45
+>>>>>>> 563fa13f3bedcdac2357f188a8060bb0586fac08

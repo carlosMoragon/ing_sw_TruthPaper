@@ -4,3 +4,8 @@ requests
 pymysql
 flask
 flask_sqlalchemy
+matplotlib
+scikit-learn
+numpy
+nltk
+
