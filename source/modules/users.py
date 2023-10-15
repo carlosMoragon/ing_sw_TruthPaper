@@ -32,7 +32,6 @@ class Commonuser(db.Model):
 
 
 class Companyuser(db.Model):
-
     def __init__(self, username, password, email, company_name, NIF):
         self.username = username
         self.password = password

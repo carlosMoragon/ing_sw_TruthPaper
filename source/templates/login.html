@@ -27,6 +27,7 @@
     <style>
        .container-lg {
             position: absolute;
+            margin-top: 5%;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -84,9 +85,7 @@
 
         <div class="row align-items-center bg-white py-3 px-lg-5">
             <div class="col-lg-4">
-                <a href="index.html" class="navbar-brand p-0 d-none d-lg-block">
-                    <h1 class="m-0 display-4 text-uppercase text-primary">Truth<span class="text-secondary font-weight-normal">paper</span></h1>
-                </a>
+                <img src="../static/img/logos/high_res/logo_color_tbg_hd.png" alt="" class="img-fluid" width="200" href="register.html">
             </div>
             
         </div>
@@ -102,10 +101,17 @@
             <input type="text" id="username" name="username" required><br>
             <label for="password">Contraseña:</label>
             <input type="password" id="password" name="password" required><br>
+            <label for="terms">Acepta los <a href="termsCondition.html"> Términos y condiciones: </a></label>
+            <input type="checkbox" name="terms" value="terms" style=" float: right; margin-left: 30px;" required><br>
             <input type="submit" value="Iniciar Sesión"> 
         </form>
         <p>¿Nuevo aquí? <a href="register.html">Regístrate</a></p>
         <p><a href="forgotten_passwd.html">¿Olvidaste tu contraseña?</a></p>
+        
+        <!-- BOTÓN PARA QUE ME LLEVE AL ADMIN Y PODER TRABAJAR >>> BORRAR EN EL FUTURO -->
+        <form action="/verifyUsers" method="post"> 
+            <input type="submit" value="Entrar al admin">
+        </form>
     </div>
 
     <script src="../static/js/date.js"></script>    
