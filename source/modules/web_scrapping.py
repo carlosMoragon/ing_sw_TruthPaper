@@ -10,6 +10,10 @@ import re
 from concurrent.futures import ThreadPoolExecutor
 from collections import defaultdict
 import threading
+import nltk
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+nltk.download('punkt')
 
 
 def _build_news(titles: List[str], urls: List[str], imgs: List[str], owner: str, date: str, category: str) -> List[cl.News]:
@@ -20,6 +24,55 @@ def _build_news(titles: List[str], urls: List[str], imgs: List[str], owner: str,
         news.append(cl.News(-1, owner, titles[i], imgs[i], urls[i], "",-1, -1, date, category))
 
     return news
+
+def add_new_container(news: List[cl.News]) -> List[cl.News]:
+    # Lista de noticias
+    news_content = [new.get_content() for new in news]
+
+    # Crear un vectorizador TF-IDF
+    tfidf_vectorizer = TfidfVectorizer()
+
+    # Aplicar TF-IDF a las noticias
+    tfidf_matrix = tfidf_vectorizer.fit_transform(news_content)
+
+    # Calcular la similitud coseno entre las noticias
+    cosine_similarities = cosine_similarity(tfidf_matrix, tfidf_matrix)
+
+    # Establecer un umbral de similitud (ajusta según tus necesidades)
+    threshold = 0.7
+
+    # Encontrar noticias relacionadas y asignarles un contenedor
+    n_cont = 0
+    for i in range(len(news)):
+        for j in range(i + 1, len(news)):
+            if cosine_similarities[i][j] >= threshold:
+                if news[i].get_container() != -1:
+                    news[j].set_container(news[i].get_container())
+                elif news[j].get_container() != -1:
+                    news[i].set_container(news[j].get_container())
+                else:
+                    news[i].set_container(n_cont)
+                    news[j].set_container(n_cont)
+                    n_cont += 1
+            else:
+                if news[i].get_container() == -1:
+                    news[i].set_container(n_cont)
+                    n_cont += 1
+                if news[j].get_container() == -1:
+                    news[j].set_container(n_cont)
+                    n_cont += 1
+
+    return news
+
+
+def split_by_container(news: List[cl.News]) -> Dict[int, List[cl.News]]:
+    containers: Dict[int, List[str]] = defaultdict(list)
+    for new in news:
+        if new.get_container() in containers:
+            containers[new.get_container()].append(new)
+        else:
+            containers[new.get_container()] = [new]
+    return containers
 
 
 # --- MAKE'S ---
@@ -180,6 +233,10 @@ def get_news() -> List[cl.News]:
     threading.Thread(target=add_content(news)).start()
     return news
 
+
+
+def get_containers(news: List[cl.News]) -> Dict[int, List[cl.News]]:
+    return split_by_container(add_new_container(news))
 
 def get_content(url: str) -> str:
     try:
