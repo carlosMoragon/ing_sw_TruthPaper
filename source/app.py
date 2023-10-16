@@ -103,29 +103,35 @@ def prueba_articulos():
 
 @app.route('/save_commonuser', methods=['POST'])
 def register_user():
-    result = manager.save_user() 
-    if result == False: 
-        return render_template('fail_register.html')
+    result = manager.save_user()
+    if result == -1:
+        return render_template('fail_register_password.html')
+    elif result == -2:
+        return render_template('fail_register_email.html')
     else:
-        if manager.save_commonuser(result):
+        if manager.save_journalistuser(result):
             return index()
 
 
 @app.route('/save_companyUser', methods=['POST'])
 def register_CompanyUser():
-    result = manager.save_user() 
-    if result == False: 
-        return render_template('fail_register.html')
+    result = manager.save_user()
+    if result == -1:
+        return render_template('fail_register_password.html')
+    elif result == -2:
+        return render_template('fail_register_email.html')
     else:
-        if manager.save_companyuser(result):
+        if manager.save_journalistuser(result):
             return index()
     
     
 @app.route('/save_journalistUser', methods=['POST'])
 def register_JournalistUser():
     result = manager.save_user() 
-    if result == False: 
-        return render_template('fail_register.html')
+    if result == -1:
+        return render_template('fail_register_password.html')
+    elif result == -2:
+        return render_template('fail_register_email.html')
     else:
         if manager.save_journalistuser(result):
             return index()
