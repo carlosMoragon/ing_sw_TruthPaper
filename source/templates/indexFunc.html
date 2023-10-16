@@ -60,9 +60,8 @@
         {% for news_item in news_list %}
             <li>
                 <strong>Owner:</strong> {{ news_item.get_owner() }}<br>
-                <strong>Título:</strong> {{ news_item.get_title() }}<br>
-                <strong>URL:</strong> {{ news_item.get_url() }}<br>
-                <strong>Contenido:</strong> {{ news_item.get_content() }}<br>
+                <strong>Título:</strong>  <a href="{{ news_item.get_url() }}"> {{ news_item.get_title() }} </a> <br>
+                <strong>URL: </strong> {{ news_item.get_url() }}<br>
                 <strong>Fecha:</strong> {{ news_item.get_date() }}<br>
             </li>
         {% endfor %}

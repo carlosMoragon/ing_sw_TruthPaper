@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash
+from flask import Flask, render_template, request, flash, redirect
 from modules import web_scrapping as ws, users, filter as f, classes as cl, graphs as gr
 from database import DBManager as manager
 from flask_sqlalchemy import SQLAlchemy
@@ -162,9 +162,9 @@ def register_JournalistUser():
             return index()
 
 #Métodos para el ADMINISTRADOR
-@app.route('/userAdmin.html')
+@app.route('/indexAdmin')
 def index_admin():
-    noticias = ws.get_news()
+    #noticias = news
     #gr.graph_news_per_source(noticias)
     return render_template('userAdmin/indexAdmin.html')
 
@@ -180,7 +180,7 @@ def process_verification():
     action = request.form.get('action') # 'accept' or 'reject'
     if action == 'accept':
         manager.updateUserChecked(user_id)
-    return render_template('userAdmin/verifyUsers.html')
+    return redirect('userAdmin/verifyUsers.html')
 
 @app.route('/charts')
 def charts():
