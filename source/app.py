@@ -16,6 +16,7 @@ init_news = threading.Thread(target=manager.get_news_db, args=(news, containers)
 @app.route('/index')
 def index():
     global news
+    global containers
     init_news.join()
     data = {
         'imgs': [new.get_image() for new in news],
@@ -25,7 +26,7 @@ def index():
         'categories': [new.get_category() for new in news]
     }
 
-    return render_template('indexFunc.html', data=data)
+    return render_template('indexFunc.html', data=data, containers=containers)
 
 
 @app.route('/')
@@ -96,7 +97,7 @@ def save_keyword():
         'dates': [new.get_date() for new in filted_news],
         'categories': [new.get_category() for new in filted_news]
     }
-    return render_template('categoriasFunc.html', data=data)
+    return render_template('categoriesFunc.html', data=data)
 
 
 # @app.route('/pruebaArticulos')

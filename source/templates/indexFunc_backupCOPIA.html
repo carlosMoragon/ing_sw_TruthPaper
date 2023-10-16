@@ -54,19 +54,22 @@
 {% endblock%}
 
 {% block recommended_news%}
-{% for container_id, news_list in containers.items() %}
-    <h2>Contenedor ID: {{ container_id }}</h2>
-    <ul>
-        {% for news_item in news_list %}
-            <li>
-                <strong>Owner:</strong> {{ news_item.get_owner() }}<br>
-                <strong>Título:</strong> {{ news_item.get_title() }}<br>
-                <strong>URL:</strong> {{ news_item.get_url() }}<br>
-                <strong>Contenido:</strong> {{ news_item.get_content() }}<br>
-                <strong>Fecha:</strong> {{ news_item.get_date() }}<br>
-            </li>
-        {% endfor %}
-    </ul>
+{% for i in range(6, data.urls|length) %}
+<div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
+    <div style=" height: 110px; width: 155px;">
+        <img class="img-fluid" src="{{data.imgs[i]}}"/>
+    </div>
+    
+    <div
+        class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0" style="height: 50px; width: auto;">
+        <div class="mb-2">
+            <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2"
+                href="">{{ data.categories[i] }}</a>
+            <a class="text-body" href=""><small>{{data.dates[i]}}</small></a>
+        </div>
+        <a class="h6 m-0 text-secondary text-uppercase font-weight-bold" href="{{data.urls[i]}}">{{data.titles[i]}}</a>
+    </div>
+</div>
 {% endfor %}
 {% endblock%}
 
