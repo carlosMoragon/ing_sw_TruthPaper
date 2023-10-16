@@ -27,3 +27,18 @@ class TestVerificationAlgorithms(unittest.TestCase):
         self.assertEqual(cl.validate_password("HolaMundo@"), False)
         self.assertEqual(cl.validate_password("HolaMundo123@"), False)
         self.assertEqual(cl.validate_password("molamundo1234@"), False)
+
+    def test_verification_email_good(self):
+        self.assertEqual(cl.validate_email("email@dominio.com"), True)
+
+    def test_verification_email_bad(self):
+        self.assertEqual(cl.validate_email("email"), False)
+        self.assertEqual(cl.validate_email("email@dominio"), False)
+        self.assertEqual(cl.validate_email("email@dominio."), False)
+        self.assertEqual(cl.validate_email("email@.com"), False)
+        self.assertEqual(cl.validate_email("email@dominio..com"), False)
+        self.assertEqual(cl.validate_email("email@@dominio.com"), False)
+        self.assertEqual(cl.validate_email("email@."), False)
+        self.assertEqual(cl.validate_email("@dominio.com"), False)
+        self.assertEqual(cl.validate_email("email@dominio.c"), False)
+        self.assertEqual(cl.validate_email(""), False)

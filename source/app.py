@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash
-from modules import web_scrapping as ws, users, filter as f, classes as cl
+from modules import web_scrapping as ws, users, filter as f, classes as cl, graphs as gr
 from database import DBManager as manager
 from flask_sqlalchemy import SQLAlchemy
 from typing import List, Dict
@@ -58,11 +58,20 @@ def login_users():
     if manager.login(request.form['username'], request.form['password']):
         return index()
     else:
-        return render_template('error_login.html')
+        return render_template('fail_login.html')
 
 @app.route('/register.html')
 def register_funct():
     return render_template('register.html')
+
+@app.route('/login_back')
+def go_to_login():
+    return render_template('login.html')
+
+
+@app.route('/termsandConditions')
+def termsConditions():
+    return render_template('termsConditions.html')
 
 
 @app.route('/save_keyword', methods=['post'])
@@ -96,32 +105,72 @@ def save_keyword():
 
 @app.route('/save_commonuser', methods=['POST'])
 def register_user():
-    result = manager.save_user() 
-    if result == False: 
-        return render_template('fail_register.html')
+    result = manager.save_user()
+    if result == -1:
+        return render_template('fail_register_password.html')
+    elif result == -2:
+        return render_template('fail_register_email.html')
     else:
-        if manager.save_commonuser(result):
+        if manager.save_journalistuser(result):
             return index()
 
 
 @app.route('/save_companyUser', methods=['POST'])
 def register_CompanyUser():
-    result = manager.save_user() 
-    if result == False: 
-        return render_template('fail_register.html')
+    result = manager.save_user()
+    if result == -1:
+        return render_template('fail_register_password.html')
+    elif result == -2:
+        return render_template('fail_register_email.html')
     else:
-        if manager.save_companyuser(result):
+        if manager.save_journalistuser(result):
             return index()
     
     
 @app.route('/save_journalistUser', methods=['POST'])
 def register_JournalistUser():
     result = manager.save_user() 
-    if result == False: 
-        return render_template('fail_register.html')
+    if result == -1:
+        return render_template('fail_register_password.html')
+    elif result == -2:
+        return render_template('fail_register_email.html')
     else:
         if manager.save_journalistuser(result):
             return index()
+
+#Métodos para el ADMINISTRADOR
+@app.route('/userAdmin.html')
+def index_admin():
+    noticias = ws.get_news()
+    #gr.graph_news_per_source(noticias)
+    return render_template('userAdmin/indexAdmin.html')
+
+@app.route('/verifyUsers')
+def verify_users():
+    #company_users = users.CompanyUser.query.all()
+    #return render_template('userAdmin/verifyUsers.html', company_users=company_users)
+    return render_template('userAdmin/verifyUsers.html')
+
+@app.route('/charts')
+def charts():
+    return render_template('userAdmin/charts.html')
+
+@app.route('/comments')
+def comments():
+    return render_template('userAdmin/comments.html')
+
+@app.route('/editUsers')
+def edit_users():
+    return render_template('userAdmin/editUsers.html')
+
+@app.route('/profileAdmin')
+def profile_admin():
+    return render_template('userAdmin/profileAdmin.html')
+
+@app.route('/pdfreader')
+def pdf_reader():
+    return render_template('userAdmin/pdfReader.html')
+
 
 
 # MySQL Connection

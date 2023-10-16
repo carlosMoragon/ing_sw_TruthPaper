@@ -20,29 +20,33 @@ def get_news_db() -> (List[cl.News], Dict[int, List[cl.News]]):
 
 def save_user():
     if cl.validate_password(request.form['password']):
-       #Si el nombre de usuario ya existe, no se puede registrar
-        newUser = users.User(
-            username=request.form['username'], 
-            password=request.form['password'], 
-            email=request.form['email'])
-        
-        db.session.add(newUser)
-        db.session.commit()
-        
-        new_user_id = newUser.id  
-        
-        newUserClient = users.Userclient(
-            client_id=new_user_id,
-            is_checked=True,
-            photo=None  
-        )
-        db.session.add(newUserClient)
-        db.session.commit()
-        
-        return new_user_id
+        if cl.validate_email(request.form['email']):
+            #Si el nombre de usuario ya existe, no se puede registrar
+            newUser = users.User(
+                username=request.form['username'],
+                password=request.form['password'],
+                email=request.form['email'])
+
+            db.session.add(newUser)
+            db.session.commit()
+
+            new_user_id = newUser.id
+
+            newUserClient = users.Userclient(
+                client_id=new_user_id,
+                is_checked=True,
+                photo=None
+            )
+            db.session.add(newUserClient)
+            db.session.commit()
+
+            return new_user_id
+        else:
+            print("EMAIL NO VÁLIDO")
+            return -2
     else:
         print("CONTRASEÑA DÉBIL")
-        return False
+        return -1
     
 def save_commonuser(new_user_id) -> bool:
         newCommonUser = users.Commonuser(

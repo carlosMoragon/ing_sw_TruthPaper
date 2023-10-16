@@ -9,7 +9,7 @@
     <meta content="Free HTML Templates" name="description">
 
     <!-- Icon -->
-    <link href="../static/img/favicon.ico" rel="icon">
+    <link href="../static/img/logos/low_res/logo_color.png" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -104,7 +104,7 @@
                         <a class="nav-link text-body small" href="#">Contacto</a> <!-- LINK!!!-->
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-body small" href="login.html">Login</a> <!-- LINK!!!-->
+                        <a class="nav-link text-body small" href="{{ url_for('go_to_login') }}">Login</a> <!-- LINK!!!-->
                     </li>
                 </ul>
             </nav>
@@ -154,7 +154,7 @@
                         <input type="file" id="photo" name="photo" accept="image/*"><br>
                         <!--El required obliga a que cargue la foto, se puede quitar-->
 
-                        <label for="terms">Acepta los <a href="termsCondition.html"> Términos y condiciones: </a></label>
+                        <label for="terms">Acepta los <a href="{{ url_for('termsConditions') }}"> Términos y condiciones: </a></label>
                         <input type="checkbox" name="terms" value="terms" style=" float: right; margin-left: 30px; " required><br>
 
                         <input type="submit" value="Registrarse"><br>
@@ -188,7 +188,7 @@
                         <label for="certificate"> Suba su credencial de periodista: </label>  
                         <input type="file" id="certificate" name="certificate"><br>
 
-                        <label for="terms">Acepta los <a href="termsCondition.html"> Términos y condiciones: </a></label>
+                        <label for="terms">Acepta los <a href="{{ url_for('termsConditions') }}"> Términos y condiciones: </a></label>
                         <input type="checkbox" name="terms" value="terms" style=" float: right; margin-left: 30px;" required><br>
 
                         <input type="submit" value="Registrarse"><br>
@@ -220,7 +220,7 @@
                             <label for="company_nif">NIF de la empresa:</label>
                             <input type="text" id="company_nif" name="company_nif" required><br>
 
-                            <label for="terms">Acepta los <a href="termsCondition.html"> Términos y condiciones: </a></label>
+                            <label for="terms">Acepta los <a href="{{ url_for('termsConditions') }}"> Términos y condiciones: </a></label>
                             <input type="checkbox" name="terms" value="terms" style=" float: right; margin-left: 30px;" required><br>
 
                             <input type="submit" value="Registrarse"><br>

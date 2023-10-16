@@ -73,7 +73,7 @@
                             <a class="nav-link text-body small" href="#">Contacto</a> <!-- LINK!!!-->
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-body small" href="{{ url_for('go_to_login') }}"">Login</a> <!-- LINK!!!-->
+                            <a class="nav-link text-body small" href="{{ url_for('go_to_login') }}">Login</a> <!-- LINK!!!-->
                         </li>
                     </ul>
                 </nav>
@@ -92,24 +92,29 @@
     </div>
     <!-- Topbar End -->
 
-    <!-- Login -->
-    <div class="container-lg">
-        <br>
-        <h2>Iniciar Sesión</h2>
-        <form action="/login_users" method="post"> 
-            <label for="username">Usuario o email:</label>
-            <input type="text" id="username" name="username" required><br>
-            <label for="password">Contraseña:</label>
-            <input type="password" id="password" name="password" required><br>
-            <label for="terms">Acepta los <a href="{{ url_for('termsConditions') }}"> Términos y condiciones: </a></label>
-            <input type="checkbox" name="terms" value="terms" style=" float: right; margin-left: 30px;" required><br>
-            <input type="submit" value="Iniciar Sesión"> 
-        </form>
-        <p>¿Nuevo aquí? <a href="register.html">Regístrate</a></p>
-        <p><a href="forgotten_passwd.html">¿Olvidaste tu contraseña?</a></p>
-        
-        <!-- BOTÓN PARA QUE ME LLEVE AL ADMIN Y PODER TRABAJAR >>> BORRAR EN EL FUTURO -->
-        <a href="{{ url_for('index_admin') }}">Usuario Administrador</a>
+   <!-- Terminos-->
+    <div class="container" style ="position: absolute;">
+        <h1>Términos y Condiciones de Uso - TruthPaper</h1>
+
+        <h2>1. Aceptación de los Términos</h2>
+        <p>Al utilizar el Servicio de TruthPaper, aceptas estar sujeto a estos Términos. Si no estás de acuerdo con alguno de los términos, no utilices el Servicio.</p>
+
+        <h2>2. Uso del Contenido</h2>
+
+        <h3>2.1 Derechos de Propiedad</h3>
+        <p>El contenido disponible en este sitio web, incluyendo pero no limitado a artículos, imágenes, videos, y gráficos ("Contenido"), está protegido por derechos de autor y otras leyes de propiedad intelectual. No puedes copiar, reproducir, distribuir o modificar el Contenido sin el permiso expreso de TruthPaper.</p>
+
+        <h2>3. Modificaciones en el Servicio</h2>
+        <p>TruthPaper se reserva el derecho de modificar o discontinuar, temporal o permanentemente, el Servicio (o cualquier parte de él) con o sin previo aviso.</p>
+
+        <h2>4. Enlaces a Terceros</h2>
+        <p>El Servicio de TruthPaper puede contener enlaces a sitios web o recursos de terceros. TruthPaper no es responsable de la disponibilidad de estos sitios o recursos externos, ni respalda o es responsable de ningún contenido, publicidad, productos u otros materiales disponibles en o a través de estos sitios web o recursos.</p>
+
+        <h2>5. Limitación de Responsabilidad</h2>
+        <p>En ningún caso TruthPaper, sus directores, empleados, socios o afiliados serán responsables ante cualquier reclamación, daño o pérdida que surja de tu uso del Servicio.</p>
+
+        <h2>6. Contacto</h2>
+        <p>Si tienes preguntas o comentarios sobre estos Términos, por favor contáctanos en [correo electrónico de contacto].</p>
     </div>
 
     <script src="../static/js/date.js"></script>    
