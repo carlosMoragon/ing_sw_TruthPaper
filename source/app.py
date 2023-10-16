@@ -5,12 +5,10 @@ from flask_sqlalchemy import SQLAlchemy
 from typing import List, Dict
 
 db = manager.db
-#admin_user = AdminUser('admin', '1234', 'adminUser@truthpaper.com', True, True, True)
-
 app = Flask(__name__)
 
-news: List[cl.News]
-containers: Dict[int, List[cl.News]]
+# news: List[cl.News]
+# containers: Dict[int, List[cl.News]]
 # init_news = threading.Thread(target=manager.get_news_db)
 
 @app.route('/index')
@@ -40,19 +38,23 @@ def start():
 
         # ESTAS SON LAS QUE SON NUEVAS QUE SE VAN A IR AÑADIENDO A LO LARGO DE LA EJECUCION
         # threading.Thread(target=_add_news_background).start()
-
+        
+    # lista = manager.loadUncheckedUsers()
+    # for i in lista:
+    #     print(i)
+        
     return render_template('login.html')
 
 
-def _add_news_background():
-    global news, containers
-    news += ws.get_news()
-    containers = ws.get_containers(news)
+# def _add_news_background():
+#     global news, containers
+#     news += ws.get_news()
+#     containers = ws.get_containers(news)
 
 
 # CAMBIAR LA RUTA
 @app.route('/login_users', methods=['POST'])
-def login_users():
+def login_users(): 
     if manager.login(request.form['username'], request.form['password']):
         return index()
     else:
@@ -79,16 +81,16 @@ def save_keyword():
     return render_template('categoriasFunc.html', data=data)
 
 
-@app.route('/pruebaArticulos')
-def prueba_articulos():
-    global news
-    # news = ws.get_news()
-    data = {
-        'imgs' : [new.get_image() for new in news],
-        'titles' : [new.get_title() for new in news],
-        'urls' : [new.get_url() for new in news]
-    }   
-    return render_template('pruebaArticulos.html', data=data)
+# @app.route('/pruebaArticulos')
+# def prueba_articulos():
+#     global news
+#     # news = ws.get_news()
+#     data = {
+#         'imgs' : [new.get_image() for new in news],
+#         'titles' : [new.get_title() for new in news],
+#         'urls' : [new.get_url() for new in news]
+#     }   
+#     return render_template('pruebaArticulos.html', data=data)
 
 #Aun en PROCESO se MEJORA y DEPURACIÓN
 
@@ -132,7 +134,6 @@ db.init_app(app)
 
 
 if __name__ == '__main__':
-
     #ws.save_html()
     app.run(debug=True)
 
