@@ -154,9 +154,9 @@ def register_JournalistUser():
             return index()
 
 #Métodos para el ADMINISTRADOR
-@app.route('/userAdmin.html')
+@app.route('/indexAdmin')
 def index_admin():
-    noticias = ws.get_news()
+    #noticias = news
     #gr.graph_news_per_source(noticias)
     return render_template('userAdmin/indexAdmin.html')
 
