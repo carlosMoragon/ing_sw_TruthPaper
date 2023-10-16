@@ -162,8 +162,16 @@ def index_admin():
 
 @app.route('/verifyUsers')
 def verify_users():
-    #company_users = users.CompanyUser.query.all()
-    #return render_template('userAdmin/verifyUsers.html', company_users=company_users)
+    unchecked_users = manager.loadUncheckedUsers()
+    return render_template('userAdmin/verifyUsers.html', unchecked_users=unchecked_users)
+
+#Método para verificar a los usuarios (Y: cambiar el estado de is_checked a 'Y')
+@app.route('/process_verification', methods=['POST'])
+def process_verification():
+    user_id = request.form.get('user_id')
+    action = request.form.get('action') # 'accept' or 'reject'
+    if action == 'accept':
+        manager.updateUserChecked(user_id)
     return render_template('userAdmin/verifyUsers.html')
 
 @app.route('/charts')

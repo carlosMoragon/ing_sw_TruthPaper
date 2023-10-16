@@ -93,6 +93,12 @@ def loadUncheckedUsers():
             uncheckedUserList.append([usuario.username, usuario.password, usuario.email])
     return uncheckedUserList
 
+#Método reescribir el estado de is_checked a 'Y'
+def updateUserChecked(user_id):
+    user = users.User.query.filter_by(id=user_id).first()
+    if user:
+        user.is_checked = 'Y'
+        db.session.commit()
 
 #MORAGON TENGO QUE PROBAR ESTO AUN
 def save_new(owner, title, image, url, content, container, journalistuser_id, date, category):

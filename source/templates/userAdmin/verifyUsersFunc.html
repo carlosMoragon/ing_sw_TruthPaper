@@ -42,11 +42,33 @@
                 </div>
                 <a class="h6 m-0 text-secondary text-uppercase font-weight-bold">{{ user.name }}</a>
                 <p> NIF: {{ user.nif }}</p>
-                <form action="/verify_users" method="post">
+                <form action="/process_verification" method="post">
+                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                    <input type="hidden" name="action" value="accept">
                     <input type="submit" value="Aceptar" class="btn btn-primary" style="width: 100px; color: green;">
                     <input type="submit" value="Denegar" class="btn btn-primary" style="width: 100px; color: red;">
+                    <!-- el botón denegar no hace nada, pero se puede implementar en el futuro -->
+
+                    <!-- Script que envia "deny" si es denegar y "accept" si es aceptar -->
+                    <script>
+                        function setAction(event) {
+                            var acceptButton = document.querySelector('input[value="Aceptar"]');
+                            var denyButton = document.querySelector('input[value="Denegar"]');
+                            var actionInput = document.getElementById('action');
+
+                            if (acceptButton && denyButton && actionInput) {
+                                if (acceptButton.clicked) {
+                                    actionInput.value = 'accept';
+                                } else if (denyButton.clicked) {
+                                    actionInput.value = 'deny';
+                                }
+                            }
+                            return true;
+                        }
+                    </script>
+
                 </form>
-                <!-- Si se pulsa aceptar/denegar >> enviar correo + reescribir registro-->
+
             </div>
         </div>
     {% endfor %}
