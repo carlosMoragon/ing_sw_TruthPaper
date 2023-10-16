@@ -102,10 +102,9 @@ def loadUncheckedUsers():
 
 # Método reescribir el estado de is_checked a 'Y'
 def updateUserChecked(user_id):
-    user = users.User.query.filter_by(id=user_id).first()
-    if user:
-        user.is_checked = 'Y'
-        db.session.commit()
+    user = users.Userclient.query.filter_by(client_id=user_id).first()
+    user.is_checked = 'Y'
+    db.session.commit()
 
 #def save_news(news: List[cl.News]) -> bool:
 #   for new in news:
