@@ -1,4 +1,5 @@
 #Clase que genera gráficos, al principio solo de pruebas para la entrega
+'''
 import matplotlib.pyplot as plt #pip install matplotlib
 import web_scrapping as ws
 import classes as cl
@@ -44,6 +45,7 @@ def graph_news_per_source(news: List[cl.News]):
 if __name__ == '__main__':
     # Contar el número de noticias por fuente
     graph_news_per_source(noticias)
+'''
 
 '''
 @app.route('/charts')

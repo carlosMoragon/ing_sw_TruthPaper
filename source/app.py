@@ -125,11 +125,13 @@ def register_JournalistUser():
 @app.route('/userAdmin.html')
 def index_admin():
     noticias = ws.get_news()
-    gr.graph_news_per_source(noticias)
+    #gr.graph_news_per_source(noticias)
     return render_template('userAdmin/indexAdmin.html')
 
-@app.route('/verifUsers')
+@app.route('/verifyUsers')
 def verify_users():
+    #company_users = users.CompanyUser.query.all()
+    #return render_template('userAdmin/verifyUsers.html', company_users=company_users)
     return render_template('userAdmin/verifyUsers.html')
 
 @app.route('/charts')

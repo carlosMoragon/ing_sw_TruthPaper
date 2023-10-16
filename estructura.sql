@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 -- MariaDB dump 10.19-11.3.0-MariaDB, for Win64 (AMD64)
 --
 -- Host: localhost    Database: truthpaper
@@ -298,4 +296,4 @@ UNLOCK TABLES;
 
 
 -- Dump completed on 2023-10-12 19:35:45
->>>>>>> 563fa13f3bedcdac2357f188a8060bb0586fac08
+
