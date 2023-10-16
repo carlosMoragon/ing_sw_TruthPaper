@@ -28,6 +28,11 @@ def index():
 
     return render_template('indexFunc.html', data=data, containers=containers)
 
+#Método para ver un contenedor específico
+@app.route('/ver_contenedor/<int:id>')
+def expand_container(id):
+    container = containers.get(id)
+    return render_template('containerNews.html', container=container)
 
 @app.route('/')
 def start():

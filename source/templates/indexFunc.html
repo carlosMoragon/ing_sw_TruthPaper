@@ -66,17 +66,10 @@
                 <strong>Fecha:</strong> {{ news_item.get_date() }}<br>
             </li>
         {% endfor %}
+    <a href="{{ url_for('expand_container', id=container_id) }}">Ver Noticias</a>
     </ul>
 {% endfor %}
 {% endblock%}
-
-{% block categories %}
-<div class="dropdown-menu rounded-0 m-0">
-    <a href="#" class="dropdown-item">Economía</a>
-    <a href="#" class="dropdown-item">Tecnología</a>
-    <a href="#" class="dropdown-item">Salud</a>
-</div>
-{% endblock %}
 
 
 
