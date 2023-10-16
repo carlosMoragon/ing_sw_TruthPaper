@@ -80,3 +80,28 @@ def save_journalistuser(new_user_id) -> bool:
         db.session.add(newJournalistUser)
         db.session.commit()
         return True
+
+
+#Method for admin information 
+def loadUncheckedUsers():
+    uncheckedUserList = []
+    for user in users.Userclient.query.all():
+        if user.is_checked == 'N':
+            usuario = users.User.query.filter_by(id=user.client_id).first()
+            uncheckedUserList.append([usuario.username, usuario.password, usuario.email])
+    return uncheckedUserList
+
+
+#MORAGON TENGO QUE PROBAR ESTO AUN
+def save_new(owner, title, image, url, content, container, journalistuser_id, date, category):
+    new = users.New(owner=owner, title=title, image=image, url=url, content=content, container=container, journalistuser_id=journalistuser_id, date=date, category=category)
+    db.session.add(new)
+    db.session.commit()
+    return True
+    
+def load_new():
+    news = []
+    article = users.New.query.limit(30).all()
+    for i in article:
+        news.append(i)
+    return news
