@@ -66,10 +66,18 @@ def register_funct():
 def go_to_login():
     return render_template('login.html')
 
+@app.route('/login_back')
+def go_to_profile():
+    return render_template('perfil.html')
+
 
 @app.route('/termsandConditions')
 def termsConditions():
     return render_template('termsConditions.html')
+
+@app.route('/categories')
+def go_to_categories():
+    return render_template('categories.html')
 
 
 @app.route('/save_keyword', methods=['post'])

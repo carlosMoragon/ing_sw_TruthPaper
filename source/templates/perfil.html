@@ -35,10 +35,6 @@
                         <li class="nav-item border-right border-secondary">
                             <a class="nav-link text-body small"> <span id="currentDate"></span></a>
                         </li>
-
-                        <li class="nav-item border-right border-secondary">
-                            <a class="nav-link text-body small" href="#">Contacto</a> <!-- LINK!!!-->
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-body small" href="{{ url_for('go_to_login') }}">Login</a>
                         </li>
@@ -53,13 +49,7 @@
         <div class="row align-items-center bg-white py-3 px-lg-5">
             <div class="col-lg-4">
                 <img src="../static/img/logos/high_res/logo_color_tbg_hd.png" alt="" class="img-fluid" width="200" href="index.html">
-            </div>>
-
-            <!-- Example of an advertisement
-        <div class="col-lg-8 text-center text-lg-right">
-            <a href="https://htmlcodex.com"><img class="img-fluid" src="img/ads-728x90.png" alt=""></a>
-        </div>
-        -->
+            </div>
 
         </div>
     </div>
@@ -77,17 +67,13 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-between px-0 px-lg-3" id="navbarCollapse">
-                <div class="navbar-nav mr-auto py-0">
-                    <a href="index.html" class="nav-item nav-link">Inicio</a>
-                    <a href="category.html" class="nav-item nav-link">Noticias Guardadas</a>
+               <div class="navbar-nav mr-auto py-0">
+                    <a href="{{ url_for('index') }}" class="nav-item nav-link">Inicio</a>
+                    <a href="{{ url_for('go_to_categories') }}" class="nav-item nav-link">Noticias Guardadas</a>
                     <!--Add more items on the menu-->
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Categorias</a>
-                        <div class="dropdown-menu rounded-0 m-0">
-                            <a href="#" class="dropdown-item">Economía</a>
-                            <a href="#" class="dropdown-item">Tecnología</a>
-                            <a href="#" class="dropdown-item">Salud</a>
-                        </div>
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Categorías</a>
+                        {% block categories %} {% endblock %}
                     </div>
                 </div>
 
@@ -103,7 +89,7 @@
 
                 <!-- Icon to enter in login-->
                 <div class="login-icon">
-                    <a href="login.html" class="nav-item nav-link">
+                    <a href="{{ 'go_to_profile' }}" class="nav-item nav-link">
                         <i class="fas fa-user"></i>
                     </a>
 

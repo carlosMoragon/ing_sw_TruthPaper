@@ -8,8 +8,8 @@
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
 
-    <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
+    <!-- Icon -->
+    <link href="../static/img/logos/high_res/logo_color_tbg_hd.png" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -19,10 +19,20 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="../static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
-    <!-- Customized Bootstrap Stylesheet -->
+    <!-- Bootstrap Stylesheet -->
     <link href="../static/css/style.css" rel="stylesheet">
+
+    <!--Other Bootstrap Libraries for the dropdown menu-->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Date and Main Scripts-->
+    <script src="../static/js/date.js"></script>
+    <script src="../static/js/main.js"></script>
+
 </head>
 
 <body>
@@ -40,7 +50,7 @@
                             <a class="nav-link text-body small" href="#">Contacto</a> <!-- LINK!!!-->
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-body small" href="{{ url_for('go_to_login') }}">Login</a>
+                            <a class="nav-link text-body small" href="perfil.html">Login</a>
                         </li>
                     </ul>
                 </nav>
@@ -54,10 +64,16 @@
             <div class="col-lg-4">
                 <img src="../static/img/logos/high_res/logo_color_tbg_hd.png" alt="" class="img-fluid" width="200" href="index.html">
             </div>
+
+            <!-- Example of an advertisement
+        <div class="col-lg-8 text-center text-lg-right">
+            <a href="https://htmlcodex.com"><img class="img-fluid" src="img/ads-728x90.png" alt=""></a>
+        </div>
+        -->
+
         </div>
     </div>
     <!-- Topbar End -->
-
 
     <!-- Navbar Start -->
     <div class="container-fluid p-0">
@@ -71,11 +87,11 @@
             </button>
             <div class="collapse navbar-collapse justify-content-between px-0 px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav mr-auto py-0">
-                    <a href="{{ url_for('index') }}" class="nav-item nav-link">Inicio</a>
-                    <a href="{{ url_for('go_to_categories') }}" class="nav-item nav-link">Noticias Guardadas</a>
+                    <a href="index.html" class="nav-item nav-link active">Inicio</a>
+                    <a href="category.html" class="nav-item nav-link">Noticias Guardadas</a>
                     <!--Add more items on the menu-->
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown active">Categorías</a>
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Categorías</a>
                         {% block categories %} {% endblock %}
                     </div>
                 </div>
@@ -105,34 +121,27 @@
     </div>
     <!-- Navbar End -->
 
-    <!-- Featured News Slider Start -->
-    <div class="container-fluid pt-5 mb-3">
-        <div class="container">
-            <div class="section-title">
-                <h4 class="m-0 text-uppercase font-weight-bold">Búsqueda "{{data.keyword}}"</h4>
-            </div>
-            <!--noticias -->
-            <div class="owl-carousel news-carousel carousel-item-4 position-relative">
-                {% block noticia_primera %} {% endblock %}
+
+    <br>
+
+    <!-- News With Sidebar Start -->
+    <div class="container-fluid" style="width: 100%; height: 100%;">
+        <div >
+            <div class="row justify-content-md-center">
+                <!-- Tranding News Start -->
+                <div class="col-md-11">
+                    <div>
+                        <div class="section-title mb-0">
+                            <h4 class="m-0 text-uppercase font-weight-bold">Noticias recomendadas</h4>
+                        </div>
+                        <div class="bg-white border border-top-0 p-3">
+                            {% block recommended_news %} {% endblock%}
+                        </div>
+                    </div>
+                </div>
+                <!-- Tranding News End -->
             </div>
         </div>
     </div>
-    <!-- Featured News Slider End -->
-
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-primary btn-square back-to-top"><i class="fa fa-arrow-up"></i></a>
-
-
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-
-    <!-- Template Javascript -->
-    <script src="../static/js/main.js"></script>
-    <script src="../static/js/date.js"></script>
-
+    <!-- News With Sidebar End -->
 </body>
-
-</html>
