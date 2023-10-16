@@ -27,6 +27,7 @@
     <style>
        .container-lg {
             position: absolute;
+            margin-top: 5%;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -72,7 +73,7 @@
                             <a class="nav-link text-body small" href="#">Contacto</a> <!-- LINK!!!-->
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-body small" href="login.html">Login</a> <!-- LINK!!!-->
+                            <a class="nav-link text-body small" href="{{ url_for('go_to_login') }}">Login</a> <!-- LINK!!!-->
                         </li>
                     </ul>
                 </nav>
@@ -84,20 +85,36 @@
 
         <div class="row align-items-center bg-white py-3 px-lg-5">
             <div class="col-lg-4">
-                <a href="index.html" class="navbar-brand p-0 d-none d-lg-block">
-                    <h1 class="m-0 display-4 text-uppercase text-primary">Truth<span class="text-secondary font-weight-normal">paper</span></h1>
-                </a>
+                <img src="../static/img/logos/high_res/logo_color_tbg_hd.png" alt="" class="img-fluid" width="200" href="register.html">
             </div>
             
         </div>
     </div>
     <!-- Topbar End -->
 
-    <!-- Login Feedback -->
-    <div class="container-lg">
-        <br>
-            <h2>Los datos son incorrectos</h2>
-            <p> <a href="login.html">Intentar de nuevo</a></p>
+   <!-- Terminos-->
+    <div class="container" style ="position: absolute;">
+        <h1>Términos y Condiciones de Uso - TruthPaper</h1>
+
+        <h2>1. Aceptación de los Términos</h2>
+        <p>Al utilizar el Servicio de TruthPaper, aceptas estar sujeto a estos Términos. Si no estás de acuerdo con alguno de los términos, no utilices el Servicio.</p>
+
+        <h2>2. Uso del Contenido</h2>
+
+        <h3>2.1 Derechos de Propiedad</h3>
+        <p>El contenido disponible en este sitio web, incluyendo pero no limitado a artículos, imágenes, videos, y gráficos ("Contenido"), está protegido por derechos de autor y otras leyes de propiedad intelectual. No puedes copiar, reproducir, distribuir o modificar el Contenido sin el permiso expreso de TruthPaper.</p>
+
+        <h2>3. Modificaciones en el Servicio</h2>
+        <p>TruthPaper se reserva el derecho de modificar o discontinuar, temporal o permanentemente, el Servicio (o cualquier parte de él) con o sin previo aviso.</p>
+
+        <h2>4. Enlaces a Terceros</h2>
+        <p>El Servicio de TruthPaper puede contener enlaces a sitios web o recursos de terceros. TruthPaper no es responsable de la disponibilidad de estos sitios o recursos externos, ni respalda o es responsable de ningún contenido, publicidad, productos u otros materiales disponibles en o a través de estos sitios web o recursos.</p>
+
+        <h2>5. Limitación de Responsabilidad</h2>
+        <p>En ningún caso TruthPaper, sus directores, empleados, socios o afiliados serán responsables ante cualquier reclamación, daño o pérdida que surja de tu uso del Servicio.</p>
+
+        <h2>6. Contacto</h2>
+        <p>Si tienes preguntas o comentarios sobre estos Términos, por favor contáctanos en [correo electrónico de contacto].</p>
     </div>
 
     <script src="../static/js/date.js"></script>    

@@ -56,11 +56,20 @@ def login_users():
     if manager.login(request.form['username'], request.form['password']):
         return index()
     else:
-        return render_template('error_login.html')
+        return render_template('fail_login.html')
 
 @app.route('/register.html')
 def register_funct():
     return render_template('register.html')
+
+@app.route('/login_back')
+def go_to_login():
+    return render_template('login.html')
+
+
+@app.route('/termsandConditions')
+def termsConditions():
+    return render_template('termsConditions.html')
 
 
 @app.route('/save_keyword', methods=['post'])

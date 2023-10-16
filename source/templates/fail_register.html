@@ -70,7 +70,7 @@
                             <a class="nav-link text-body small" href="#">Contacto</a> <!-- LINK!!!-->
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-body small" href="login.html">Login</a> <!-- LINK!!!-->
+                            <a class="nav-link text-body small" href="{{ url_for('go_to_login') }}">Login</a> <!-- LINK!!!-->
                         </li>
                     </ul>
                 </nav>
@@ -95,7 +95,7 @@
     <div class="container-lg">
         <br>
             <h2>Constraseña muy debil</h2>
-            <p><a href="register.html">Intentar de nuevo</a></p>
+            <p><a href="{{ url_for('go_to_login') }}">Intentar de nuevo</a></p>
     </div>
 
     <script src="../static/js/date.js"></script>    
