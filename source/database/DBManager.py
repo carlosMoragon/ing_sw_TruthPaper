@@ -13,10 +13,12 @@ def login(username, password) -> bool:
         return False
 
 # CONSULTA A LA BBDD PARA QUE TE COJA LAS NOTICIAS -> SE VA A LLAMAR A ESTA FUNCION DESDE APP.PY ANTES DE INICIAR
-"""
-def get_news_db() -> (List[cl.News], Dict[int, List[cl.News]]):
-    return None, ws.split_news(news)
-"""
+
+
+def get_news_db(news, container):
+    news.extend(load_new())
+    container.update(ws.split_news(news))
+
 
 def save_user():
     if cl.validate_password(request.form['password']):
@@ -98,6 +100,24 @@ def save_new(owner, title, image, url, content, container, journalistuser_id, da
     db.session.add(new)
     db.session.commit()
     return True
+
+# def save_news(news: List[cl.News]) -> bool:
+#    for new in news:
+#        new_db = users.New(
+#            owner=new.get_owner(),
+#            title=new.get_title(),
+#            image=new.get_image(),
+#            url=new.get_url(),
+#            content=new.get_content(),
+#            container=new.get_container(),
+#            journalistuser_id=new.get_journalist(),
+#            date=new.get_date(),
+#            category=new.get_category()
+#        )
+#        db.session.add(new_db)
+#    db.session.commit()
+#    return True
+
     
 def load_new():
     news = []
@@ -105,3 +125,22 @@ def load_new():
     for i in article:
         news.append(i)
     return news
+
+# def load_new() -> List[cl.News]:
+#    all_news = db.session.query(users.New).all()
+#    news_objects = []
+#    for news in all_news:
+#        news_obj = cl.News(
+#            id=news.id,
+#            owner=news.owner,
+#            title=news.title,
+#            image=news.image,
+#            url=news.url,
+#           content=news.content,
+#            container=news.container,
+#            journalist=news.journalistuser_id,
+#            date=news.date.strftime('%Y-%m-%d'),
+#            category=news.category
+#        )
+#        news_objects.append(news_obj)
+#    return news_objects
