@@ -63,7 +63,7 @@ def _add_news_background():
     new_news = ws.get_news()
     news.extend(new_news)
     containers = ws.get_containers(news)
-    manager.save_news(new_news)
+    #manager.save_news(app, new_news)
     print("añadidas")
 
 

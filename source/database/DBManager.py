@@ -105,23 +105,46 @@ def updateUserChecked(user_id):
         user.is_checked = 'Y'
         db.session.commit()
 
-def save_news(news: List[cl.News]) -> bool:
-   for new in news:
-       new_db = users.New(
-           owner=new.get_owner(),
-           title=new.get_title(),
-           image=new.get_image(),
-           url=new.get_url(),
-           content=new.get_content(),
-           container=new.get_container(),
-           journalistuser_id=new.get_journalist(),
-           date=new.get_date(),
-           category=new.get_category()
-       )
-       db.session.add(new_db)
-       print("b")
-   db.session.commit()
-   return True
+#def save_news(news: List[cl.News]) -> bool:
+#   for new in news:
+#       new_db = users.New(
+#           owner=new.get_owner(),
+#           title=new.get_title(),
+#           image=new.get_image(),
+#           url=new.get_url(),
+#           content=new.get_content(),
+#           container=new.get_container(),
+#           journalistuser_id=new.get_journalist(),
+#           date=new.get_date(),
+#           category=new.get_category()
+#       )
+#       db.session.add(new_db)
+#       print("b")
+#   db.session.commit()
+#   return True
+
+
+def save_news(app, news: List[cl.News]) -> bool:
+    with app.app_context():
+        i=4
+        for new in news:
+            i +=1
+            new_db = users.New(
+                id=i,
+                owner=new.get_owner(),
+                title=new.get_title(),
+                image=new.get_image(),
+                url=new.get_url(),
+                content=new.get_content(),
+                container=new.get_container(),
+                journalistuser_id=31,
+                date=new.get_date(),
+                category=new.get_category()
+            )
+            db.session.add(new_db)
+
+        db.session.commit()
+        return True
 
 
 def load_news() -> List[cl.News]:
