@@ -45,9 +45,13 @@ def start():
         # ESTAS SON LAS QUE SON NUEVAS QUE SE VAN A IR AÑADIENDO A LO LARGO DE LA EJECUCION
         threading.Thread(target=_add_news_background).start()
 
-     # lista = manager.loadUncheckedUsers()
-     # for i in lista:
-     #     print(i)
+    #SON PRUEBAS, SIRVEN PARA VER ESTOS DATOS POR CONSOLA
+    # lista = manager.loadUncheckedUsers()
+    #  lista = manager.load_new()
+    #  for i in lista:
+    #      print(i)
+     
+     
      print(f"sale {news}")
      return render_template('login.html')
 

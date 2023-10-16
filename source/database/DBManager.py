@@ -100,53 +100,40 @@ def updateUserChecked(user_id):
         user.is_checked = 'Y'
         db.session.commit()
 
-#MORAGON TENGO QUE PROBAR ESTO AUN
-def save_new(owner, title, image, url, content, container, journalistuser_id, date, category):
-    new = users.New(owner=owner, title=title, image=image, url=url, content=content, container=container, journalistuser_id=journalistuser_id, date=date, category=category)
-    db.session.add(new)
-    db.session.commit()
-    return True
+def save_news(news: List[cl.News]) -> bool:
+   for new in news:
+       new_db = users.New(
+           owner=new.get_owner(),
+           title=new.get_title(),
+           image=new.get_image(),
+           url=new.get_url(),
+           content=new.get_content(),
+           container=new.get_container(),
+           journalistuser_id=new.get_journalist(),
+           date=new.get_date(),
+           category=new.get_category()
+       )
+       db.session.add(new_db)
+   db.session.commit()
+   return True
 
-# def save_news(news: List[cl.News]) -> bool:
-#    for new in news:
-#        new_db = users.New(
-#            owner=new.get_owner(),
-#            title=new.get_title(),
-#            image=new.get_image(),
-#            url=new.get_url(),
-#            content=new.get_content(),
-#            container=new.get_container(),
-#            journalistuser_id=new.get_journalist(),
-#            date=new.get_date(),
-#            category=new.get_category()
-#        )
-#        db.session.add(new_db)
-#    db.session.commit()
-#    return True
 
-    
-def load_new():
-    news = []
-    article = users.New.query.limit(30).all()
-    for i in article:
-        news.append(i)
-    return news
-
-# def load_new() -> List[cl.News]:
-#    all_news = db.session.query(users.New).all()
-#    news_objects = []
-#    for news in all_news:
-#        news_obj = cl.News(
-#            id=news.id,
-#            owner=news.owner,
-#            title=news.title,
-#            image=news.image,
-#            url=news.url,
-#           content=news.content,
-#            container=news.container,
-#            journalist=news.journalistuser_id,
-#            date=news.date.strftime('%Y-%m-%d'),
-#            category=news.category
-#        )
-#        news_objects.append(news_obj)
-#    return news_objects
+def load_new() -> List[cl.News]:
+   all_news = db.session.query(users.New).all()
+   #all_news = users.New.query.all()
+   news_objects = []
+   for news in all_news:
+       news_obj = cl.News(
+           id=news.id,
+           owner=news.owner,
+           title=news.title,
+           image=news.image,
+           url=news.url,
+           content=news.content,
+           container=news.container,
+           journalist=news.journalistuser_id,
+           date=news.date.strftime('%Y-%m-%d'),
+           category=news.category
+       )
+       news_objects.append(news_obj)
+   return news_objects
