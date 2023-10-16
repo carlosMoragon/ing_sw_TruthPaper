@@ -4,6 +4,7 @@ from database import DBManager as manager
 from flask_sqlalchemy import SQLAlchemy
 from typing import List, Dict
 import threading
+from datetime import datetime
 
 db = manager.db
 app = Flask(__name__)
@@ -39,32 +40,30 @@ def expand_container(id):
 def start():
      global news, containers
      if not news:
-        print("inicia")
+
         # ESTA ES LA DE LAS BBDD QUE SON LAS QUE MAS RAPIDO TIENEN QUE IR
         init_news.start()
 
         # ESTAS SON LAS QUE SON NUEVAS QUE SE VAN A IR AÑADIENDO A LO LARGO DE LA EJECUCION
-        threading.Thread(target=_add_news_background).start()
+        if manager.is_update(datetime.now().strftime(f'%Y-%m-%d')):
+            threading.Thread(target=_add_news_background).start()
 
     #SON PRUEBAS, SIRVEN PARA VER ESTOS DATOS POR CONSOLA
     # lista = manager.loadUncheckedUsers()
     #  lista = manager.load_new()
     #  for i in lista:
     #      print(i)
-     
-     
-     print(f"sale {news}")
+
      return render_template('login.html')
 
 
 def _add_news_background():
     global news, containers
-    print("2 hilo")
     new_news = ws.get_news()
     news.extend(new_news)
     containers = ws.get_containers(news)
-    #manager.save_news(app, new_news)
-    print("añadidas")
+    manager.save_news(app, new_news)
+
 
 
 

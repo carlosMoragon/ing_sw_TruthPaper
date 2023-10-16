@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from modules import users, classes as cl, web_scrapping as ws
 from typing import List, Dict
 db = SQLAlchemy()
+from sqlalchemy import desc
 from flask import request, current_app
 
 
@@ -126,7 +127,7 @@ def updateUserChecked(user_id):
 
 def save_news(app, news: List[cl.News]) -> bool:
     with app.app_context():
-        i=4
+        i = last_id()
         for new in news:
             i +=1
             new_db = users.New(
@@ -165,5 +166,13 @@ def load_news() -> List[cl.News]:
            category=news.category
        )
        news_objects.append(news_obj)
-       print("a")
+
    return news_objects
+
+
+def is_update(fecha_actual: str) -> bool:
+    return fecha_actual == db.session.query(users.New.date).order_by(desc(users.New.date)).first()
+
+
+def last_id() -> int:
+    return db.session.query(users.New).order_by(desc(users.New.id)).first()
