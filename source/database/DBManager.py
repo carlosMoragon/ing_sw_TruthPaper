@@ -91,9 +91,10 @@ def loadUncheckedUsers():
         if user.is_checked == 'N':
             usuario = users.User.query.filter_by(id=user.client_id).first()
             uncheckedUserList.append([usuario.username, usuario.password, usuario.email])
+    print(uncheckedUserList)
     return uncheckedUserList
 
-#Método reescribir el estado de is_checked a 'Y'
+# Método reescribir el estado de is_checked a 'Y'
 def updateUserChecked(user_id):
     user = users.User.query.filter_by(id=user_id).first()
     if user:

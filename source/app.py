@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash
+from flask import Flask, render_template, request, flash, redirect
 from modules import web_scrapping as ws, users, filter as f, classes as cl, graphs as gr
 from database import DBManager as manager
 from flask_sqlalchemy import SQLAlchemy
@@ -172,7 +172,7 @@ def process_verification():
     action = request.form.get('action') # 'accept' or 'reject'
     if action == 'accept':
         manager.updateUserChecked(user_id)
-    return render_template('userAdmin/verifyUsers.html')
+    return redirect('userAdmin/verifyUsers.html')
 
 @app.route('/charts')
 def charts():
