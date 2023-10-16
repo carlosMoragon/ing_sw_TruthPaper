@@ -4,11 +4,10 @@ import web_scrapping as ws
 import classes as cl
 from typing import List
 import sys
-sys.path.append('classes.py')
-from classes import cl
+# sys.path.append('classes.py')
+# from classes import cl
 
 
-noticias = []
 noticias = ws.get_news()
 
 #Número de noticias por fuente
@@ -29,19 +28,17 @@ def graph_news_per_source(news: List[cl.News]):
             sources[source] = 1
     
     # obtener fuentes y cantidades
-    newspaper = list(sources.keys())
-    count = list(sources.values())
+    newspapers = list(sources.keys())
+    counts = list(sources.values())
 
     #generar gráfico
     sources = dict(sorted(sources.items(), key=lambda item: item[1], reverse=True))
-    plt.bar(newspaper, count, color='green')
+    plt.bar(newspapers, counts, color='green')
     plt.title("Número de noticias por fuente")
     plt.xlabel("Fuente")
     plt.ylabel("Número de noticias")
-    plt.show()
-
-      # Guardar el gráfico como una imagen
     plt.savefig('static/img/graphs/news_per_source.png')
+    plt.show()
 
 
 if __name__ == '__main__':

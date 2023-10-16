@@ -109,9 +109,7 @@
         <p><a href="forgotten_passwd.html">¿Olvidaste tu contraseña?</a></p>
         
         <!-- BOTÓN PARA QUE ME LLEVE AL ADMIN Y PODER TRABAJAR >>> BORRAR EN EL FUTURO -->
-        <form action="/verifyUsers" method="post"> 
-            <input type="submit" value="Entrar al admin">
-        </form>
+        <a href="{{ url_for('index_admin') }}">Usuario Administrador</a>
     </div>
 
     <script src="../static/js/date.js"></script>    

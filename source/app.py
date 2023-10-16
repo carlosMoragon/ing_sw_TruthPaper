@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash
-from modules import web_scrapping as ws, users, filter as f, classes as cl
+from modules import web_scrapping as ws, users, filter as f, classes as cl, graphs as gr
 from database import DBManager as manager
 from flask_sqlalchemy import SQLAlchemy
 from typing import List, Dict
@@ -120,6 +120,38 @@ def register_JournalistUser():
     else:
         if manager.save_journalistuser(result):
             return index()
+
+#Métodos para el ADMINISTRADOR
+@app.route('/userAdmin.html')
+def index_admin():
+    noticias = ws.get_news()
+    gr.graph_news_per_source(noticias)
+    return render_template('userAdmin/indexAdmin.html')
+
+@app.route('/verifUsers')
+def verify_users():
+    return render_template('userAdmin/verifyUsers.html')
+
+@app.route('/charts')
+def charts():
+    return render_template('userAdmin/charts.html')
+
+@app.route('/comments')
+def comments():
+    return render_template('userAdmin/comments.html')
+
+@app.route('/editUsers')
+def edit_users():
+    return render_template('userAdmin/editUsers.html')
+
+@app.route('/profileAdmin')
+def profile_admin():
+    return render_template('userAdmin/profileAdmin.html')
+
+@app.route('/pdfreader')
+def pdf_reader():
+    return render_template('userAdmin/pdfReader.html')
+
 
 
 # MySQL Connection
