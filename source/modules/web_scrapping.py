@@ -21,7 +21,8 @@ def _build_news(titles: List[str], urls: List[str], imgs: List[str], owner: str,
 
     for i in range(len(urls)):
 
-        news.append(cl.News(-1, owner, titles[i], imgs[i], urls[i], "",-1, -1, date, category))
+        # news.append(cl.News(-1, owner, titles[i], imgs[i], urls[i], "",-1, -1, date, category))
+        news.append(cl.News(-1, owner, re.sub(r'(["\'])', r'\\\1',titles[i]), imgs[i], urls[i], "",-1, -1, date, category))
 
     return news
 
@@ -141,7 +142,9 @@ def _make_nytimesnews(structure: BeautifulSoup, category: str, date: str) -> Lis
         h3_texts = [h3_tag.text.strip() for h3_tag in h3_tags]
         if h3_texts:
             titles.append(h3_texts)
-    return [cl.News(-1,"The New York Times", titles[i][0], 'static\\img\\nytimes.png',link_news[i], "",-1,-1, date,category) for i in range(len(link_news))]
+    return [cl.News(-1,"The New York Times", re.sub(r'(["\'])', r'\\\1',titles[i][0]), 'static\\img\\nytimes.png',link_news[i], "",-1,-1, date,category) for i in range(len(link_news))]
+    #return [cl.News(-1,"The New York Times", titles[i][0], 'static\\img\\nytimes.png',link_news[i], "",-1,-1, date,category) for i in range(len(link_news))]
+
 
 
 # --- CATEGORIES ---
@@ -259,7 +262,7 @@ def add_content(news: List[cl.News]):
     with ThreadPoolExecutor(max_workers=5) as executor:
         content = list(executor.map(get_content, [new.get_url() for new in news]))
         for i in range(len(news)):
-            news[i].set_content(str(content[i]))
+            news[i].set_content(re.sub(r'[^\x00-\x7F]+', '', str(content[i])))
 
 
 """

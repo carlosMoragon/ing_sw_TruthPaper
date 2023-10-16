@@ -79,7 +79,7 @@ class AdministratorUser(db.Model):
 
 
 class New(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     owner = db.Column(db.String(50), nullable=False)
     title = db.Column(db.String(255), nullable=False)
     image = db.Column(db.String(255), nullable=False)
@@ -103,8 +103,4 @@ class New(db.Model):
         self.category = category
 
 
-# def insert_new(owner, title, image, url, content, container, journalistuser_id, date, category):
-#     new = New(owner=owner, title=title, image=image, url=url, content=content, container=container, journalistuser_id=journalistuser_id, date=date, category=category)
-#     db.session.add(new)
-#     db.session.commit()
 

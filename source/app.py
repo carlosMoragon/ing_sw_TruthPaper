@@ -10,13 +10,14 @@ app = Flask(__name__)
 
 news: List[cl.News] = []
 containers: Dict[int, List[cl.News]] = {}
-init_news = threading.Thread(target=manager.get_news_db, args=(news, containers))
+init_news = threading.Thread(target=manager.get_news_db, args=(app, news, containers))
 
 
 @app.route('/index')
 def index():
     global news
     global containers
+    print("llega")
     init_news.join()
     data = {
         'imgs': [new.get_image() for new in news],
@@ -38,25 +39,33 @@ def expand_container(id):
 def start():
      global news, containers
      if not news:
-        print("entra")
+        print("inicia")
         # ESTA ES LA DE LAS BBDD QUE SON LAS QUE MAS RAPIDO TIENEN QUE IR
         init_news.start()
 
         # ESTAS SON LAS QUE SON NUEVAS QUE SE VAN A IR AÑADIENDO A LO LARGO DE LA EJECUCION
         threading.Thread(target=_add_news_background).start()
 
-     # lista = manager.loadUncheckedUsers()
-     # for i in lista:
-     #     print(i)
+    #SON PRUEBAS, SIRVEN PARA VER ESTOS DATOS POR CONSOLA
+    # lista = manager.loadUncheckedUsers()
+    #  lista = manager.load_new()
+    #  for i in lista:
+    #      print(i)
+     
+     
      print(f"sale {news}")
      return render_template('login.html')
 
 
-def _add_news_background() -> None:
-     global news, containers
-     news += ws.get_news()
-     containers = ws.get_containers(news)
-     pass
+def _add_news_background():
+    global news, containers
+    print("2 hilo")
+    new_news = ws.get_news()
+    news.extend(new_news)
+    containers = ws.get_containers(news)
+    #manager.save_news(app, new_news)
+    print("añadidas")
+
 
 
 # CAMBIAR LA RUTA
