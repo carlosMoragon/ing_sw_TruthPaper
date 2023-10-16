@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from modules import users, classes as cl, web_scrapping as ws
 from typing import List, Dict
 db = SQLAlchemy()
-from flask import request
+from flask import request, current_app
 
 
 def login(username, password) -> bool:
@@ -15,10 +15,15 @@ def login(username, password) -> bool:
 # CONSULTA A LA BBDD PARA QUE TE COJA LAS NOTICIAS -> SE VA A LLAMAR A ESTA FUNCION DESDE APP.PY ANTES DE INICIAR
 
 
-def get_news_db(news, container):
-    news.extend(load_new())
-    container.update(ws.split_news(news))
+#def get_news_db(news, container):
+#    news.extend(load_new())
+#    container.update(ws.split_news(news))
 
+def get_news_db(app, news, container):
+    with app.app_context():
+        print("entra")
+        news.extend(load_news())
+        container.update(ws.split_by_container(news))
 
 def save_user():
     if cl.validate_password(request.form['password']):
@@ -114,11 +119,12 @@ def save_news(news: List[cl.News]) -> bool:
            category=new.get_category()
        )
        db.session.add(new_db)
+       print("b")
    db.session.commit()
    return True
 
 
-def load_new() -> List[cl.News]:
+def load_news() -> List[cl.News]:
    all_news = db.session.query(users.New).all()
    #all_news = users.New.query.all()
    news_objects = []
@@ -136,4 +142,5 @@ def load_new() -> List[cl.News]:
            category=news.category
        )
        news_objects.append(news_obj)
+       print("a")
    return news_objects
