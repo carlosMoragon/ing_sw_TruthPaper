@@ -180,7 +180,7 @@ def process_verification():
     action = request.form.get('action') # 'accept' or 'reject'
     if action == 'accept':
         manager.updateUserChecked(user_id)
-    return redirect('userAdmin/verifyUsers.html')
+    return render_template('userAdmin/verifyUsers.html')
 
 @app.route('/charts')
 def charts():
