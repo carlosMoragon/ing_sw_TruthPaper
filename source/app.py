@@ -177,10 +177,11 @@ def verify_users():
 @app.route('/process_verification', methods=['POST'])
 def process_verification():
     user_id = request.form.get('user_id')
-    action = request.form.get('action') # 'accept' or 'reject'
+    action = request.form.get('action') # 'accept' or 'deny'
     if action == 'accept':
+        print("===================ACCEPT USER===================")
         manager.updateUserChecked(user_id)
-    return render_template('userAdmin/verifyUsers.html')
+    return redirect('/verifyUsers')
 
 @app.route('/charts')
 def charts():
