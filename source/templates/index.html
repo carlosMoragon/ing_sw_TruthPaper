@@ -24,15 +24,6 @@
     <!-- Bootstrap Stylesheet -->
     <link href="../static/css/style.css" rel="stylesheet">
 
-    <!--Other Bootstrap Libraries for the dropdown menu-->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <!-- Date and Main Scripts-->
-    <script src="../static/js/date.js"></script>
-    <script src="../static/js/main.js"></script>
-
 </head>
 
 <body>
@@ -74,7 +65,7 @@
     <!-- Navbar Start -->
     <div class="container-fluid p-0">
         <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-2 py-lg-0 px-lg-5">
-            <a href= "{{ url_for('index') }}"  class="navbar-brand d-block d-lg-none">
+            <a href="index.html" class="navbar-brand d-block d-lg-none">
                 <h1 class="m-0 display-4 text-uppercase text-primary">Truth<span
                         class="text-white font-weight-normal">paper</span></h1>
             </a>
@@ -83,17 +74,19 @@
             </button>
             <div class="collapse navbar-collapse justify-content-between px-0 px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav mr-auto py-0">
-                    <a href="{{ url_for('index') }}" class="nav-item nav-link active">Inicio</a>
-                    <a href="{{ url_for('go_to_categories') }}" class="nav-item nav-link">Noticias Guardadas</a>
+                    <a href="{{ url_for('index')}}" class="nav-item nav-link ">Inicio</a>
+                    <a href="{{url_for('index')}}" class="nav-item nav-link">Noticias Guardadas</a>
                     <!--Add more items on the menu-->
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Categorías</a>
+                        <div class="dropdown-menu rounded-0 m-0">
                             <a href="#" class="dropdown-item">Economía</a>
                             <a href="#" class="dropdown-item">Tecnología</a>
                             <a href="#" class="dropdown-item">Salud</a>
                         </div>
                     </div>
                 </div>
+
 
 
                 <!-- search by keywords -->
@@ -113,9 +106,7 @@
                     <a href= "{{ url_for('go_to_profile') }}" class="nav-item nav-link">
                         <i class="fas fa-user"></i>
                     </a>
-
                 </div>
-            </div>
         </nav>
     </div>
     <!-- Navbar End -->
@@ -178,4 +169,13 @@
         </div>
     </div>
     <!-- News With Sidebar End -->
+
+    <!--Other Bootstrap Libraries for the dropdown menu-->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        <!-- Date and Main Scripts-->
+        <script src="../static/js/date.js"></script>
+        <script src="../static/js/main.js"></script>
 </body>

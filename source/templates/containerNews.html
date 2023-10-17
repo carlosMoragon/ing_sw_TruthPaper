@@ -83,7 +83,7 @@
             <div class="collapse navbar-collapse justify-content-between px-0 px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav mr-auto py-0">
                     <a href="{{ url_for('index')}}" class="nav-item nav-link ">Inicio</a>
-                    <a href="url_for('index') " class="nav-item nav-link">Noticias Guardadas</a>
+                    <a href="{{url_for('index')}}" class="nav-item nav-link">Noticias Guardadas</a>
                     <!--Add more items on the menu-->
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Categorías</a>
@@ -93,7 +93,6 @@
                             <a href="#" class="dropdown-item">Salud</a>
                         </div>
                     </div>
-                <a href="category.html" class="nav-item nav-link active">Noticias Guardadas</a>
                 </div>
 
 
@@ -135,12 +134,12 @@
                             <h4 class="m-0 text-uppercase font-weight-bold">Noticias</h4>
                         </div>
                         <div class="bg-white border border-top-0 p-3">
-                            <h1>Contenedor ID: {{ container_id }}</h1> <!-- Para comprobar, luego se quita -->
                             <ul>
                                 {% for index in range(container|length) %}
                                     <li class="position-relative overflow-hidden" style="height: 300px;">
                                         <div style=" height: 100%;" !important>
                                             <img class="img-fluid" src="{{container[index].get_image()}}" href="{{container[index].get_url()}}" style="width: 100%;" />
+                                            <p> </p>
                                         </div>
 
                                         <div class="overlay">
