@@ -1,15 +1,9 @@
 #Clase que genera gráficos, al principio solo de pruebas para la entrega
-'''
+from wordcloud import WordCloud
 import matplotlib.pyplot as plt #pip install matplotlib
-import web_scrapping as ws
-import classes as cl
 from typing import List
-import sys
-# sys.path.append('classes.py')
-# from classes import cl
+from modules import classes as cl
 
-
-noticias = ws.get_news()
 
 #Número de noticias por fuente
 #Número de noticias de una categoría categoría por fuente
@@ -18,16 +12,23 @@ noticias = ws.get_news()
 
 #Número de noticias por fuente
 
-def graph_news_per_source(news: List[cl.News]):
+def graph_news_per_source(news: List[cl.News ]):
     #contar noticias por fuente
     sources = {}
     for new in news:
-        source = new.get_source()
-        if source in sources:
-            sources[source] += 1
-        else:
-            sources[source] = 1
-    
+        try:
+            source = new.get_owner()
+            if source in sources:
+                sources[source] += 1
+            else:
+                sources[source] = 1
+        except Exception as e:
+            print(f"Error al obtener la fuente de la noticia: {e}")
+    ''' Comprobación
+    for source, count in sources.items():
+        print(f"{source}: {count} noticias")
+    '''
+
     # obtener fuentes y cantidades
     newspapers = list(sources.keys())
     counts = list(sources.values())
@@ -38,19 +39,107 @@ def graph_news_per_source(news: List[cl.News]):
     plt.title("Número de noticias por fuente")
     plt.xlabel("Fuente")
     plt.ylabel("Número de noticias")
-    plt.savefig('static/img/graphs/news_per_source.png')
+    #plt.savefig('static/img/graphs/news_per_source.png') # PROBLEMA donde lo guardo
     plt.show()
 
+# Función que genera un gráfico del número de noticias por categoría
+def graph_news_per_category(news: List[cl.News]):
+    # Contar noticias por categoría
+    categories = {}
+    for new in news:
+        try:
+            category = new.get_category()
+            if category in categories:
+                categories[category] += 1
+            else:
+                categories[category] = 1
+        except Exception as e:
+            print(f"Error al obtener la categoría de la noticia: {e}")
 
-if __name__ == '__main__':
-    # Contar el número de noticias por fuente
-    graph_news_per_source(noticias)
+    for category, count in categories.items():
+        print(f"{category}: {count} noticias")
+
+    # Obtener categorías y cantidades
+    category_list = list(categories.keys())
+    counts = list(categories.values())
+
+    # Generar gráfico
+    categories = dict(sorted(categories.items(), key=lambda item: item[1], reverse=True))
+    plt.bar(category_list, counts, color='blue')
+    plt.title("Número de noticias por categoría")
+    plt.xlabel("Categoría")
+    plt.ylabel("Número de noticias")
+    plt.show()
+
+''' Misma función pero colorea si es de distinto owner
+    for new in news:
+        try:
+            category = new.get_category()
+            owner = new.get_owner()
+
+            if category in categories:
+                categories[category] += 1
+            else:
+                categories[category] = 1
+
+            if owner not in owners:
+                owners[owner] = len(owners)  # Asignar un número único a cada owner
+
+        except Exception as e:
+            print(f"Error al obtener la categoría o el propietario de la noticia: {e}")
+
+    # Obtener categorías y cantidades
+    categories = dict(sorted(categories.items(), key=lambda item: item[1], reverse=True))
+    categories_names = list(categories.keys())
+    counts = list(categories.values())
+
+    # Obtener owners y sus números asociados
+    owners_colors = {owner: f'C{num}' for owner, num in owners.items()}
+
+    # Generar gráfico
+    fig, ax = plt.subplots()
+    for category, count in zip(categories_names, counts):
+        owner = owners_colors[news[0].get_owner()]  # Tomar el owner del primer elemento
+        ax.bar(category, count, color=owner, label=f'{category} ({count})')
+
+    # Personalizar el gráfico
+    plt.title("Número de noticias por categoría")
+    plt.xlabel("Categoría")
+    plt.ylabel("Número de noticias")
+    plt.xticks(rotation=45)
+    plt.legend(title="Propietario")
+    plt.tight_layout()
+
+    # Mostrar el gráfico
+    plt.show()
 '''
 
-'''
-@app.route('/charts')
-def generate_charts():
-    noticias = ws.get_news()
-    graph_news_per_source(noticias)
-    return render_template('charts.html')
-  '''
+#Nube de palabras por categoría
+def wordcloud_per_category(news: List[cl.News]):
+    # Crear un diccionario para almacenar el contenido por categoría
+    content_by_category = {}
+
+    # Agrupar el contenido por categoría
+    for new in news:
+        try:
+            category = new.get_category()
+            content = new.get_content()
+
+            if category in content_by_category:
+                content_by_category[category] += ' ' + content
+            else:
+                content_by_category[category] = content
+
+        except Exception as e:
+            print(f"Error al obtener la categoría o el contenido de la noticia: {e}")
+
+    # Generar nubes de palabras por categoría
+    for category, content in content_by_category.items():
+        wordcloud = WordCloud(width=800, height=400, background_color='white').generate(content)
+
+        # Mostrar la nube de palabras
+        plt.figure(figsize=(10, 5))
+        plt.imshow(wordcloud, interpolation='bilinear')
+        plt.title(f"Nube de Palabras para la Categoría: {category}")
+        plt.axis('off')
+        plt.show()

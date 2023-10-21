@@ -187,6 +187,24 @@ def process_verification():
 def charts():
     return render_template('userAdmin/charts.html')
 
+#Función que genera el gráfico de noticias/fuente
+@app.route('/generate_chart_source', methods=['POST'])
+def generate_charts_source():
+    gr.graph_news_per_source(news)
+    return render_template('userAdmin/charts.html')
+
+#Función que genera l gráfico de noticias/categorias
+@app.route('/generate_chart_category', methods=['POST'])
+def generate_chart_category():
+    gr.graph_news_per_category(news)
+    return render_template('userAdmin/charts.html')
+
+#Función que genera la nube de palabras
+@app.route('/generate_wordcloud', methods=['POST'])
+def generate_wordcloud():
+    gr.wordcloud_per_category(news)
+    return render_template('userAdmin/charts.html')
+
 @app.route('/comments')
 def comments():
     return render_template('userAdmin/comments.html')
