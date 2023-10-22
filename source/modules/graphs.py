@@ -1,19 +1,16 @@
 #Clase que genera gráficos, al principio solo de pruebas para la entrega
-from wordcloud import WordCloud
 import matplotlib.pyplot as plt #pip install matplotlib
 from typing import List
 from modules import classes as cl
-
-
-#Número de noticias por fuente
-#Número de noticias de una categoría categoría por fuente
-#Palabras más comunes 
-#Nube de palabras
+from nltk.corpus import stopwords
+from wordcloud import WordCloud, STOPWORDS
+import nltk
+nltk.download('stopwords')
 
 #Número de noticias por fuente
 
 def graph_news_per_source(news: List[cl.News ]):
-    #contar noticias por fuente
+   #contar noticias por fuente
     sources = {}
     for new in news:
         try:
@@ -24,10 +21,9 @@ def graph_news_per_source(news: List[cl.News ]):
                 sources[source] = 1
         except Exception as e:
             print(f"Error al obtener la fuente de la noticia: {e}")
-    ''' Comprobación
-    for source, count in sources.items():
-        print(f"{source}: {count} noticias")
-    '''
+    #Comprobación
+    #for source, count in sources.items():
+    #   print(f"{source}: {count} noticias")
 
     # obtener fuentes y cantidades
     newspapers = list(sources.keys())
@@ -41,6 +37,7 @@ def graph_news_per_source(news: List[cl.News ]):
     plt.ylabel("Número de noticias")
     #plt.savefig('static/img/graphs/news_per_source.png') # PROBLEMA donde lo guardo
     plt.show()
+
 
 # Función que genera un gráfico del número de noticias por categoría
 def graph_news_per_category(news: List[cl.News]):
@@ -114,8 +111,12 @@ def graph_news_per_category(news: List[cl.News]):
     plt.show()
 '''
 
+stop_words_es = set(stopwords.words('spanish'))
 #Nube de palabras por categoría
-def wordcloud_per_category(news: List[cl.News]):
+def wordcloud_per_category(news: List[cl.News], requested_category):
+    # Obtener lista de "stop words"
+    stop_words = set(STOPWORDS)
+
     # Crear un diccionario para almacenar el contenido por categoría
     content_by_category = {}
 
@@ -135,11 +136,31 @@ def wordcloud_per_category(news: List[cl.News]):
 
     # Generar nubes de palabras por categoría
     for category, content in content_by_category.items():
-        wordcloud = WordCloud(width=800, height=400, background_color='white').generate(content)
+        if category == requested_category:
+            # Eliminar stop words en español del contenido
+            filtered_content = ' '.join(word for word in content.split() if word.lower() not in stop_words_es)
 
-        # Mostrar la nube de palabras
-        plt.figure(figsize=(10, 5))
-        plt.imshow(wordcloud, interpolation='bilinear')
-        plt.title(f"Nube de Palabras para la Categoría: {category}")
-        plt.axis('off')
-        plt.show()
+            # Generar la nube de palabras
+            wordcloud = WordCloud(width=800, height=400, background_color='white').generate(filtered_content)
+
+            # Mostrar la nube de palabras
+            plt.figure(figsize=(10, 5))
+            plt.imshow(wordcloud, interpolation='bilinear')
+            plt.title(f"Nube de Palabras para la Categoría: {category}")
+            plt.axis('off')
+            plt.show()
+
+
+
+#Función que genera una lista con todas las categorias --> cambiar de lugar!
+def get_categories(news: List[cl.News]):
+    categories = set()  # Usamos un conjunto para evitar duplicados
+
+    for new in news:
+        try:
+            category = new.get_category()
+            categories.add(category)
+        except Exception as e:
+            print(f"Error al obtener la categoría de la noticia: {e}")
+
+    return list(categories)

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, redirect
+from flask import Flask, render_template, request, flash, redirect, url_for
 from modules import web_scrapping as ws, users, filter as f, classes as cl, graphs as gr
 from database import DBManager as manager
 from flask_sqlalchemy import SQLAlchemy
@@ -164,9 +164,8 @@ def register_JournalistUser():
 #Métodos para el ADMINISTRADOR
 @app.route('/indexAdmin')
 def index_admin():
-    #noticias = news
-    #gr.graph_news_per_source(noticias)
-    return render_template('userAdmin/indexAdmin.html')
+    unchecked_users = manager.loadUncheckedUsers()
+    return render_template('userAdmin/indexAdmin.html', unchecked_users=unchecked_users)
 
 @app.route('/verifyUsers')
 def verify_users():
@@ -185,25 +184,27 @@ def process_verification():
 
 @app.route('/charts')
 def charts():
-    return render_template('userAdmin/charts.html')
+    categorias = gr.get_categories(news)
+    return render_template('userAdmin/charts.html', categorias = categorias)
 
 #Función que genera el gráfico de noticias/fuente
 @app.route('/generate_chart_source', methods=['POST'])
 def generate_charts_source():
     gr.graph_news_per_source(news)
-    return render_template('userAdmin/charts.html')
+    return redirect(url_for('charts'))
 
 #Función que genera l gráfico de noticias/categorias
 @app.route('/generate_chart_category', methods=['POST'])
 def generate_chart_category():
     gr.graph_news_per_category(news)
-    return render_template('userAdmin/charts.html')
+    return redirect(url_for('charts'))
 
 #Función que genera la nube de palabras
 @app.route('/generate_wordcloud', methods=['POST'])
 def generate_wordcloud():
-    gr.wordcloud_per_category(news)
-    return render_template('userAdmin/charts.html')
+    categoria = request.form['categoria']  # Obtener la categoría seleccionada del formulario
+    gr.wordcloud_per_category(news, categoria)
+    return redirect(url_for('charts'))
 
 @app.route('/comments')
 def comments():

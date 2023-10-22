@@ -109,7 +109,40 @@
                             <h4 class="m-0 text-uppercase font-weight-bold">Verificación de usuarios</h4>
                         </div>
                         <div class="bg-white border border-top-0 p-3">
-                            {% block verify_users %} {% endblock%}
+                            {% for user_list in unchecked_users[:3] %}
+                            <div class="d-flex align-items-center bg-white mb-3 border border-left-0" style="height: 150px;">
+                                <div class="S px-3 d-flex flex-column justify-content-center " style="height: 50px; width: auto;">
+                                    <a class="h6 m-0 text-secondary text-uppercase font-weight-bold">{{ user_list.0 }}</a>
+                                    <p> ID: {{ user_list.3}}</p>
+                                    <p> Email: {{ user_list.2}}</p>
+                                    <form action="/process_verification" method="post">
+                                        <input type="hidden" name="user_id" value="{{ user_list.3 }}">
+                                        <input type="hidden" name="action" value="accept">
+                                        <input type="submit" value="Aceptar" class="btn btn-primary" style="width: 100px; color: green;">
+                                        <input type="submit" value="Denegar" class="btn btn-primary" style="width: 100px; color: red;">
+                                        <!-- el botón denegar no hace nada, pero se puede implementar en el futuro -->
+
+                                        <!-- Script que envia "deny" si es denegar y "accept" si es aceptar -->
+                                       <script>
+                                            function setAction(event) {
+                                                var actionInput = document.querySelector('input[name="action"]');
+
+                                                if (event.target.value === 'Aceptar') {
+                                                    actionInput.value = 'accept';
+                                                } else if (event.target.value === 'Denegar') {
+                                                    actionInput.value = 'deny';
+                                                }
+
+                                                var buttons = document.querySelectorAll('input[type="submit"]');
+                                                    buttons.forEach(function(button) {
+                                                        button.addEventListener('click', setAction);
+                                                    });
+                                            }
+                                        </script>
+                                    </form>
+                                </div>
+                            </div>
+                        {% endfor %}
                         </div>
                     </div>
                 </div>
