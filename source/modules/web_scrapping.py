@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from modules import classes as cl
+from ..modules import classes as cl
 from typing import List, Dict
 from datetime import datetime
 import os
@@ -26,6 +26,7 @@ def _build_news(titles: List[str], urls: List[str], imgs: List[str], owner: str,
 
     return news
 
+
 def add_new_container(news: List[cl.News]) -> List[cl.News]:
     # Lista de noticias
     news_content = [new.get_content() for new in news]
@@ -40,7 +41,7 @@ def add_new_container(news: List[cl.News]) -> List[cl.News]:
     cosine_similarities = cosine_similarity(tfidf_matrix, tfidf_matrix)
 
     # Establecer un umbral de similitud (ajusta según tus necesidades)
-    threshold = 0.7
+    threshold = 0.3
 
     # Encontrar noticias relacionadas y asignarles un contenedor
     n_cont = 0
