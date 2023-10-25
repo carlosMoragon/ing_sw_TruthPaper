@@ -27,8 +27,8 @@ def index():
         'dates': [new.get_date() for new in news],
         'categories': [new.get_category() for new in news]
     }
-
-    return render_template('indexFunc.html', data=data, containers=containers)
+    categories_list = gr.get_categories(news)
+    return render_template('indexFunc.html', data=data, containers=containers, categories_list=categories_list)
 
 #Método para ver un contenedor específico
 @app.route('/ver_contenedor/<int:id>')

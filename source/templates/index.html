@@ -70,19 +70,18 @@
                         class="text-white font-weight-normal">paper</span></h1>
             </a>
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"> HOLAAA </span>
             </button>
+            <a href="{{ url_for('index')}}" class="nav-item nav-link ">  <img src="../static/img/logos/favicon/favicon_color.png" style="width: 40px; object-fit: cover;"> </a>
             <div class="collapse navbar-collapse justify-content-between px-0 px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav mr-auto py-0">
                     <a href="{{ url_for('index')}}" class="nav-item nav-link ">Inicio</a>
-                    <a href="{{url_for('index')}}" class="nav-item nav-link">Noticias Guardadas</a>
+                    <a href="{{url_for('index')}}" class="nav-item nav-link" > Noticias Guardadas</a>
                     <!--Add more items on the menu-->
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Categorías</a>
                         <div class="dropdown-menu rounded-0 m-0">
-                            <a href="#" class="dropdown-item">Economía</a>
-                            <a href="#" class="dropdown-item">Tecnología</a>
-                            <a href="#" class="dropdown-item">Salud</a>
+                            {% block categories %} {% endblock %}
                         </div>
                     </div>
                 </div>
