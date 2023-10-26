@@ -1,0 +1,33 @@
+{% extends "register.html" %}
+
+{% block sweet_alert %}
+   <script>
+   alert("funciona")
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    Swal.fire({
+                        icon: 'error',
+                        title: '{{ category }}',
+                        text: '{{ message }}'
+                    });
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </script>
+{% endwith %}
+
+{% endblock %}
+
+{% block save_form %}
+    <script>
+        function saveFormData() {
+            // Obtener los valores de los campos y guardarlos en el almacenamiento local
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            localStorage.setItem("username", username);
+            localStorage.setItem("password", password);
+        }
+        </script>
+{% endblock %}

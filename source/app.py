@@ -12,6 +12,7 @@ app = Flask(__name__)
 news: List[cl.News] = []
 containers: Dict[int, List[cl.News]] = {}
 init_news = threading.Thread(target=manager.get_news_db, args=(app, news, containers))
+app.secret_key = 'truthpaper' # Clave secreta para flash (alerts errores)
 
 
 @app.route('/index')
@@ -70,10 +71,17 @@ def _add_news_background():
 # CAMBIAR LA RUTA
 @app.route('/login_users', methods=['POST'])
 def login_users(): 
-    if manager.login(request.form['username'], request.form['password']):
-        return index()
-    else:
-        return render_template('fail_login.html')
+    try:
+        if manager.login(request.form['username'], request.form['password']):
+            return index()
+        else:
+            flash("Datos introducidos incorrectos", "error")
+            return redirect(url_for('start'))
+    except Exception as e:
+        print(f"Ocurrió un error durante el inicio de sesión: {str(e)}")
+        flash("Ocurrió un error durante el inicio de sesión. Por favor, inténtalo de nuevo más tarde.", "error")
+        return redirect(url_for('start'))
+
 
 @app.route('/register.html')
 def register_funct():
@@ -125,41 +133,40 @@ def save_keyword():
 #     return render_template('pruebaArticulos.html', data=data)
 
 #Aun en PROCESO se MEJORA y DEPURACIÓN
-
 @app.route('/save_commonuser', methods=['POST'])
 def register_user():
     result = manager.save_user()
     if result == -1:
-        return render_template('fail_register_password.html')
+        return render_template('register.html', registration_error="Contraseña débil", form=request.form)
     elif result == -2:
-        return render_template('fail_register_email.html')
+        return render_template('register.html', registration_error="Email inválido", form=request.form)
     else:
         if manager.save_journalistuser(result):
             return index()
+
 
 
 @app.route('/save_companyUser', methods=['POST'])
 def register_CompanyUser():
     result = manager.save_user()
     if result == -1:
-        return render_template('fail_register_password.html')
+        return render_template('register.html', registration_error="Contraseña débil", form=request.form)
     elif result == -2:
-        return render_template('fail_register_email.html')
+        return render_template('register.html', registration_error="Email inválido", form=request.form)
     else:
         if manager.save_journalistuser(result):
             return index()
-    
-    
 @app.route('/save_journalistUser', methods=['POST'])
 def register_JournalistUser():
-    result = manager.save_user() 
+    result = manager.save_user()
     if result == -1:
-        return render_template('fail_register_password.html')
+        return render_template('register.html', registration_error="Contraseña débil", form=request.form)
     elif result == -2:
-        return render_template('fail_register_email.html')
+        return render_template('register.html', registration_error="Email inválido", form=request.form)
     else:
         if manager.save_journalistuser(result):
             return index()
+
 
 #Métodos para el ADMINISTRADOR
 @app.route('/indexAdmin')

@@ -24,6 +24,13 @@
     <!-- Bootstrap Stylesheet -->
     <link href="../static/css/style.css" rel="stylesheet">
 
+    <!-- Agregar Sweet Alert CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.4/dist/sweetalert2.min.css">
+
+    <!-- Agregar Sweet Alert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.4/dist/sweetalert2.min.js"></script>
+
+
     <style>
        .container-lg {
             position: absolute;
@@ -96,6 +103,21 @@
     <div class="container-lg">
         <br>
         <h2>Iniciar Sesión</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <script>
+                        Swal.fire({
+                            icon: '{{ category }}',
+                            text: '{{ message }}',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    </script>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
         <form action="/login_users" method="post"> 
             <label for="username">Usuario o email:</label>
             <input type="text" id="username" name="username" required><br>
@@ -105,7 +127,7 @@
         </form>
         <p>¿Nuevo aquí? <a href="register.html">Regístrate</a></p>
         <p><a href="forgotten_passwd.html">¿Olvidaste tu contraseña?</a></p>
-        
+
         <!-- BOTÓN PARA QUE ME LLEVE AL ADMIN Y PODER TRABAJAR >>> BORRAR EN EL FUTURO -->
         <a href="{{ url_for('index_admin') }}">Usuario Administrador</a>
     </div>
