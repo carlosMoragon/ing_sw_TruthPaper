@@ -1,0 +1,32 @@
+<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner absolute">
+                       <!-- Inicio del bucle -->
+                        {% for container_id, news_list in containers.items() %}
+                            {% for news_item in news_list %}
+                            <!-- Noticia  -->
+                            <div class="carousel-item{% if loop.first %} active{% endif %}" style="height: 500px;">
+                                <a href="{{ url_for('expand_container', id=container_id) }}">
+                                    <img class="img-fluid w-100" src="{{  news_item.get_imager() }}" style="object-fit: cover;">
+                                </a>
+                                <div class="overlay">
+                                    <div class="mb-2">
+                                        <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
+                                            href="">{{  news_item.get_owner() }}</a>
+                                        <a class="text-white" href="">{{  news_item.get_date() }}</a>
+                                    </div>
+                                    <a class="h2 m-0 text-white text-uppercase font-weight-bold" href="{{ url_for('expand_container', id=container_id) }}">{{  news_item.get_title() }}</a>
+                                </div>
+                            </div>
+                            <!-- Fin de la Noticia -->
+                            {% endfor %}
+                        {% endfor %}
+    </div>
+    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
