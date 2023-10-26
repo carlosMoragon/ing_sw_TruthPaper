@@ -165,7 +165,7 @@
                 <p> El usuario periodista permite certificar las opiniones y reseñas de profesional </p>
                 <p> Este usuario debe ser certificado por TruthPaper </p>
                 <div id="journalist" class="register_user">
-                    <form action="/save_journalistUser" method="post">
+                    <form action="/save_journalistUser" method="post" enctype="multipart/form-data">
                         <label for="journalist_name">Nombre:</label>
                         <input type="text" id="journalist_name" name="journalist_name" required><br>
 
@@ -180,6 +180,9 @@
                     
                         <label for="password">Contraseña:</label>
                         <input type="password" id="password" name="password" required><br>
+
+                        <label for="photo">Foto:</label>
+                        <input type="file" id="photo" name="photo" accept="image/*"><br>
 
                         <label for="certificate"> Suba su credencial de periodista: </label>  
                         <input type="file" id="certificate" name="certificate"><br>
@@ -197,7 +200,7 @@
                 <p> El usuario empresa permite darse de alta como compañia y publicar noticias </p>
                 <p> Este usuario debe ser certificado por TruthPaper </p>
                     <div id="company" class="register_user">
-                        <form action="/save_companyUser" method="post">
+                        <form action="/save_companyUser" method="post" enctype="multipart/form-data">
                             <label for="username">Nombre de usuario:</label>
                             <input type="text" id="username" name="username" required><br>
 
@@ -209,6 +212,9 @@
 
                             <label for="password">Contraseña:</label>
                             <input type="password" id="password" name="password" required><br>
+                            
+                            <label for="photo">Foto:</label>
+                            <input type="file" id="photo" name="photo" accept="image/*"><br>    
                             
                             <label for="bankaccount">Número de cuenta:</label>
                             <input type="bankaccount" id="bankaccount" name="bankaccount" required><br>

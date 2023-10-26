@@ -66,11 +66,14 @@ def _add_news_background():
 
 
 
-
 # CAMBIAR LA RUTA
 @app.route('/login_users', methods=['POST'])
 def login_users(): 
     if manager.login(request.form['username'], request.form['password']):
+        # user = users.User.query.filter_by(username=request.form['username']).first()
+        # client_id = user.id
+        # image = manager.load_image(client_id)
+        # return manager.serve_pil_image(image)
         return index()
     else:
         return render_template('fail_login.html')
@@ -123,43 +126,39 @@ def save_keyword():
 #         'urls' : [new.get_url() for new in news]
 #     }   
 #     return render_template('pruebaArticulos.html', data=data)
-
-#Aun en PROCESO se MEJORA y DEPURACIÓN
+   
+        
+def handle_user_registration(user_type):
+    result = manager.save_user()
+    if result == -1:
+        return render_template('fail_register_password.html')
+    elif result == -2:
+        return render_template('fail_register_email.html')
+    else:
+        if user_type == 'common':
+            if manager.save_commonuser(result):
+                return index()
+        elif user_type == 'company':
+            if manager.save_companyuser(result):
+                return index()
+        elif user_type == 'journalist':
+            if manager.save_journalistuser(result):
+                return index()
+        else:
+            # Manejar un tipo de usuario no válido, si es necesario
+            pass
 
 @app.route('/save_commonuser', methods=['POST'])
-def register_user():
-    result = manager.save_user()
-    if result == -1:
-        return render_template('fail_register_password.html')
-    elif result == -2:
-        return render_template('fail_register_email.html')
-    else:
-        if manager.save_journalistuser(result):
-            return index()
-
+def register_user_common():
+    return handle_user_registration('common')
 
 @app.route('/save_companyUser', methods=['POST'])
-def register_CompanyUser():
-    result = manager.save_user()
-    if result == -1:
-        return render_template('fail_register_password.html')
-    elif result == -2:
-        return render_template('fail_register_email.html')
-    else:
-        if manager.save_journalistuser(result):
-            return index()
-    
-    
+def register_user_company():
+    return handle_user_registration('company')
+
 @app.route('/save_journalistUser', methods=['POST'])
-def register_JournalistUser():
-    result = manager.save_user() 
-    if result == -1:
-        return render_template('fail_register_password.html')
-    elif result == -2:
-        return render_template('fail_register_email.html')
-    else:
-        if manager.save_journalistuser(result):
-            return index()
+def register_user_journalist():
+    return handle_user_registration('journalist')
 
 #Métodos para el ADMINISTRADOR
 @app.route('/indexAdmin')

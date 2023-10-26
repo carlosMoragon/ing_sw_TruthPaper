@@ -3,8 +3,9 @@ from modules import users, classes as cl, web_scrapping as ws
 from typing import List, Dict
 db = SQLAlchemy()
 from sqlalchemy import desc
-from flask import request, current_app
-
+from flask import request, current_app, send_file
+from PIL import Image
+from io import BytesIO
 
 def login(username, password) -> bool:
     user_db = users.User.query.filter_by(username=username).first()
@@ -15,10 +16,6 @@ def login(username, password) -> bool:
 
 # CONSULTA A LA BBDD PARA QUE TE COJA LAS NOTICIAS -> SE VA A LLAMAR A ESTA FUNCION DESDE APP.PY ANTES DE INICIAR
 
-
-#def get_news_db(news, container):
-#    news.extend(load_new())
-#    container.update(ws.split_news(news))
 
 def get_news_db(app, news, container):
     with app.app_context():
@@ -42,8 +39,8 @@ def save_user():
 
             newUserClient = users.Userclient(
                 client_id=new_user_id,
-                is_checked=True,
-                photo=None
+                is_checked='Y',
+                photo=request.files['photo'].read()
             )
             db.session.add(newUserClient)
             db.session.commit()
@@ -109,25 +106,6 @@ def updateUserChecked(id):
     user.is_checked = 'Y'
     db.session.commit()
 
-#def save_news(news: List[cl.News]) -> bool:
-#   for new in news:
-#       new_db = users.New(
-#           owner=new.get_owner(),
-#           title=new.get_title(),
-#           image=new.get_image(),
-#           url=new.get_url(),
-#           content=new.get_content(),
-#           container=new.get_container(),
-#           journalistuser_id=new.get_journalist(),
-#           date=new.get_date(),
-#           category=new.get_category()
-#       )
-#       db.session.add(new_db)
-#       print("b")
-#   db.session.commit()
-#   return True
-
-
 def save_news(app, news: List[cl.News]) -> bool:
     with app.app_context():
         i = last_id()
@@ -179,3 +157,18 @@ def is_update(fecha_actual: str) -> bool:
 
 def last_id() -> int:
     return db.session.query(users.New).order_by(desc(users.New.id)).first()
+
+def serve_pil_image(pil_img):
+    img_io = BytesIO()
+    pil_img.save(img_io, 'JPEG')
+    img_io.seek(0)
+    return send_file(img_io, mimetype='image/jpeg')
+    
+def load_image(user_id):
+    user = users.Userclient.query.filter_by(client_id=user_id).first()
+    if user and user.photo:
+        image_bytes = user.photo
+        image = Image.open(BytesIO(image_bytes))
+        return image
+    else:
+        return None
