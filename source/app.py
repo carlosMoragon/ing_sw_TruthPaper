@@ -90,7 +90,6 @@ def go_to_login():
 def go_to_profile():
     return render_template('perfil.html')
 
-
 @app.route('/termsandConditions')
 def termsConditions():
     return render_template('termsConditions.html')
@@ -127,7 +126,6 @@ def save_keyword():
 #     }   
 #     return render_template('pruebaArticulos.html', data=data)
    
-        
 def handle_user_registration(user_type):
     result = manager.save_user()
     if result == -1:
