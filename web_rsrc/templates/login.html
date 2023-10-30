@@ -73,7 +73,7 @@
                             <a class="nav-link text-body small" href="#">Contacto</a> <!-- LINK!!!-->
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-body small" href="{{ url_for('go_to_login') }}"">Login</a> <!-- LINK!!!-->
+                            <a class="nav-link text-body small" href="{{ url_for('main_blueprint.go_to_login') }}">Login</a> <!-- LINK!!!-->
                         </li>
                     </ul>
                 </nav>
@@ -101,7 +101,7 @@
             <input type="text" id="username" name="username" required><br>
             <label for="password">Contraseña:</label>
             <input type="password" id="password" name="password" required><br>
-            <label for="terms">Acepta los <a href="{{ url_for('termsConditions') }}"> Términos y condiciones: </a></label>
+            <label for="terms">Acepta los <a href="{{ url_for('main_blueprint.termsandConditions') }}"> Términos y condiciones: </a></label>
             <input type="checkbox" name="terms" value="terms" style=" float: right; margin-left: 30px;" required><br>
             <input type="submit" value="Iniciar Sesión"> 
         </form>
@@ -109,7 +109,7 @@
         <p><a href="forgotten_passwd.html">¿Olvidaste tu contraseña?</a></p>
         
         <!-- BOTÓN PARA QUE ME LLEVE AL ADMIN Y PODER TRABAJAR >>> BORRAR EN EL FUTURO -->
-        <a href="{{ url_for('index_admin') }}">Usuario Administrador</a>
+        <a href="{{ url_for('main_blueprint.index_admin') }}">Usuario Administrador</a>
     </div>
 
     <script src="../static/js/date.js"></script>    
