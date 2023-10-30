@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from ..modules import classes as cl
+from modules import classes as cl
 from typing import List, Dict
 from datetime import datetime
 # import os
