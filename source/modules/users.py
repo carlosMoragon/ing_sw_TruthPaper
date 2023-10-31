@@ -107,4 +107,21 @@ class New(db.Model):
         self.views = views
 
 
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    likes = db.Column(db.Integer, nullable=True, default=0)
+    views = db.Column(db.Integer, nullable=True, default=0)
+    content = db.Column(db.Text, nullable=True)
+    image = db.Column(db.BLOB, nullable=True)
+    userclient_id = db.Column(db.Integer, db.ForeignKey('userclient.client_id'), nullable=True)
+    idNew = db.Column(db.Integer, db.ForeignKey('new.id'), nullable=True)
+
+    def __init__(self, likes, views, content, image, userclient_id, idNew):
+        self.likes = likes
+        self.views = views
+        self.content = content
+        self.image = image
+        self.userclient_id = userclient_id
+        self.idNew = idNew
+
 

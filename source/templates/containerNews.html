@@ -152,6 +152,17 @@
                                         </div>
                                     </li>
                                 {% endfor %}
+                                {% block comments %}
+                                    <form style="margin-top: 5%;">
+                                      <div class="form-group">
+                                          <label for="comment">Deja tu comentario:</label>
+                                          <input type="hidden" name="id_new" value="">
+                                          <textarea class="form-control" rows="5" id="comment"></textarea>
+                                      </div>
+                                      <button type="submit" class="btn btn-primary">Enviar</button>
+                                    </form>
+
+                                {% endblock %}
                             </ul>
                         </div>
                     </div>
