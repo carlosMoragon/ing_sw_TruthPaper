@@ -150,7 +150,7 @@
                         <input type="file" id="photo" name="photo" accept="image/*"><br>
                         <!--El required obliga a que cargue la foto, se puede quitar-->
 
-                        <label for="terms">Acepta los <a href="{{ url_for('termsConditions') }}"> Términos y condiciones: </a></label>
+                        <label for="terms">Acepta los <a href="{{ url_for('main_blueprint.terms_conditions') }}"> Términos y condiciones: </a></label>
                         <input type="checkbox" name="terms" value="terms" style=" float: right; margin-left: 30px; " required><br>
 
                         <input type="submit" value="Registrarse"><br>
@@ -184,7 +184,7 @@
                         <label for="certificate"> Suba su credencial de periodista: </label>  
                         <input type="file" id="certificate" name="certificate"><br>
 
-                        <label for="terms">Acepta los <a href="{{ url_for('termsConditions') }}"> Términos y condiciones: </a></label>
+                        <label for="terms">Acepta los <a href="{{ url_for('main_blueprint.terms_conditions') }}"> Términos y condiciones: </a></label>
                         <input type="checkbox" name="terms" value="terms" style=" float: right; margin-left: 30px;" required><br>
 
                         <input type="submit" value="Registrarse"><br>
@@ -216,7 +216,7 @@
                             <label for="company_nif">NIF de la empresa:</label>
                             <input type="text" id="company_nif" name="company_nif" required><br>
 
-                            <label for="terms">Acepta los <a href="{{ url_for('termsConditions') }}"> Términos y condiciones: </a></label>
+                            <label for="terms">Acepta los <a href="{{ url_for('main_blueprint.terms_conditions') }}"> Términos y condiciones: </a></label>
                             <input type="checkbox" name="terms" value="terms" style=" float: right; margin-left: 30px;" required><br>
 
                             <input type="submit" value="Registrarse"><br>

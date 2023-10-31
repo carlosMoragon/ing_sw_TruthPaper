@@ -6,7 +6,7 @@ from .database import DBManager
 # Routes
 from .routes import routes
 
-app = Flask(__name__, template_folder='../web_rsrc/templates')
+app = Flask(__name__)
 
 
 # MySQL Connection
