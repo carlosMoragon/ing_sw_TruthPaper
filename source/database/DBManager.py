@@ -143,12 +143,28 @@ def save_news(app, news: List[cl.News]) -> bool:
                 container=new.get_container(),
                 journalistuser_id=31,
                 date=new.get_date(),
-                category=new.get_category()
+                category=new.get_category(),
+                likes= new.get_likes(),
+                views = new.get_views(),
+
             )
             db.session.add(new_db)
 
         db.session.commit()
         return True
+
+def load_comments()-> List[cl.Comment]:
+    all_comments = db.session.query(users.Comment).all()
+    comments_objects = []
+    for comment in all_comments:
+        comment_obj = cl.Comment(
+            id=comment.id,
+            img=comment.img,
+            userclient_id=comment.userclient_id,
+        )
+        comments_objects.append(comment_obj)
+
+    return comments_objects
 
 
 def load_news() -> List[cl.News]:
@@ -166,7 +182,9 @@ def load_news() -> List[cl.News]:
            container=news.container,
            journalist=news.journalistuser_id,
            date=news.date.strftime('%Y-%m-%d'),
-           category=news.category
+           category=news.category,
+           likes=news.likes,
+           views=news.views
        )
        news_objects.append(news_obj)
 

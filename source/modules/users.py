@@ -89,8 +89,10 @@ class New(db.Model):
     journalistuser_id = db.Column(db.Integer)
     date = db.Column(db.Date, nullable=False)
     category = db.Column(db.String(30), nullable=False)
+    likes = db.Column(db.Integer, nullable=False, default=0)
+    views = db.Column(db.Integer, nullable=False, default=0)
 
-    def __init__(self, id, owner, title, image, url, content, container, journalistuser_id, date, category):
+    def __init__(self, id, owner, title, image, url, content, container, journalistuser_id, date, category, likes, views):
         self.id = id
         self.owner = owner
         self.title = title
@@ -101,6 +103,8 @@ class New(db.Model):
         self.journalistuser_id = journalistuser_id
         self.date = date
         self.category = category
+        self.likes = likes
+        self.views = views
 
 
 

@@ -26,7 +26,9 @@ def index():
         'titles': [str(new.get_title()) for new in news],
         'urls': [new.get_url() for new in news],
         'dates': [new.get_date() for new in news],
-        'categories': [new.get_category() for new in news]
+        'categories': [new.get_category() for new in news],
+        'likes': [new.get_likes() for new in news],
+        'views': [new.get_views() for new in news]
     }
     categories_list = gr.get_categories(news)
     return render_template('indexFunc.html', data=data, containers=containers, categories_list=categories_list)
@@ -35,7 +37,8 @@ def index():
 @app.route('/ver_contenedor/<int:id>')
 def expand_container(id):
     container = containers.get(id)
-    return render_template('containerNews.html', container=container)
+    comments = manager.load_comments()
+    return render_template('containerNews.html', container=container, comments = comments)
 
 @app.route('/')
 def start():
@@ -116,7 +119,9 @@ def save_keyword():
         'urls' : [new.get_url() for new in filted_news],
         'keyword': keyword,
         'dates': [new.get_date() for new in filted_news],
-        'categories': [new.get_category() for new in filted_news]
+        'categories': [new.get_category() for new in filted_news],
+        'likes': [new.get_likes() for new in filted_news],
+        'views': [new.get_views() for new in filted_news]
     }
     return render_template('categoriesFunc.html', data=data)
 
