@@ -70,10 +70,9 @@ def _add_news_background():
 
 
 
-
 # CAMBIAR LA RUTA
 @app.route('/login_users', methods=['POST'])
-def login_users(): 
+def login_users():
     try:
         if manager.login(request.form['username'], request.form['password']):
             return index()
@@ -84,7 +83,6 @@ def login_users():
         print(f"Ocurrió un error durante el inicio de sesión: {str(e)}")
         flash("Ocurrió un error durante el inicio de sesión. Por favor, inténtalo de nuevo más tarde.", "error")
         return redirect(url_for('start'))
-
 
 @app.route('/register.html')
 def register_funct():
@@ -97,7 +95,6 @@ def go_to_login():
 @app.route('/login_back')
 def go_to_profile():
     return render_template('perfil.html')
-
 
 @app.route('/termsandConditions')
 def termsConditions():
@@ -139,38 +136,38 @@ def save_keyword():
 
 #Aun en PROCESO se MEJORA y DEPURACIÓN
 @app.route('/save_commonuser', methods=['POST'])
-def register_user():
+def handle_user_registration(user_type):
     result = manager.save_user()
     if result == -1:
         return render_template('register.html', registration_error="Contraseña débil", form=request.form)
     elif result == -2:
         return render_template('register.html', registration_error="Email inválido", form=request.form)
     else:
-        if manager.save_journalistuser(result):
-            return index()
+        if user_type == 'common':
+            if manager.save_commonuser(result):
+                return index()
+        elif user_type == 'company':
+            if manager.save_companyuser(result):
+                return index()
+        elif user_type == 'journalist':
+            if manager.save_journalistuser(result):
+                return index()
+        else:
+            # Manejar un tipo de usuario no válido, si es necesario
+            pass
 
-
+@app.route('/save_commonuser', methods=['POST'])
+def register_user_common():
+    return handle_user_registration('common')
 
 @app.route('/save_companyUser', methods=['POST'])
-def register_CompanyUser():
-    result = manager.save_user()
-    if result == -1:
-        return render_template('register.html', registration_error="Contraseña débil", form=request.form)
-    elif result == -2:
-        return render_template('register.html', registration_error="Email inválido", form=request.form)
-    else:
-        if manager.save_journalistuser(result):
-            return index()
+def register_user_company():
+    return handle_user_registration('company')
+
 @app.route('/save_journalistUser', methods=['POST'])
-def register_JournalistUser():
-    result = manager.save_user()
-    if result == -1:
-        return render_template('register.html', registration_error="Contraseña débil", form=request.form)
-    elif result == -2:
-        return render_template('register.html', registration_error="Email inválido", form=request.form)
-    else:
-        if manager.save_journalistuser(result):
-            return index()
+def register_user_journalist():
+    return handle_user_registration('journalist')
+
 
 
 #Métodos para el ADMINISTRADOR
