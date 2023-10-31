@@ -66,7 +66,7 @@
                 <strong>Fecha:</strong> {{ news_item.get_date() }}<br>
             </li>
         {% endfor %}
-    <a href="{{ url_for('expand_container', id=container_id) }}">Ver Noticias</a>
+    <a href="{{ url_for('main_blueprint.expand_container', idn=container_id) }}">Ver Noticias</a>
     </ul>
 {% endfor %}
 {% endblock%}

@@ -79,16 +79,16 @@
             </button>
             <div class="collapse navbar-collapse justify-content-between px-0 px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav mr-auto py-0">
-                    <a href="{{ url_for('index_admin') }}" class="nav-item nav-link">Inicio</a>
-                    <a href="{{ url_for('verify_users') }}" class="nav-item nav-link">Verificación</a>
-                    <a href="{{ url_for('charts') }}" class="nav-item nav-link">Gráficos</a>
-                    <a href="{{ url_for('comments') }}" class="nav-item nav-link">Comentarios</a>
-                    <a href="{{ url_for('edit_users') }}" class="nav-item nav-link active">Editar Usuarios</a>
+                    <a href="{{ url_for('main_blueprint.index_admin') }}" class="nav-item nav-link">Inicio</a>
+                    <a href="{{ url_for('main_blueprint.verify_users') }}" class="nav-item nav-link">Verificación</a>
+                    <a href="{{ url_for('main_blueprint.charts') }}" class="nav-item nav-link">Gráficos</a>
+                    <a href="{{ url_for('main_blueprint.comments') }}" class="nav-item nav-link">Comentarios</a>
+                    <a href="{{ url_for('main_blueprint.edit_users') }}" class="nav-item nav-link active">Editar Usuarios</a>
                 </div>
 
                 <!-- Icon to enter in login-->
                 <div class="login-icon">
-                    <a href="{{ url_for('profile_admin') }}" class="nav-item nav-link">
+                    <a href="{{ url_for('main_blueprint.profile_admin') }}" class="nav-item nav-link">
                         <i class="fas fa-user"></i>
                     </a>
 
