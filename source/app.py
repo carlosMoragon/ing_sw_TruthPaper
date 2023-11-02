@@ -21,6 +21,8 @@ def index():
     global containers
     print("llega")
     init_news.join()
+    for new in news:
+        print(f"{new.get_container_id()}\n")
     data = {
         'imgs': [new.get_image() for new in news],
         'titles': [str(new.get_title()) for new in news],
@@ -33,12 +35,12 @@ def index():
     categories_list = gr.get_categories(news)
     return render_template('indexFunc.html', data=data, containers=containers, categories_list=categories_list)
 
-#Método para ver un contenedor específico
+# Método para ver un contenedor específico
 @app.route('/ver_contenedor/<int:id>')
 def expand_container(id):
     container = containers.get(id)
-    comments = manager.load_comments()
-    return render_template('containerNews.html', container=container, comments = comments)
+    # comments = manager.load_comments(id)
+    return render_template('containerNews.html', container=container, comments=[])#comments)
 
 @app.route('/')
 def start():
@@ -50,7 +52,9 @@ def start():
 
         # ESTAS SON LAS QUE SON NUEVAS QUE SE VAN A IR AÑADIENDO A LO LARGO DE LA EJECUCION
         if manager.is_update(datetime.now().strftime(f'%Y-%m-%d')):
+            print("SE ACTUALIZAN LAS NOTICIAS")
             threading.Thread(target=_add_news_background).start()
+
 
     #SON PRUEBAS, SIRVEN PARA VER ESTOS DATOS POR CONSOLA
     # lista = manager.loadUncheckedUsers()

@@ -62,7 +62,7 @@ def filter_by_date(search: str, news: List[cl.News]) -> List[cl.News]:
 def filter_by_container(container: int, news: List[cl.News]) -> List[cl.News]:
     matches = []
     for new in news:
-        if container == new.get_container():
+        if container == new.get_container_id():
             matches.append(new)
 
     return matches

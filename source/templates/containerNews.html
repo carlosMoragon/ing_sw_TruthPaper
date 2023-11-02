@@ -152,7 +152,31 @@
                                         </div>
                                     </li>
                                 {% endfor %}
-                                {% block comments %}
+
+                                <!-- html para comentarios -->
+                                {% block print_comments %}
+                                    <div class="container">
+                                        {% for comment in comments %}
+                                            <div class="card mb-3">
+                                                <div class="card-header">
+                                                    Usuario: {{ comment.get_userclient_id() }}
+                                                </div>
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Likes: {{ comment.get_likes() }}</h5> <button type="button" class="btn btn-outline-secondary" style="color: white;"> <i class="fa fa-thumbs-up"></i> {{ comment.get_likes() }} </button>
+                                                    <h6 class="card-subtitle mb-2 text-muted">Vistas: {{ comment.get_views() }}</h6>
+                                                    <p class="card-text">{{ comment.get_content() }}</p>
+                                                    {% if comment.get_img() %}
+                                                        <img src="{{ comment.get_img() }}" class="img-fluid" alt="Imagen del comentario">
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+
+
+                                {% endblock %}
+
+                                {% block publish_comments %}
                                     <form style="margin-top: 5%;">
                                       <div class="form-group">
                                           <label for="comment">Deja tu comentario:</label>

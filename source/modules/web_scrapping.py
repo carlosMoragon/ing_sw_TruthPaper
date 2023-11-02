@@ -21,8 +21,8 @@ def _build_news(titles: List[str], urls: List[str], imgs: List[str], owner: str,
 
     for i in range(len(urls)):
 
-        # news.append(cl.News(-1, owner, titles[i], imgs[i], urls[i], "",-1, -1, date, category))
-        news.append(cl.News(-1, owner, re.sub(r'(["\'])', r'\\\1',titles[i]), imgs[i], urls[i], "",-1, -1, date, category))
+        # self, id: int, owner: str, title: str, image: str, url: str, content: str,  journalist: int, date: str, category: str, likes: int, views: int, container_id: int
+        news.append(cl.News(-1, owner, titles[i], imgs[i], urls[i], "",-1, date, category, 0, 0, -1))
 
     return news
 
@@ -47,20 +47,20 @@ def add_new_container(news: List[cl.News]) -> List[cl.News]:
     for i in range(len(news)):
         for j in range(i + 1, len(news)):
             if cosine_similarities[i][j] >= threshold:
-                if news[i].get_container() != -1:
-                    news[j].set_container(news[i].get_container())
-                elif news[j].get_container() != -1:
-                    news[i].set_container(news[j].get_container())
+                if news[i].get_container_id() != -1:
+                    news[j].set_container_id(news[i].get_container_id())
+                elif news[j].get_container_id() != -1:
+                    news[i].set_container_id(news[j].get_container_id())
                 else:
-                    news[i].set_container(n_cont)
-                    news[j].set_container(n_cont)
+                    news[i].set_container_id(n_cont)
+                    news[j].set_container_id(n_cont)
                     n_cont += 1
             else:
-                if news[i].get_container() == -1:
-                    news[i].set_container(n_cont)
+                if news[i].get_container_id() == -1:
+                    news[i].set_container_id(n_cont)
                     n_cont += 1
-                if news[j].get_container() == -1:
-                    news[j].set_container(n_cont)
+                if news[j].get_container_id() == -1:
+                    news[j].set_container_id(n_cont)
                     n_cont += 1
 
     return news
@@ -69,10 +69,10 @@ def add_new_container(news: List[cl.News]) -> List[cl.News]:
 def split_by_container(news: List[cl.News]) -> Dict[int, List[cl.News]]:
     containers: Dict[int, List[str]] = defaultdict(list)
     for new in news:
-        if new.get_container() in containers:
-            containers[new.get_container()].append(new)
+        if new.get_container_id() in containers:
+            containers[new.get_container_id()].append(new)
         else:
-            containers[new.get_container()] = [new]
+            containers[new.get_container_id()] = [new]
     return containers
 
 

@@ -85,26 +85,26 @@ class New(db.Model):
     image = db.Column(db.String(255), nullable=False)
     url = db.Column(db.String(255), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    container = db.Column(db.Integer, nullable=False)
+    container_id = db.Column(db.Integer, db.ForeignKey('container.id'))
     journalistuser_id = db.Column(db.Integer)
     date = db.Column(db.Date, nullable=False)
     category = db.Column(db.String(30), nullable=False)
     likes = db.Column(db.Integer, nullable=False, default=0)
     views = db.Column(db.Integer, nullable=False, default=0)
 
-    def __init__(self, id, owner, title, image, url, content, container, journalistuser_id, date, category, likes, views):
+    def __init__(self, id, owner, title, image, url, content, container, journalistuser_id, date, category, likes, views, container_id):
         self.id = id
         self.owner = owner
         self.title = title
         self.image = image
         self.url = url
         self.content = content
-        self.container = container
         self.journalistuser_id = journalistuser_id
         self.date = date
         self.category = category
         self.likes = likes
         self.views = views
+        self.container_id = container_id
 
 
 class Comment(db.Model):
@@ -114,14 +114,20 @@ class Comment(db.Model):
     content = db.Column(db.Text, nullable=True)
     image = db.Column(db.BLOB, nullable=True)
     userclient_id = db.Column(db.Integer, db.ForeignKey('userclient.client_id'), nullable=True)
-    idNew = db.Column(db.Integer, db.ForeignKey('new.id'), nullable=True)
-
-    def __init__(self, likes, views, content, image, userclient_id, idNew):
+    container_id = db.Column(db.Integer, db.ForeignKey('container.id'), nullable=True)
+    def __init__(self, likes, views, content, image, userclient_id, container_id):
         self.likes = likes
         self.views = views
         self.content = content
         self.image = image
         self.userclient_id = userclient_id
-        self.idNew = idNew
+        self.container_id = container_id
 
+class Container(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    likes = db.Column(db.Integer, default=0)
+
+    def __init__(self, id, likes=0):
+        self.id = id
+        self.likes = likes
 
