@@ -3,9 +3,9 @@ from bs4 import BeautifulSoup
 from modules import classes as cl
 from typing import List, Dict
 from datetime import datetime
-import os
-import html
-#import glob
+# import os
+# import html
+# import glob
 import re
 from concurrent.futures import ThreadPoolExecutor
 from collections import defaultdict
@@ -21,9 +21,11 @@ def _build_news(titles: List[str], urls: List[str], imgs: List[str], owner: str,
 
     for i in range(len(urls)):
 
-        news.append(cl.News(-1, owner, titles[i], imgs[i], urls[i], "",-1, -1, date, category))
+        # news.append(cl.News(-1, owner, titles[i], imgs[i], urls[i], "",-1, -1, date, category))
+        news.append(cl.News(-1, owner, re.sub(r'(["\'])', r'\\\1', titles[i]), imgs[i], urls[i], "", -1, -1, date, category))
 
     return news
+
 
 def add_new_container(news: List[cl.News]) -> List[cl.News]:
     # Lista de noticias
@@ -39,7 +41,7 @@ def add_new_container(news: List[cl.News]) -> List[cl.News]:
     cosine_similarities = cosine_similarity(tfidf_matrix, tfidf_matrix)
 
     # Establecer un umbral de similitud (ajusta según tus necesidades)
-    threshold = 0.7
+    threshold = 0.3
 
     # Encontrar noticias relacionadas y asignarles un contenedor
     n_cont = 0
@@ -66,7 +68,7 @@ def add_new_container(news: List[cl.News]) -> List[cl.News]:
 
 
 def split_by_container(news: List[cl.News]) -> Dict[int, List[cl.News]]:
-    containers: Dict[int, List[str]] = defaultdict(list)
+    containers: Dict[int, List[cl.News]] = defaultdict(list)
     for new in news:
         if new.get_container() in containers:
             containers[new.get_container()].append(new)
@@ -126,6 +128,7 @@ def _make_lasexta_marca_news(structure: BeautifulSoup, category: str, date: str,
 def _make_nytimesnews(structure: BeautifulSoup, category: str, date: str) -> List[cl.News]:
 
     articles = structure.find_all('section', class_='story-wrapper')
+
     link_news = []
 
     for article in articles:
@@ -141,32 +144,37 @@ def _make_nytimesnews(structure: BeautifulSoup, category: str, date: str) -> Lis
         h3_texts = [h3_tag.text.strip() for h3_tag in h3_tags]
         if h3_texts:
             titles.append(h3_texts)
-    return [cl.News(-1,"The New York Times", titles[i][0], 'static\\img\\nytimes.png',link_news[i], "",-1,-1, date,category) for i in range(len(link_news))]
+    return [cl.News(-1, "The New York Times", re.sub(r'(["\'])', r'\\\1', titles[i][0]), 'static\\img\\nytimes.png', link_news[i], "", -1, -1, date, category) for i in range(len(link_news))]
+    # return [cl.News(-1,"The New York Times", titles[i][0], 'static\\img\\nytimes.png',link_news[i], "",-1,-1, date,category) for i in range(len(link_news))]
 
 
 # --- CATEGORIES ---
 def _category_antena3(structure: BeautifulSoup) -> List[cl.News]:
     categories = structure.find_all('li', 'menu-main__item menu-main__item--level2')
+    # ------> DUPLICADO
     a_tags = [category.find('a') for category in categories]
     urls = [a_tag.get('href').strip() for a_tag in a_tags]
     names = [a_tag.text.strip() for a_tag in a_tags]
 
     sol = []
     date = datetime.now().strftime(f'%Y-%m-%d')
-
+    # --------> HASTA AQUÍ
     for i in range(len(urls)):
         sol += _make_antena3news(BeautifulSoup(requests.get(urls[i]).text, 'lxml'), names[i], date)
     return sol
 
 
 def _category_lasexta(structure: BeautifulSoup) -> List[cl.News]:
+
     categories = structure.find('div', class_= "wrapper_links")
+    # ------> DUPLICADO
     a_tags = categories.find_all('a')
     urls = [a_tag.get('href').strip() for a_tag in a_tags]
     names = [a_tag.text.strip() for a_tag in a_tags]
 
     sol = []
     date = datetime.now().strftime(f'%Y-%m-%d')
+    # --------> HASTA AQUÍ
     for i in range(len(urls)):
         sol += _make_lasexta_marca_news(BeautifulSoup(requests.get(urls[i]).text, 'lxml'), names[i], date, "lasexta")
     return sol
@@ -178,14 +186,14 @@ def _category_marca(structure: BeautifulSoup) -> List[cl.News]:
         categories = lu.find_all('li')[:-2]
     else:
         return []
-
+    # ------> DUPLICADO
     a_tags = [category.find('a') for category in categories]
     urls = [a_tag.get('href').strip() for a_tag in a_tags]
     names = [a_tag.text.strip() for a_tag in a_tags]
 
     sol = []
     date = datetime.now().strftime(f'%Y-%m-%d')
-
+    # --------> HASTA AQUÍ
     for i in range(len(urls)):
         sol += _make_lasexta_marca_news(BeautifulSoup(requests.get(urls[i]).text, 'lxml'), names[i], date, "marca")
     return sol
@@ -193,46 +201,47 @@ def _category_marca(structure: BeautifulSoup) -> List[cl.News]:
 
 def _category_nytimes(structure: BeautifulSoup) -> List[cl.News]:
     categories = structure.find_all('lu', 'css-397oyn')
+    # ------> DUPLICADO
     a_tags = [category.find('a') for category in categories]
     urls = [a_tag.get('href').strip() for a_tag in a_tags]
     names = [a_tag.text.strip() for a_tag in a_tags]
 
     sol = []
     date = datetime.now().strftime(f'%Y-%m-%d')
-
+    # --------> HASTA AQUÍ
     for i in range(len(urls)):
         sol += _make_nytimesnews(BeautifulSoup(requests.get(urls[i]).text, 'lxml'), names[i], date)
     return sol
 
 
 # --- GETS ---
-def get_nytimes() -> List[cl.News]:
+def get_nytimes(date) -> List[cl.News]:
     structure = BeautifulSoup(requests.get("https://www.nytimes.com/international/").text, 'lxml')
-    return _category_nytimes(structure) + _make_nytimesnews(structure, "general", datetime.now().strftime(f'%Y-%m-%d'))
+    return _category_nytimes(structure) + _make_nytimesnews(structure, "general", date)
 
 
-def get_antena3() -> List[cl.News]:
+def get_antena3(date) -> List[cl.News]:
     antena3_structure = BeautifulSoup(requests.get("https://www.antena3.com/noticias/").text, 'lxml')
 
-    return _category_antena3(antena3_structure) + _make_antena3news(antena3_structure, "general", datetime.now().strftime(f'%Y-%m-%d'))
+    return _category_antena3(antena3_structure) + _make_antena3news(antena3_structure, "general", date)
 
 
-def get_lasexta_marca() -> List[cl.News]:
+def get_lasexta_marca(date) -> List[cl.News]:
     lasexta_structure = BeautifulSoup(requests.get("https://www.lasexta.com/noticias/").text, 'lxml')
     marca_structure = BeautifulSoup(requests.get("https://www.marca.com/").text, 'lxml')
     return (_category_lasexta(lasexta_structure) +
-            _make_lasexta_marca_news(lasexta_structure, "general", datetime.now().strftime(f'%Y-%m-%d'), "lasexta") +
+            _make_lasexta_marca_news(lasexta_structure, "general", date, "lasexta") +
             _category_marca(marca_structure) +
-            _make_lasexta_marca_news(marca_structure, "general", datetime.now().strftime(f'%Y-%m-%d'), "marca")
+            _make_lasexta_marca_news(marca_structure, "general", date, "marca")
             )
 
 
 def get_news() -> List[cl.News]:
-    news = get_antena3() + get_lasexta_marca() + get_nytimes()
+    date = datetime.now().strftime(f'%Y-%m-%d')
+    news = get_antena3(date) + get_lasexta_marca(date) + get_nytimes(date)
     # EMPEZAR A AÑADIR EL CONTENDIDO A LAS NOTICIAS
     threading.Thread(target=add_content(news)).start()
     return news
-
 
 
 def get_containers(news: List[cl.News]) -> Dict[int, List[cl.News]]:
@@ -259,7 +268,7 @@ def add_content(news: List[cl.News]):
     with ThreadPoolExecutor(max_workers=5) as executor:
         content = list(executor.map(get_content, [new.get_url() for new in news]))
         for i in range(len(news)):
-            news[i].set_content(str(content[i]))
+            news[i].set_content(re.sub(r'[^\x00-\x7F]+', '', str(content[i])))
 
 
 """

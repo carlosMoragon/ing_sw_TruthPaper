@@ -1,21 +1,25 @@
-from flask import Flask, render_template, request, flash
+from flask import Flask, render_template, request, flash, redirect
 from modules import web_scrapping as ws, users, filter as f, classes as cl, graphs as gr
 from database import DBManager as manager
 from flask_sqlalchemy import SQLAlchemy
 from typing import List, Dict
+import threading
+from datetime import datetime
 
 db = manager.db
 app = Flask(__name__)
 
-# news: List[cl.News]
-# containers: Dict[int, List[cl.News]]
-# init_news = threading.Thread(target=manager.get_news_db)
+news: List[cl.News] = []
+containers: Dict[int, List[cl.News]] = {}
+init_news = threading.Thread(target=manager.get_news_db, args=(app, news, containers))
+
 
 @app.route('/index')
 def index():
     global news
-    news = ws.get_news()
-
+    global containers
+    print("llega")
+    init_news.join()
     data = {
         'imgs': [new.get_image() for new in news],
         'titles': [str(new.get_title()) for new in news],
@@ -23,33 +27,44 @@ def index():
         'dates': [new.get_date() for new in news],
         'categories': [new.get_category() for new in news]
     }
-    print(news[0].get_image())
-    return render_template('indexFunc.html', data=data)
 
+    return render_template('indexFunc.html', data=data, containers=containers)
+
+#Método para ver un contenedor específico
+@app.route('/ver_contenedor/<int:id>')
+def expand_container(id):
+    container = containers.get(id)
+    return render_template('containerNews.html', container=container)
 
 @app.route('/')
 def start():
-    # global news, containers
-    # if news is None:
+     global news, containers
+     if not news:
+
         # ESTA ES LA DE LAS BBDD QUE SON LAS QUE MAS RAPIDO TIENEN QUE IR
-        # results = init_news.start()
-        # news = results[0]
-        # containers = results[1]
+        init_news.start()
 
         # ESTAS SON LAS QUE SON NUEVAS QUE SE VAN A IR AÑADIENDO A LO LARGO DE LA EJECUCION
-        # threading.Thread(target=_add_news_background).start()
-        
+        if manager.is_update(datetime.now().strftime(f'%Y-%m-%d')):
+            threading.Thread(target=_add_news_background).start()
+
+    #SON PRUEBAS, SIRVEN PARA VER ESTOS DATOS POR CONSOLA
     # lista = manager.loadUncheckedUsers()
-    # for i in lista:
-    #     print(i)
-        
-    return render_template('login.html')
+    #  lista = manager.load_new()
+    #  for i in lista:
+    #      print(i)
+
+     return render_template('login.html')
 
 
-# def _add_news_background():
-#     global news, containers
-#     news += ws.get_news()
-#     containers = ws.get_containers(news)
+def _add_news_background():
+    global news, containers
+    new_news = ws.get_news()
+    news.extend(new_news)
+    containers = ws.get_containers(news)
+    manager.save_news(app, new_news)
+
+
 
 
 # CAMBIAR LA RUTA
@@ -68,10 +83,18 @@ def register_funct():
 def go_to_login():
     return render_template('login.html')
 
+@app.route('/login_back')
+def go_to_profile():
+    return render_template('perfil.html')
+
 
 @app.route('/termsandConditions')
 def termsConditions():
     return render_template('termsConditions.html')
+
+@app.route('/categories')
+def go_to_categories():
+    return render_template('categories.html')
 
 
 @app.route('/save_keyword', methods=['post'])
@@ -87,7 +110,7 @@ def save_keyword():
         'dates': [new.get_date() for new in filted_news],
         'categories': [new.get_category() for new in filted_news]
     }
-    return render_template('categoriasFunc.html', data=data)
+    return render_template('categoriesFunc.html', data=data)
 
 
 # @app.route('/pruebaArticulos')
@@ -139,17 +162,26 @@ def register_JournalistUser():
             return index()
 
 #Métodos para el ADMINISTRADOR
-@app.route('/userAdmin.html')
+@app.route('/indexAdmin')
 def index_admin():
-    noticias = ws.get_news()
+    #noticias = news
     #gr.graph_news_per_source(noticias)
     return render_template('userAdmin/indexAdmin.html')
 
 @app.route('/verifyUsers')
 def verify_users():
-    #company_users = users.CompanyUser.query.all()
-    #return render_template('userAdmin/verifyUsers.html', company_users=company_users)
-    return render_template('userAdmin/verifyUsers.html')
+    unchecked_users = manager.loadUncheckedUsers()
+    return render_template('userAdmin/verifyUsers.html', unchecked_users=unchecked_users)
+
+#Método para verificar a los usuarios (Y: cambiar el estado de is_checked a 'Y')
+@app.route('/process_verification', methods=['POST'])
+def process_verification():
+    user_id = request.form.get('user_id')
+    action = request.form.get('action') # 'accept' or 'deny'
+    if action == 'accept':
+        print("===================ACCEPT USER===================")
+        manager.updateUserChecked(user_id)
+    return redirect('/verifyUsers')
 
 @app.route('/charts')
 def charts():

@@ -2,7 +2,8 @@ from flask_sqlalchemy import SQLAlchemy
 from modules import users, classes as cl, web_scrapping as ws
 from typing import List, Dict
 db = SQLAlchemy()
-from flask import request
+from sqlalchemy import desc
+from flask import request, current_app
 
 
 def login(username, password) -> bool:
@@ -13,10 +14,17 @@ def login(username, password) -> bool:
         return False
 
 # CONSULTA A LA BBDD PARA QUE TE COJA LAS NOTICIAS -> SE VA A LLAMAR A ESTA FUNCION DESDE APP.PY ANTES DE INICIAR
-"""
-def get_news_db() -> (List[cl.News], Dict[int, List[cl.News]]):
-    return None, ws.split_news(news)
-"""
+
+
+#def get_news_db(news, container):
+#    news.extend(load_new())
+#    container.update(ws.split_news(news))
+
+def get_news_db(app, news, container):
+    with app.app_context():
+        print("entra")
+        news.extend(load_news())
+        container.update(ws.split_by_container(news))
 
 def save_user():
     if cl.validate_password(request.form['password']):
@@ -88,20 +96,86 @@ def loadUncheckedUsers():
     for user in users.Userclient.query.all():
         if user.is_checked == 'N':
             usuario = users.User.query.filter_by(id=user.client_id).first()
-            uncheckedUserList.append([usuario.username, usuario.password, usuario.email])
+            uncheckedUserList.append([usuario.username, usuario.password, usuario.email, user.client_id])
     return uncheckedUserList
 
-
-#MORAGON TENGO QUE PROBAR ESTO AUN
-def save_new(owner, title, image, url, content, container, journalistuser_id, date, category):
-    new = users.New(owner=owner, title=title, image=image, url=url, content=content, container=container, journalistuser_id=journalistuser_id, date=date, category=category)
-    db.session.add(new)
+# Método reescribir el estado de is_checked a 'Y'
+def updateUserChecked(id):
+    print("entra en la funcion")
+    user = users.Userclient.query.filter_by(client_id=id).first()
+    print("==================")
+    print(user.is_checked)
+    print("==================")
+    user.is_checked = 'Y'
     db.session.commit()
-    return True
-    
-def load_new():
-    news = []
-    article = users.New.query.limit(30).all()
-    for i in article:
-        news.append(i)
-    return news
+
+#def save_news(news: List[cl.News]) -> bool:
+#   for new in news:
+#       new_db = users.New(
+#           owner=new.get_owner(),
+#           title=new.get_title(),
+#           image=new.get_image(),
+#           url=new.get_url(),
+#           content=new.get_content(),
+#           container=new.get_container(),
+#           journalistuser_id=new.get_journalist(),
+#           date=new.get_date(),
+#           category=new.get_category()
+#       )
+#       db.session.add(new_db)
+#       print("b")
+#   db.session.commit()
+#   return True
+
+
+def save_news(app, news: List[cl.News]) -> bool:
+    with app.app_context():
+        i = last_id()
+        for new in news:
+            i +=1
+            new_db = users.New(
+                id=i,
+                owner=new.get_owner(),
+                title=new.get_title(),
+                image=new.get_image(),
+                url=new.get_url(),
+                content=new.get_content(),
+                container=new.get_container(),
+                journalistuser_id=31,
+                date=new.get_date(),
+                category=new.get_category()
+            )
+            db.session.add(new_db)
+
+        db.session.commit()
+        return True
+
+
+def load_news() -> List[cl.News]:
+   all_news = db.session.query(users.New).all()
+   #all_news = users.New.query.all()
+   news_objects = []
+   for news in all_news:
+       news_obj = cl.News(
+           id=news.id,
+           owner=news.owner,
+           title=news.title,
+           image=news.image,
+           url=news.url,
+           content=news.content,
+           container=news.container,
+           journalist=news.journalistuser_id,
+           date=news.date.strftime('%Y-%m-%d'),
+           category=news.category
+       )
+       news_objects.append(news_obj)
+
+   return news_objects
+
+
+def is_update(fecha_actual: str) -> bool:
+    return fecha_actual == db.session.query(users.New.date).order_by(desc(users.New.date)).first()
+
+
+def last_id() -> int:
+    return db.session.query(users.New).order_by(desc(users.New.id)).first()
