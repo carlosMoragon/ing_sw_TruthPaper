@@ -99,11 +99,8 @@ def loadUncheckedUsers():
 
 # Método reescribir el estado de is_checked a 'Y'
 def updateUserChecked(id):
-    print("entra en la funcion")
     user = users.Userclient.query.filter_by(client_id=id).first()
-    print("==================")
     print(user.is_checked)
-    print("==================")
     user.is_checked = 'Y'
     db.session.commit()
 
