@@ -1,10 +1,13 @@
-from flask import Flask, render_template, request, flash, redirect
+from flask import Flask, render_template, request, flash, redirect, send_file
 from modules import web_scrapping as ws, users, filter as f, classes as cl, graphs as gr
 from database import DBManager as manager
 from flask_sqlalchemy import SQLAlchemy
 from typing import List, Dict
 import threading
 from datetime import datetime
+import fitz
+from io import BytesIO
+from pdf2image import convert_from_bytes
 
 db = manager.db
 app = Flask(__name__)
@@ -65,6 +68,9 @@ def _add_news_background():
     manager.save_news(app, new_news)
 
 
+def convert_pdf_to_images(pdf_bytes):
+    images = convert_from_bytes(pdf_bytes)
+    return images
 
 # CAMBIAR LA RUTA
 @app.route('/login_users', methods=['POST'])
@@ -74,6 +80,12 @@ def login_users():
         # client_id = user.id
         # image = manager.load_image(client_id)
         # return manager.serve_pil_image(image)
+        
+        # user = users.User.query.filter_by(username=request.form['username']).first()
+        # journalist_id = user.id       
+        # documento = manager.load_pdf_certificate(journalist_id)
+        # return manager.serve_pil_image(documento)
+        
         return index()
     else:
         return render_template('fail_login.html')

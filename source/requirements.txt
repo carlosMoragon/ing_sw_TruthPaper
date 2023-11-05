@@ -8,4 +8,6 @@ matplotlib
 scikit-learn
 numpy
 nltk
-
+PyPDF2
+PyMuPDFs
+pdf2image
