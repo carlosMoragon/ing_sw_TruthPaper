@@ -20,7 +20,7 @@ def index():
     global news
     global containers
     print("llega")
-    init_news.join()
+    #init_news.join()
     for new in news:
         print(f"{new.get_container_id()}\n")
     data = {
@@ -39,8 +39,8 @@ def index():
 @app.route('/ver_contenedor/<int:id>')
 def expand_container(id):
     container = containers.get(id)
-    # comments = manager.load_comments(id)
-    return render_template('containerNews.html', container=container, comments=[])#comments)
+    comments = manager.load_comments(id)
+    return render_template('containerNews.html', container=container, comments=comments)
 
 @app.route('/')
 def start():
@@ -48,10 +48,10 @@ def start():
      if not news:
 
         # ESTA ES LA DE LAS BBDD QUE SON LAS QUE MAS RAPIDO TIENEN QUE IR
-        init_news.start()
+        #init_news.start()
 
         # ESTAS SON LAS QUE SON NUEVAS QUE SE VAN A IR AÑADIENDO A LO LARGO DE LA EJECUCION
-        if manager.is_update(datetime.now().strftime(f'%Y-%m-%d')):
+        if not manager.is_update(datetime.now().strftime(f'%Y-%m-%d')):
             print("SE ACTUALIZAN LAS NOTICIAS")
             threading.Thread(target=_add_news_background).start()
 

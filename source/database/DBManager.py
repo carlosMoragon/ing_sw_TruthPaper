@@ -108,7 +108,7 @@ def save_news(app, news: List[cl.News]) -> bool:
     with app.app_context():
         i = last_id()
         for new in news:
-            i +=1
+            i += 1
             new_db = users.New(
                 id=i,
                 owner=new.get_owner(),
@@ -116,12 +116,12 @@ def save_news(app, news: List[cl.News]) -> bool:
                 image=new.get_image(),
                 url=new.get_url(),
                 content=new.get_content(),
-                container_id=new.get_container_id(), # Se supone que guarda el id de contenedor en la columna correcta
+                container_id=new.get_container_id(),# Se supone que guarda el id de contenedor en la columna correcta
                 journalistuser_id=31,
                 date=new.get_date(),
                 category=new.get_category(),
-                likes= new.get_likes(),
-                views = new.get_views(),
+                likes=new.get_likes(),
+                views=new.get_views()
 
             )
             db.session.add(new_db)
@@ -212,12 +212,22 @@ def is_update(fecha_actual: str) -> bool:
 def is_update(fecha_actual: str) -> bool:
     print("entra en is_update")
     fecha_db = db.session.query(users.New.date).order_by(desc(users.New.date)).first()[0].strftime("%Y-%m-%d")
-    print(f"{fecha_db}, {fecha_actual}")
+    print(f"{fecha_db == fecha_actual}")
     return fecha_actual == str(fecha_db)
+
+'''
+def last_id() -> int:
+    return db.session.query(users.New).order_by(desc(users.New.id)).first()
+'''
 
 
 def last_id() -> int:
-    return db.session.query(users.New).order_by(desc(users.New.id)).first()
+    latest_new = db.session.query(users.New).order_by(desc(users.New.id)).first()
+    if latest_new:
+        return latest_new.id
+    else:
+        return 0
+
 
 def serve_pil_image(pil_img):
     img_io = BytesIO()

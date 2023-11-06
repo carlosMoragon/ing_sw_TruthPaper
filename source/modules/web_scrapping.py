@@ -142,7 +142,8 @@ def _make_nytimesnews(structure: BeautifulSoup, category: str, date: str) -> Lis
         h3_texts = [h3_tag.text.strip() for h3_tag in h3_tags]
         if h3_texts:
             titles.append(h3_texts)
-    return [cl.News(-1,"The New York Times", re.sub(r'(["\'])', r'\\\1',titles[i][0]), 'static\\img\\nytimes.png',link_news[i], "",-1,-1, date,category) for i in range(len(link_news))]
+    #  id: int, owner: str, title: str, image: str, url: str, content: str,  journalist: int, date: str, category: str, likes: int, views: int, container_id: int):
+    return [cl.News(-1,"The New York Times",titles[i][0], 'static\\img\\nytimes.png', link_news[i], "", -1, date, category, 0, 0, -1) for i in range(len(link_news))]
     #return [cl.News(-1,"The New York Times", titles[i][0], 'static\\img\\nytimes.png',link_news[i], "",-1,-1, date,category) for i in range(len(link_news))]
 
 

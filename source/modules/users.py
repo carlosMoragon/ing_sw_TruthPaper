@@ -92,7 +92,7 @@ class New(db.Model):
     likes = db.Column(db.Integer, nullable=False, default=0)
     views = db.Column(db.Integer, nullable=False, default=0)
 
-    def __init__(self, id, owner, title, image, url, content, container, journalistuser_id, date, category, likes, views, container_id):
+    def __init__(self, id, owner, title, image, url, content, journalistuser_id, date, category, likes, views, container_id):
         self.id = id
         self.owner = owner
         self.title = title
