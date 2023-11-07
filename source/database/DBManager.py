@@ -15,23 +15,12 @@ import io
 def login(username, password) -> bool:
     user_db = users.User.query.filter_by(username=username).first()
     email_db = users.User.query.filter_by(email=username).first()
-    #UNO VA A SER NONE, FILTRAR ESO
-    print(user_db)
-    print('-----------------------------------')
-    email_db = email_db.id 
-    print('id')
-    print(email_db)
-    if user_db or email_db:
-        contraseñaUser = user_db.password
-        contraseñaEmail = email_db.password
-        return contraseñaUser == password or contraseñaEmail == password 
-        #return user_db.password == password
-    else:
-        return False
+    
+    if user_db == None:
+        user_db = email_db
+    return user_db.password == password
 
 # CONSULTA A LA BBDD PARA QUE TE COJA LAS NOTICIAS -> SE VA A LLAMAR A ESTA FUNCION DESDE APP.PY ANTES DE INICIAR
-
-
 def get_news_db(app, news, container):
     with app.app_context():
         print("entra")
