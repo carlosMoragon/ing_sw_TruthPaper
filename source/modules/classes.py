@@ -399,7 +399,7 @@ class News:
     def __hash__(self):
         return hash(self._id)
     
-    class Container:
+class Container:
         def __init__(self, id: int, likes: str):
             self._id = id
             self._likes = likes
