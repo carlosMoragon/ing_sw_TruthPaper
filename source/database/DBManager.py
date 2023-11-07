@@ -11,10 +11,21 @@ import fitz
 import base64
 import io
 
+
 def login(username, password) -> bool:
     user_db = users.User.query.filter_by(username=username).first()
-    if user_db:
-         return user_db.password == password
+    email_db = users.User.query.filter_by(email=username).first()
+    #UNO VA A SER NONE, FILTRAR ESO
+    print(user_db)
+    print('-----------------------------------')
+    email_db = email_db.id 
+    print('id')
+    print(email_db)
+    if user_db or email_db:
+        contraseñaUser = user_db.password
+        contraseñaEmail = email_db.password
+        return contraseñaUser == password or contraseñaEmail == password 
+        #return user_db.password == password
     else:
         return False
 
@@ -34,6 +45,7 @@ def save_user():
             newUser = users.User(
                 username=request.form['username'],
                 password=request.form['password'],
+                #password=bcrypt.generate_password_hash(request.form['password']).decode('utf-8'),
                 email=request.form['email'])
 
             db.session.add(newUser)
@@ -176,6 +188,26 @@ def load_image(user_id):
         return image
     else:
         return None
+
+def load_container():
+    container = cl.Container.query.all()
+    container_objects = []
+    for cont in container:
+        container_obj = cl.Container(
+            id=cont.id,
+            name=cont.name
+        )
+        container_objects.append(container_obj)
+    return container_objects
+
+def add_container(id, likes):
+    new_container = cl.Container(
+        id = id,
+        likes = likes
+    )
+    db.session.add(new_container)
+    db.session.commit()
+    return True
 
 
 # def render_pdf(user_id):
