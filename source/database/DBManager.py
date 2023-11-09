@@ -10,7 +10,9 @@ from PyPDF2 import PdfReader
 import fitz
 import base64
 import io
+from flask_bcrypt import Bcrypt
 
+bcrypt = Bcrypt()
 
 def login(username, password) -> bool:
     user_db = users.User.query.filter_by(username=username).first()
@@ -20,8 +22,14 @@ def login(username, password) -> bool:
         user_db = email_db
     if user_db == None:
         return False
+    encoded_password = password.encode('utf-8')
+    if bcrypt.check_password_hash(user_db.password, encoded_password):
+        return True
+    else:
+        return False
     
-    return user_db.password == password
+    #return bcrypt.check_password_hash(user_db.password, password).encode('utf-8')
+    # return user_db.password == password
 
 # CONSULTA A LA BBDD PARA QUE TE COJA LAS NOTICIAS -> SE VA A LLAMAR A ESTA FUNCION DESDE APP.PY ANTES DE INICIAR
 def get_news_db(app, news, container):
@@ -36,8 +44,8 @@ def save_user():
             #Si el nombre de usuario ya existe, no se puede registrar
             newUser = users.User(
                 username=request.form['username'],
-                password=request.form['password'],
-                #password=bcrypt.generate_password_hash(request.form['password']).decode('utf-8'),
+                #password=request.form['password'],
+                password=bcrypt.generate_password_hash(request.form['password']).decode('utf-8'),
                 email=request.form['email'])
 
             db.session.add(newUser)

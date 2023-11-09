@@ -8,6 +8,7 @@ from datetime import datetime
 import fitz
 from io import BytesIO
 from pdf2image import convert_from_bytes
+# from flask_bcrypt import Bcrypt as bcrypt
 
 db = manager.db
 app = Flask(__name__)
