@@ -21,3 +21,8 @@ orianna       HolaMundo1234*
 NotLoki       Encriptado1234*
 AgentMobius   Jetskis1111*
 MissMinutes   ForAllTimes6666*
+scarletW    MarvelFreak1234*
+spiderman   MarvelFreak1236*
+gwendolin   MarvelFreak1237*
+DoctorStrange  MarvelFreak1238*
+mariahill   MarvelFreak1239*
