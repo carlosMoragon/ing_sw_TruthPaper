@@ -5,10 +5,9 @@ from flask_sqlalchemy import SQLAlchemy
 from typing import List, Dict
 import threading
 from datetime import datetime
-import fitz
+#import fitz
 from io import BytesIO
-from pdf2image import convert_from_bytes
-# from flask_bcrypt import Bcrypt as bcrypt
+#from pdf2image import convert_from_bytes
 
 db = manager.db
 app = Flask(__name__)
@@ -69,25 +68,25 @@ def _add_news_background():
     manager.save_news(app, new_news)
 
 
-def convert_pdf_to_images(pdf_bytes):
-    images = convert_from_bytes(pdf_bytes)
-    return images
+# def convert_pdf_to_images(pdf_bytes):
+#     images = convert_from_bytes(pdf_bytes)
+#     return images
 
 # CAMBIAR LA RUTA
 @app.route('/login_users', methods=['POST'])
 def login_users(): 
     if manager.login(request.form['username'], request.form['password']):
-        # user = users.User.query.filter_by(username=request.form['username']).first()
-        # client_id = user.id
-        # image = manager.load_image(client_id)
-        # return manager.serve_pil_image(image)
+        user = users.User.query.filter_by(username=request.form['username']).first()
+        client_id = user.id
+        image = manager.load_image(client_id)
+        return image
         
         # user = users.User.query.filter_by(username=request.form['username']).first()
         # journalist_id = user.id       
         # documento = manager.load_pdf_certificate(journalist_id)
         # return manager.serve_pil_image(documento)
         
-        return index()
+        #return index()
     else:
         return render_template('fail_login.html')
 

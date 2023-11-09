@@ -6,10 +6,10 @@ from sqlalchemy import desc
 from flask import request, current_app, send_file, render_template
 from PIL import Image
 from io import BytesIO
-from PyPDF2 import PdfReader
-import fitz
+# from PyPDF2 import PdfReader
+# import fitz
 import base64
-import io
+# import io
 from flask_bcrypt import Bcrypt
 
 bcrypt = Bcrypt()
@@ -57,6 +57,7 @@ def save_user():
                 client_id=new_user_id,
                 is_checked='Y',
                 photo=request.files['photo'].read()
+                # photo = transform_images_to_jpeg(request.files['photo'].read())
             )
             db.session.add(newUserClient)
             db.session.commit()
@@ -174,18 +175,30 @@ def is_update(fecha_actual: str) -> bool:
 def last_id() -> int:
     return db.session.query(users.New).order_by(desc(users.New.id)).first()
 
+from PIL import Image
+from io import BytesIO
+
+def transform_images_to_jpeg(photo_bytes):
+    pil_image = Image.open(BytesIO(photo_bytes))
+    if pil_image.mode == 'RGBA':
+        pil_image = pil_image.convert('RGB')
+    jpeg_image_io = BytesIO()
+    pil_image.save(jpeg_image_io, 'JPEG')
+    jpeg_image_io.seek(0)
+    return jpeg_image_io
+
 def serve_pil_image(pil_img):
     img_io = BytesIO()
     pil_img.save(img_io, 'JPEG')
     img_io.seek(0)
     return send_file(img_io, mimetype='image/jpeg')
-      
+
 def load_image(user_id):
     user = users.Userclient.query.filter_by(client_id=user_id).first()
     if user and user.photo:
         image_bytes = user.photo
-        image = Image.open(BytesIO(image_bytes))
-        return image
+        jpeg_image_io = transform_images_to_jpeg(image_bytes)
+        return serve_pil_image(Image.open(jpeg_image_io))
     else:
         return None
 
