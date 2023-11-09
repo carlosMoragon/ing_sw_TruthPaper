@@ -18,6 +18,9 @@ def login(username, password) -> bool:
     
     if user_db == None:
         user_db = email_db
+    if user_db == None:
+        return False
+    
     return user_db.password == password
 
 # CONSULTA A LA BBDD PARA QUE TE COJA LAS NOTICIAS -> SE VA A LLAMAR A ESTA FUNCION DESDE APP.PY ANTES DE INICIAR
