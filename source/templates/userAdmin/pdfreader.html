@@ -111,8 +111,7 @@
                                 <script>
                                     document.addEventListener('DOMContentLoaded', function() {
                                         var urlParams = new URLSearchParams(window.location.search);
-                                        var certificate_base64 = "{{ certificate_base64 }}";  // Inserta el valor devuelto por la función Flask aquí
-                                        // var certificate_base64 = urlParams.get('certificate_base64');
+                                        var certificate_base64 = "{{ certificate_base64 }}";  
                                         if (certificate_base64) {
                                             var pdfContainer = document.getElementById('pdfContainer');
                                             var embedTag = document.createElement('embed');

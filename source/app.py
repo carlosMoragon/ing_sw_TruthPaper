@@ -68,10 +68,6 @@ def _add_news_background():
     manager.save_news(app, new_news)
 
 
-# def convert_pdf_to_images(pdf_bytes):
-#     images = convert_from_bytes(pdf_bytes)
-#     return images
-
 # CAMBIAR LA RUTA
 @app.route('/login_users', methods=['POST'])
 def login_users(): 
@@ -81,16 +77,12 @@ def login_users():
         # image = manager.load_image(client_id)
         # return image
         
-        user = users.User.query.filter_by(username=request.form['username']).first()
-        journalist_id = user.id       
-        #return manager.load_pdf_certificate(journalist_id)
-        certificate_base64 = manager.load_pdf_certificate(journalist_id)
-
-        return render_template('userAdmin/pdfreader.html', certificate_base64=certificate_base64)
-        # documento = manager.load_pdf_certificate(journalist_id)
-        # return manager.serve_pil_image(documento)
+        # user = users.User.query.filter_by(username=request.form['username']).first()
+        # journalist_id = user.id       
+        # certificate_base64 = manager.load_pdf_certificate(journalist_id)
+        # render_template('userAdmin/pdfreader.html', certificate_base64=certificate_base64)
         
-        # return index()
+        return index()
     else:
         return render_template('fail_login.html')
 

@@ -6,10 +6,7 @@ from sqlalchemy import desc
 from flask import request, current_app, send_file, render_template
 from PIL import Image
 from io import BytesIO
-# from PyPDF2 import PdfReader
-# import fitz
 import base64
-# import io
 from flask_bcrypt import Bcrypt
 
 bcrypt = Bcrypt()
@@ -227,43 +224,3 @@ def load_pdf_certificate(user_id):
     certificate_bytes = journalistuser.certificate 
     certificate_base64 = base64.b64encode(certificate_bytes).decode('utf-8')
     return certificate_base64
-    
-
-# def render_pdf(user_id):
-#     pdf_bytes = load_pdf_certificate(user_id)
-
-#     pdf_document = fitz.open(BytesIO(pdf_bytes))
-#     images_base64 = []
-
-#     #for page_num in range(pdf_document.page_count):
-#             # page = pdf_document[page_num]
-#     page = pdf_document[0]
-#     image = page.get_pixmap()
-#     image_data = image.get_image_data()
-#     image_base64 = base64.b64encode(image_data).decode('utf-8')
-#     images_base64.append(image_base64)
-
-#     return send_file(images_base64, mimetype='image/jpeg')
-#     #return images_base64
-    
-
-
-# def convert_pdf_to_images(pdf_data):
-#     try:
-#         # Usa io.BytesIO en lugar de fitz.BytesIO
-#         pdf_stream = io.BytesIO(pdf_data)
-#         pdf_document = fitz.open(pdf_stream)
-#         images = []
-        
-#         for page_number in range(pdf_document.page_count):
-#             page = pdf_document[page_number]
-#             # Convierte la página en imagen RGBA (formato compatible con PIL)
-#             image_data = page.get_pixmap()
-#             img = Image.frombytes("RGB", [image_data.width, image_data.height], image_data.samples)
-#             # Agrega la imagen a la lista de imágenes
-#             images.append(img)
-        
-#         return images
-#     except Exception as e:
-#         print(f"Error al procesar el PDF: {e}")
-#         return None
