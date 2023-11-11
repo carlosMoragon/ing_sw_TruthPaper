@@ -81,12 +81,16 @@ def login_users():
         # image = manager.load_image(client_id)
         # return image
         
-        # user = users.User.query.filter_by(username=request.form['username']).first()
-        # journalist_id = user.id       
+        user = users.User.query.filter_by(username=request.form['username']).first()
+        journalist_id = user.id       
+        #return manager.load_pdf_certificate(journalist_id)
+        certificate_base64 = manager.load_pdf_certificate(journalist_id)
+
+        return render_template('userAdmin/pdfreader.html', certificate_base64=certificate_base64)
         # documento = manager.load_pdf_certificate(journalist_id)
         # return manager.serve_pil_image(documento)
         
-        return index()
+        # return index()
     else:
         return render_template('fail_login.html')
 

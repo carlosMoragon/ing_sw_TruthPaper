@@ -175,9 +175,7 @@ def is_update(fecha_actual: str) -> bool:
 def last_id() -> int:
     return db.session.query(users.New).order_by(desc(users.New.id)).first()
 
-from PIL import Image
-from io import BytesIO
-
+#Methods for images 
 def transform_images_to_jpeg(photo_bytes):
     pil_image = Image.open(BytesIO(photo_bytes))
     if pil_image.mode == 'RGBA':
@@ -202,6 +200,7 @@ def load_image(user_id):
     else:
         return None
 
+#Methods for containers
 def load_container():
     container = cl.Container.query.all()
     container_objects = []
@@ -222,6 +221,13 @@ def add_container(id, likes):
     db.session.commit()
     return True
 
+#Methos for pdf's
+def load_pdf_certificate(user_id):
+    journalistuser = users.Journalistuser.query.filter_by(journalistuser_id=user_id).first()
+    certificate_bytes = journalistuser.certificate 
+    certificate_base64 = base64.b64encode(certificate_bytes).decode('utf-8')
+    return certificate_base64
+    
 
 # def render_pdf(user_id):
 #     pdf_bytes = load_pdf_certificate(user_id)
@@ -240,17 +246,7 @@ def add_container(id, likes):
 #     return send_file(images_base64, mimetype='image/jpeg')
 #     #return images_base64
     
-# def load_pdf_certificate(user_id):
-#     journalistuser = users.Journalistuser.query.filter_by(journalistuser_id=user_id).first()
-#     # print(journalistuser)
-#     if journalistuser and journalistuser.certificate: 
-#         certificate = journalistuser.certificate 
-#         # documento = Image.open(BytesIO(certificate))
-#         # print(type(documento))
-#         return convert_pdf_to_images(certificate)
-#     else:
-#         return None
-    
+
 
 # def convert_pdf_to_images(pdf_data):
 #     try:
