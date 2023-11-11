@@ -215,6 +215,8 @@ def is_update(fecha_actual: str) -> bool:
 
 
 def is_update(fecha_actual: str) -> bool:
+    return False
+
     print("entra en is_update")
     fecha_db = db.session.query(users.New.date).order_by(desc(users.New.date)).first()[0].strftime("%Y-%m-%d")
     print(f"{fecha_db == fecha_actual}")
@@ -259,17 +261,30 @@ def load_container():
         )
         container_objects.append(container_obj)
     return container_objects
-
-
+'''
 def add_container(app, news: List[cl.News]):
     with app.app_context():
-        for id in list(set([new.get_container_id for new in news])):
+        for news_item in news:
+            container_id = set(news_item.get_container_id())  # Call the method to get the integer value
             new_container = users.Container(
-                id=id,
+                id=container_id,
                 likes=0
             )
             db.session.add(new_container)
         db.session.commit()
+
+'''
+def add_container(app, news: List[cl.News]):
+    with app.app_context():
+        for idx in set([new.get_container_id for new in news]):
+            print(idx)
+            new_container = users.Container(
+                id=idx,
+                likes=0
+            )
+            db.session.add(new_container)
+        db.session.commit()
+
 
 
 # def render_pdf(user_id):
