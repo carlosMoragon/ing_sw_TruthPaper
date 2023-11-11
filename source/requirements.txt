@@ -9,4 +9,7 @@ scikit-learn
 numpy
 nltk
 wordcloud
-
+PyPDF2
+PyMuPDFs
+fitz
+pdf2image

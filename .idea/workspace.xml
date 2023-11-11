@@ -5,10 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c0860c78-4c1e-47fd-805e-c74259889eca" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/database/DBManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/database/DBManager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/modules/users.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/modules/users.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/modules/web_scrapping.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/modules/web_scrapping.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/modules/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/modules/classes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/source/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,20 +33,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "paloma",
-    "last_opened_file_path": "C:/Users/cmora/Desktop/identity_field.py",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Merging capitanao&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/cmora/Desktop/identity_field.py&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\cmora\workspace\ing_sw_TruthPaper\source\templates" />
@@ -176,7 +177,9 @@
       <workItem from="1698317821556" duration="2289000" />
       <workItem from="1698414247274" duration="9473000" />
       <workItem from="1699122853528" duration="2056000" />
-      <workItem from="1699185333568" duration="6730000" />
+      <workItem from="1699185333568" duration="7586000" />
+      <workItem from="1699342822549" duration="5231000" />
+      <workItem from="1699477403482" duration="2312000" />
     </task>
     <servers />
   </component>

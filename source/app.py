@@ -1,10 +1,13 @@
-from flask import Flask, render_template, request, flash, redirect, url_for
+# Importar los módulos necesarios
+
+from flask import Flask, render_template, request, flash, redirect,url_for, send_file
 from modules import web_scrapping as ws, users, filter as f, classes as cl, graphs as gr
 from database import DBManager as manager
 from flask_sqlalchemy import SQLAlchemy
 from typing import List, Dict
 import threading
 from datetime import datetime
+from pdf2image import convert_from_bytes
 
 db = manager.db
 app = Flask(__name__)
@@ -70,9 +73,13 @@ def _add_news_background():
     new_news = ws.get_news()
     news.extend(new_news)
     containers = ws.get_containers(news)
+    manager.add_container(app, new_news)
     manager.save_news(app, new_news)
 
 
+def convert_pdf_to_images(pdf_bytes):
+    images = convert_from_bytes(pdf_bytes)
+    return images
 
 # CAMBIAR LA RUTA
 @app.route('/login_users', methods=['POST'])
@@ -87,6 +94,7 @@ def login_users():
         print(f"Ocurrió un error durante el inicio de sesión: {str(e)}")
         flash("Ocurrió un error durante el inicio de sesión. Por favor, inténtalo de nuevo más tarde.", "error")
         return redirect(url_for('start'))
+
 
 @app.route('/register.html')
 def register_funct():

@@ -433,3 +433,20 @@ class News:
 
     def __hash__(self):
         return hash(self._id)
+    
+class Container:
+        def __init__(self, id: int, likes: str):
+            self._id = id
+            self._likes = likes
+
+        def get_id(self) -> int:
+            return self._id
+
+        def set_id(self, id):
+            self._id = id
+
+        def get_likes(self) -> str:
+            return self._likes
+
+        def set_likes(self, likes):
+            self._likes = likes
