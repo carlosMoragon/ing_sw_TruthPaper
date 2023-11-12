@@ -1,5 +1,13 @@
 {% extends 'index.html' %}
 
+{% block categories %}
+     {% for category in categories_list %}
+         <a href="{{ url_for('expand_category', category=category) }}" class="dropdown-item">{{ category }}</a>
+     {% endfor %}
+{% endblock %}
+
+
+
 
 {% block primera_noticia %}
 <div class="carousel-item active" style="height: 500px;">

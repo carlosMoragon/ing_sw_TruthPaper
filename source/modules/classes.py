@@ -72,6 +72,7 @@ class Comment:
     def get_containerid(self):
         return self._container_id
 
+
     def __str__(self) -> str:
         return f"id: {self._id}, likes: {self._likes}, views: {self._views}, content: {self._content}, img: {self._img}, userclient_id: {self._userclient_id}"
 

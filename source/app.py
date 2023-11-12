@@ -35,16 +35,40 @@ def index():
         'likes': [new.get_likes() for new in news],
         'views': [new.get_views() for new in news]
     }
-    categories_list = gr.get_categories(news)
-    return render_template('indexFunc.html', data=data, containers=containers, categories_list=categories_list)
+    categories = gr.get_categories(news) # una lista
+    categories_list = gr.get_general_categories(categories)
+    categories_list_unique = list(set(categories_list))
+    return render_template('indexFunc.html', data=data, containers=containers, categories_list=categories_list_unique)
 
 # Método para ver un contenedor específico
 @app.route('/ver_contenedor/<int:id>')
 def expand_container(id):
     container = containers.get(id)
     comments = manager.load_comments(id)
+    if comments is None:
+        return render_template('containerNews.html', container=container)
     return render_template('containerNews.html', container=container, comments=comments)
 
+# Función que muestra una categoría general compuesta por N específicas
+
+@app.route('/category/<string:category>')
+def expand_category(category):
+    # category --> categoria especifica
+    categories_list = gr.get_general_categories(category)
+    print(categories_list)
+    global news
+    global containers
+    filtered_news = f.filter_by_general_categories(categories_list, news)
+    data = {
+        'imgs': [new.get_image() for new in filtered_news],
+        'titles': [str(new.get_title()) for new in filtered_news],
+        'urls': [new.get_url() for new in filtered_news],
+        'dates': [new.get_date() for new in filtered_news],
+        'categories': [new.get_category() for new in filtered_news],
+        'likes': [new.get_likes() for new in filtered_news],
+        'views': [new.get_views() for new in filtered_news]
+    }
+    return render_template('indexFunc.html', data=data, containers=containers)
 @app.route('/')
 def start():
      global news, containers

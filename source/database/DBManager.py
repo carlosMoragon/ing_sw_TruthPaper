@@ -1,13 +1,12 @@
-from flask_sqlalchemy import SQLAlchemy
 from modules import users, classes as cl, web_scrapping as ws
 from typing import List, Dict
 from sqlalchemy import desc
 from flask import request, current_app, send_file, render_template
 from PIL import Image
 from io import BytesIO
+from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
-
 
 
 
@@ -180,7 +179,7 @@ def load_comments(id: int) -> List[cl.Comment]:
             likes=comment.likes,
             views=comment.views,
             content=comment.content,
-            img=comment.img,
+            img=comment.image,
             userclient_id=comment.userclient_id,
             container_id=comment.container_id
         )
@@ -189,29 +188,11 @@ def load_comments(id: int) -> List[cl.Comment]:
     print(comments_objects)
     return comments_objects
 
-
-''' Método para actualizar columna, BORRAR 
-def update_container_for_news(news_list):
-    existing_containers = set()
-    for news in news_list:
-        container_id = news.get_container()
-        existing_containers.add(container_id)
-
-    for container_id in existing_containers:
-        container = users.Container.query.filter_by(id=container_id).first()
-
-        if container is None:
-            new_container = users.Container(id=container_id, likes=0)
-            db.session.add(new_container)
-
-    db.session.commit()
-    '''
-'''
 def is_update(fecha_actual: str) -> bool:
     # print(db.session.query(users.New.date).order_by(desc(users.New.date)).first())
     
     return fecha_actual == db.session.query(users.New.date).order_by(desc(users.New.date)).first()
-'''
+
 
 
 def is_update(fecha_actual: str) -> bool:

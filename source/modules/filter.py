@@ -48,6 +48,13 @@ def filter_by_categories(category: str, news: List[cl.News]) -> List[cl.News]:
                 matches.append(new)
     return matches
 
+def filter_by_general_categories(categories: List[str], news: List[cl.News]) -> List[cl.News]:
+    matches = []
+    for new in news:
+        if new.get_category() in map(str.lower, categories):
+            matches.append(new)
+
+    return matches
 
 def filter_by_date(search: str, news: List[cl.News]) -> List[cl.News]:
     matches = []

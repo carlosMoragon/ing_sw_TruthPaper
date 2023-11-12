@@ -155,15 +155,19 @@
 
                                 <!-- html para comentarios -->
                                 {% block print_comments %}
-                                    <div class="container">
+                                    <div class="container" style="margin-top: 5%;">
                                         {% for comment in comments %}
                                             <div class="card mb-3">
                                                 <div class="card-header">
-                                                    Usuario: {{ comment.get_userclient_id() }}
+                                                    Usuario: {{ comment.get_username() }}
                                                 </div>
                                                 <div class="card-body">
-                                                    <h5 class="card-title">Likes: {{ comment.get_likes() }}</h5> <button type="button" class="btn btn-outline-secondary" style="color: white;"> <i class="fa fa-thumbs-up"></i> {{ comment.get_likes() }} </button>
-                                                    <h6 class="card-subtitle mb-2 text-muted">Vistas: {{ comment.get_views() }}</h6>
+                                                    <div class = "like-views-row" style="margin-bottom: 5%; display: flex;">
+                                                        <button type="button" class="btn btn-outline-primary" style="color: #0d0d0f; margin-bottom: 5%"> <i class="fa fa-thumbs-up"></i> {{ comment.get_likes() }} </button>
+                                                        <button type="button" class="btn btn-primary btn-link" style="color: #0d0d0f; height: 50%">
+                                                            <i class="fa fa-eye"></i> {{ comment.get_views() }}
+                                                        </button>
+                                                    </div>
                                                     <p class="card-text">{{ comment.get_content() }}</p>
                                                     {% if comment.get_img() %}
                                                         <img src="{{ comment.get_img() }}" class="img-fluid" alt="Imagen del comentario">
