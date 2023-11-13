@@ -165,11 +165,7 @@ def get_categories(news: List[cl.News]):
 
     return list(categories)
 
-# Función que dada una categoría si esta pertenece a una categoría general, devuelve esta
-def get_general_categories(categories: List[str]) -> List[str]:
-    result = []
-
-    category_mapping = {
+category_mapping = {
         'General': ['general', 'Tiempo'],
         'Economía': ['Economía', 'España'],
         'España': ['España', 'Andalucía', 'Elecciones', 'Espejo Público', 'Cataluña', 'Valencia', 'Madrid'],
@@ -181,6 +177,10 @@ def get_general_categories(categories: List[str]) -> List[str]:
         'Programas': ['Programas', 'Series'],
         'Sociedad': ['Loterías y sorteos', 'Cultura', 'Sociedad', 'Loterías']
     }
+# Función que dada una categoría si esta pertenece a una categoría general, devuelve esta
+def get_general_categories(categories: List[str]) -> List[str]:
+    global category_mapping
+    result = []
 
     for category in categories:
         found = False
@@ -196,19 +196,7 @@ def get_general_categories(categories: List[str]) -> List[str]:
 
 # Funcion que dada una categoria general, devuelve una lista con las categorias especificas
 def get_specific_categories(general_category: str) -> List[str]:
-    category_mapping = {
-        'General': ['general', 'Tiempo'],
-        'Economía': ['Economía', 'España'],
-        'España': ['España', 'Andalucía', 'Elecciones', 'Espejo Público', 'Cataluña', 'Valencia', 'Madrid'],
-        'Deportes': ['Ciclismo', 'Deportes Jugones', 'Motor Fórmula 1', 'Baloncesto', 'Tenis', 'Motor', 'Tecnología', 'Fútbol'],
-        'Salud': ['Salud', 'Bienestar'],
-        'Internacional': ['Guerra Ucrania', 'Mundo', 'Europa', 'Internacional'],
-        'Ciencia y Tecnología': ['Ciencia y tecnología', 'Ciencia'],
-        'Viral': ['Viral', '¿Cómo, qué, cuándo?', 'Virales'],
-        'Programas': ['Programas', 'Series'],
-        'Sociedad': ['Loterías y sorteos', 'Cultura', 'Sociedad', 'Loterías']
-    }
-
+    global category_mapping
     specific_categories = category_mapping.get(general_category, [])
 
     return specific_categories
@@ -216,9 +204,6 @@ def get_specific_categories(general_category: str) -> List[str]:
 # Ejemplo de uso
 general_category = 'Deportes'
 specific_categories_list = get_specific_categories(general_category)
-
-
-
 
 
 

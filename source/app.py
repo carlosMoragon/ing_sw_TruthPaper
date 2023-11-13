@@ -53,7 +53,7 @@ def expand_container(id):
 
 @app.route('/category/<string:category>')
 def expand_category(category):
-    # category --> categoria especifica
+    # category --> categoria general
     categories_list = gr.get_general_categories(category)
     print(categories_list)
     global news
@@ -68,7 +68,7 @@ def expand_category(category):
         'likes': [new.get_likes() for new in filtered_news],
         'views': [new.get_views() for new in filtered_news]
     }
-    return render_template('indexFunc.html', data=data, containers=containers)
+    return render_template('categoriesFunc.html', data=data, containers=containers)
 @app.route('/')
 def start():
      global news, containers
