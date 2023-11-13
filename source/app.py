@@ -71,7 +71,8 @@ def _add_news_background():
 # CAMBIAR LA RUTA
 @app.route('/login_users', methods=['POST'])
 def login_users(): 
-    if manager.login(request.form['username'], request.form['password']):
+    respuesta_login = manager.login(request.form['username'], request.form['password'])
+    if (type(respuesta_login) == bool and respuesta_login == True):
         # user = users.User.query.filter_by(username=request.form['username']).first()
         # client_id = user.id
         # image = manager.load_image(client_id)
@@ -83,6 +84,8 @@ def login_users():
         # render_template('userAdmin/pdfreader.html', certificate_base64=certificate_base64)
         
         return index()
+    elif (type(respuesta_login) != bool):
+        return 'Yes bae'    
     else:
         return render_template('fail_login.html')
 
