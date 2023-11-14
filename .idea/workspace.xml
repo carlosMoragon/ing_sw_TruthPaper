@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c0860c78-4c1e-47fd-805e-c74259889eca" name="Changes" comment="">
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/antena3_2023-10-03.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/antena3_2023-10-04.html" beforeDir="false" />
@@ -48,6 +49,15 @@
       <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/nytimes_2023-10-15.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/source/database/DBManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/database/DBManager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/modules/web_scrapping.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/modules/web_scrapping.py" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/database/DBManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/database/DBManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/source/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/source/templates/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/templates/userAdmin/pdfreader.html" beforeDir="false" afterPath="$PROJECT_DIR$/source/templates/userAdmin/pdfreader.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/templates/userAdmin/verifyUsers.html" beforeDir="false" afterPath="$PROJECT_DIR$/source/templates/userAdmin/verifyUsers.html" afterDir="false" />
+>>>>>>> capitanao
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
