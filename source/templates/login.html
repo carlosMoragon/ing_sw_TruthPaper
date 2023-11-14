@@ -13,7 +13,7 @@
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">  
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
@@ -24,33 +24,30 @@
     <!-- Bootstrap Stylesheet -->
     <link href="../static/css/style.css" rel="stylesheet">
 
-    <!-- Agregar Sweet Alert CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.4/dist/sweetalert2.min.css">
-
-    <!-- Agregar Sweet Alert JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.4/dist/sweetalert2.min.js"></script>
-
-
     <style>
-       .container-lg {
+        .container-lg {
             position: absolute;
             margin-top: 5%;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 70%;
-            max-width: 400px; /* Adjust the maximum width according to your preferences  */
-            text-align: left; /* Centers the content inside the container */
+            max-width: 400px;
+            /* Adjust the maximum width according to your preferences  */
+            text-align: left;
+            /* Centers the content inside the container */
         }
 
         form label {
             display: block;
             text-align: left;
-            margin-bottom: 5px; /* Space between labels and input fields */
+            margin-bottom: 5px;
+            /* Space between labels and input fields */
         }
 
         form input[type="submit"] {
-            width: auto; /* Set the width according to the content */
+            width: auto;
+            /* Set the width according to the content */
             margin-bottom: 10px;
         }
 
@@ -75,7 +72,7 @@
                         <li class="nav-item border-right border-secondary">
                             <a class="nav-link text-body small" href="#"><span id="currentDate"></span></a>
                         </li>
-                        
+
                         <li class="nav-item border-right border-secondary">
                             <a class="nav-link text-body small" href="#">Contacto</a> <!-- LINK!!!-->
                         </li>
@@ -85,52 +82,39 @@
                     </ul>
                 </nav>
             </div>
-            <div class="col-lg-3 text-right d-none d-md-block">
-                <!-- We can put something in the upper right part of the black bar at the top of the screen -->>
+            <div class=" col-lg-3 text-right d-none d-md-block">
+                                <!-- We can put something in the upper right part of the black bar at the top of the screen -->>
             </div>
-        </div>
-
-        <div class="row align-items-center bg-white py-3 px-lg-5">
-            <div class="col-lg-4">
-                <img src="../static/img/logos/high_res/logo_color_tbg_hd.png" alt="" class="img-fluid" width="200" href="register.html">
-            </div>
-            
         </div>
     </div>
     <!-- Topbar End -->
 
     <!-- Login -->
-    <div class="container-lg">
-        <br>
-        <h2>Iniciar Sesión</h2>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <script>
-                        Swal.fire({
-                            icon: '{{ category }}',
-                            text: '{{ message }}',
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                    </script>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+    <div class="row align-items-center h-100">
+        <div class="col h-100">
+            <div class="bg-image" style="background-image: url('../static/img/no_image.jpg'); height: 100vh;"></div>
+        </div>
+        <div class="col">
+            <br>
+            <h2>Iniciar Sesión</h2>
+            <form action="/login_users" method="post">
+                <label for="username">Usuario o email:</label>
+                <input type="text" id="username" name="username" required><br>
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" name="password" required><br>
+                <label for="terms">Acepta los <a href="{{ url_for('termsConditions') }}"> Términos y condiciones:
+                    </a></label>
+                <input type="checkbox" name="terms" value="terms" style=" float: right; margin-left: 30px;"
+                    required><br>
+                <input type="submit" value="Iniciar Sesión">
+            </form>
+            <p>¿Nuevo aquí? <a href="register.html">Regístrate</a></p>
+            <p><a href="forgotten_passwd.html">¿Olvidaste tu contraseña?</a></p>
 
-        <form action="/login_users" method="post"> 
-            <label for="username">Usuario o email:</label>
-            <input type="text" id="username" name="username" required><br>
-            <label for="password">Contraseña:</label>
-            <input type="password" id="password" name="password" required><br>
-            <input type="submit" value="Iniciar Sesión"> 
-        </form>
-        <p>¿Nuevo aquí? <a href="register.html">Regístrate</a></p>
-        <p><a href="forgotten_passwd.html">¿Olvidaste tu contraseña?</a></p>
-
-        <!-- BOTÓN PARA QUE ME LLEVE AL ADMIN Y PODER TRABAJAR >>> BORRAR EN EL FUTURO -->
-        <a href="{{ url_for('index_admin') }}">Usuario Administrador</a>
+            <!-- BOTÓN PARA QUE ME LLEVE AL ADMIN Y PODER TRABAJAR >>> BORRAR EN EL FUTURO -->
+            <a href="{{ url_for('index_admin') }}">Usuario Administrador</a>
+        </div>
     </div>
 
-    <script src="../static/js/date.js"></script>    
+    <script src="../static/js/date.js"></script>
 </body>

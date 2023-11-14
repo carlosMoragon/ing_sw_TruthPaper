@@ -45,9 +45,47 @@ def index():
 def expand_container(id):
     container = containers.get(id)
     comments = manager.load_comments(id)
+    data = {
+        'content': [comment.get_content() for comment in comments],
+        'username': [manager.get_username(comment.get_userclient_id()) for comment in comments],
+        'id': [comment.get_id() for comment in comments],
+        'likes': [comment.get_likes() for comment in comments],
+        'views': [comment.get_views() for comment in comments],
+        'img': [comment.get_img() for comment in comments],
+    }
     if comments is None:
         return render_template('containerNews.html', container=container)
-    return render_template('containerNews.html', container=container, comments=comments)
+    return render_template('containerNews.html', container=container, data=data)
+''' comments
+data = {
+        'content': [comment.get_content() for comment in comments],
+        'username': [manager.get_username(comment.get_userclient_id) for comment in comment],
+        'id': [comment.get_id() for comment in comments],
+        'likes': [comment.get_likes() for comment in comments],
+        'views': [comment.get_views() for comment in comments],
+        'img': [comment.get_img() for comment in comments],
+        'userclient_id': [comment.get_userclient_id() for comment in comments],
+        'container_id': [comment.get_container_id() for comment in comments]
+    }
+    
+    En el HTML pondremos
+    Nombre usuario: {{data.username}}
+    Contenido: {{data.content}}
+    Likes: {{data.likes}}
+    Views: {{data.views}}
+    
+'''
+
+# Método que inserta un comentario en un contenedor
+@app.route('/insert_comment', methods=['POST'])
+def insert_comment(id_container):
+    comment_content = request.form.get('comment_content')
+    manager.insert_comment(user_id=manager.user_id, container_id=id_container, content=comment_content)
+    if manager.user_id is not None:
+        # Insertar el comentario en la base de datos
+        insert_comment(manager.user_id, id, comment_content)
+    return redirect(url_for('expand_container', id=id_container))
+
 
 # Función que muestra una categoría general compuesta por N específicas
 
@@ -89,7 +127,7 @@ def start():
     #  for i in lista:
     #      print(i)
 
-     return render_template('login.html')
+     return render_template('loginAntiguo.html')
 
 
 def _add_news_background():
@@ -126,7 +164,7 @@ def register_funct():
 
 @app.route('/login_back')
 def go_to_login():
-    return render_template('login.html')
+    return render_template('loginAntiguo.html')
 
 @app.route('/login_back')
 def go_to_profile():
