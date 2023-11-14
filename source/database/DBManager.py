@@ -8,8 +8,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-
-
+# Hay que implementar como coger el id del usuario que se acaba de registrar
+user_id = 11
 
 def login(username, password) -> bool:
     user_db = users.User.query.filter_by(username=username).first()
@@ -18,6 +18,7 @@ def login(username, password) -> bool:
     if user_db == None:
         user_db = email_db
     return user_db.password == password
+
 
 # CONSULTA A LA BBDD PARA QUE TE COJA LAS NOTICIAS -> SE VA A LLAMAR A ESTA FUNCION DESDE APP.PY ANTES DE INICIAR
 def get_news_db(app, news, container):
@@ -269,9 +270,22 @@ def add_container(app, news: List[cl.News]):
                 db.session.add(new_container)
         db.session.commit()
 
+
 def get_last_container_id():
     return db.session.query(users.Container).order_by(desc(users.Container.id)).first()
 
+def insert_comment(user_id, container_id, content):
+    # Crea una nueva instancia de Comment
+    new_comment = users.Comment(user_id=user_id, container_id=container_id, content=content)
+
+    # Agrega la nueva instancia a la sesión y guarda en la base de datos
+    db.session.add(new_comment)
+    db.session.commit()
+
+
+def get_username(user_id):
+    user = users.User.query.filter_by(id=user_id).first()
+    return user.username
 
 # def render_pdf(user_id):
 #     pdf_bytes = load_pdf_certificate(user_id)
