@@ -127,7 +127,7 @@ def start():
     #  for i in lista:
     #      print(i)
 
-     return render_template('loginAntiguo.html')
+     return render_template('login.html')
 
 
 def _add_news_background():
@@ -164,7 +164,7 @@ def register_funct():
 
 @app.route('/login_back')
 def go_to_login():
-    return render_template('loginAntiguo.html')
+    return render_template('login.html')
 
 @app.route('/login_back')
 def go_to_profile():
