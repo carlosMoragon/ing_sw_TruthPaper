@@ -7,9 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 from typing import List, Dict
 import threading
 from datetime import datetime
-#import fitz
 from io import BytesIO
-#from pdf2image import convert_from_bytes
 
 db = manager.db
 app = Flask(__name__)
@@ -141,23 +139,7 @@ def _add_news_background():
     manager.save_news(app, new_news)
 
 
-# CAMBIAR LA RUTA
-'''
-@app.route('/login_users', methods=['POST'])
 
-def login_users():
-    try:
-        if manager.login(request.form['username'], request.form['password']):
-            return index()
-        else:
-            flash("Datos introducidos incorrectos", "error")
-            return redirect(url_for('start'))
-    except Exception as e:
-        print(f"Ocurrió un error durante el inicio de sesión: {str(e)}")
-        flash("Ocurrió un error durante el inicio de sesión. Por favor, inténtalo de nuevo más tarde.", "error")
-        return redirect(url_for('start'))
-
-'''
 @app.route('/login_users', methods=['POST'])
 def login_users(): 
     respuesta_login = manager.login(request.form['username'], request.form['password'])
@@ -174,7 +156,7 @@ def login_users():
         
         return index()
     elif (type(respuesta_login) != bool):
-        return 'Yes bae'    
+        return render_template('userAdmin/profileAdmin.html')    
     else:
         return render_template('fail_login.html')
 
@@ -228,8 +210,6 @@ def save_keyword():
 #     }   
 #     return render_template('pruebaArticulos.html', data=data)
 
-#Aun en PROCESO se MEJORA y DEPURACIÓN
-@app.route('/save_commonuser', methods=['POST'])
 def handle_user_registration(user_type):
     result = manager.save_user()
     if result == -1:

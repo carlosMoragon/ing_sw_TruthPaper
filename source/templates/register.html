@@ -205,12 +205,7 @@
                         <input type="file" id="photo" name="photo" accept="image/*"><br>
 
                         <label for="certificate"> Suba su credencial de periodista: </label>  
-<<<<<<< HEAD
->>>>>>> develop
-                        <input type="file" id="certificate" name="certificate"><br>
-=======
                         <input type="file" id="certificate" name="certificate" required><br>
->>>>>>> 03f10542fae2b500ecc34c6e6fd990fb3c19608d
 
                         <label for="terms">Acepta los <a href="{{ url_for('termsConditions') }}"> Términos y condiciones: </a></label>
                         <input type="checkbox" name="terms" value="terms" style="float: right; margin-left: 30px;" required><br>
@@ -226,11 +221,7 @@
                 <p> El usuario empresa permite darse de alta como compañia y publicar noticias </p>
                 <p> Este usuario debe ser certificado por TruthPaper </p>
                     <div id="company" class="register_user">
-<<<<<<< HEAD
-                       <form action="/save_companyUser" method="post">
-=======
                         <form action="/save_companyUser" method="post" enctype="multipart/form-data">
->>>>>>> develop
                             <label for="username">Nombre de usuario:</label>
                             <input type="text" id="username" name="username" value="{{ request.form.get('username', '') }}" required><br>
 
@@ -242,14 +233,9 @@
 
                             <label for="password">Contraseña:</label>
                             <input type="password" id="password" name="password" required><br>
-<<<<<<< HEAD
-
-=======
                             
                             <label for="photo">Foto:</label>
                             <input type="file" id="photo" name="photo" accept="image/*"><br>    
-                            
->>>>>>> develop
                             <label for="bankaccount">Número de cuenta:</label>
                             <input type="text" id="bankaccount" name="bankaccount" value="{{ request.form.get('bankaccount', '') }}" required><br>
 
