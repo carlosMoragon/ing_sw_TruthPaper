@@ -113,22 +113,12 @@ def expand_category(category):
 def start():
      global news, containers
      if not news:
-
         # ESTA ES LA DE LAS BBDD QUE SON LAS QUE MAS RAPIDO TIENEN QUE IR
         init_news.start()
-
         # ESTAS SON LAS QUE SON NUEVAS QUE SE VAN A IR AÑADIENDO A LO LARGO DE LA EJECUCION
         if not manager.is_update(datetime.now().strftime(f'%Y-%m-%d')):
             print("SE ACTUALIZAN LAS NOTICIAS")
             threading.Thread(target=_add_news_background).start()
-
-
-    #SON PRUEBAS, SIRVEN PARA VER ESTOS DATOS POR CONSOLA
-    # lista = manager.loadUncheckedUsers()
-    #  lista = manager.load_new()
-    #  for i in lista:
-    #      print(i)
-
      return render_template('login.html')
 
 
@@ -159,24 +149,21 @@ def login_users():
 
 '''
 @app.route('/login_users', methods=['POST'])
-def login_users(): 
+def login_users():
     respuesta_login = manager.login(request.form['username'], request.form['password'])
-    if (type(respuesta_login) == bool and respuesta_login == True):
-        # user = users.User.query.filter_by(username=request.form['username']).first()
-        # client_id = user.id
-        # image = manager.load_image(client_id)
-        # return image
-        
-        # user = users.User.query.filter_by(username=request.form['username']).first()
-        # journalist_id = user.id       
-        # certificate_base64 = manager.load_pdf_certificate(journalist_id)
-        # render_template('userAdmin/pdfreader.html', certificate_base64=certificate_base64)
-        
-        return index()
-    elif (type(respuesta_login) != bool):
-        return 'Yes bae'    
-    else:
-        return render_template('fail_login.html')
+    try:
+        if (type(respuesta_login) == bool and respuesta_login == True):
+            return index()
+        elif (type(respuesta_login) != bool):
+            return 'Yes bae'
+        else:
+            flash("Datos introducidos incorrectos", "error")
+            print("datos introducidos incorrectos")
+            return redirect(url_for('start'))
+    except Exception as e:
+        print(f"Ocurrió un error durante el inicio de sesión: {str(e)}")
+        flash("Ocurrió un error durante el inicio de sesión. Por favor, inténtalo de nuevo más tarde.", "error")
+        return redirect(url_for('start'))
 
 @app.route('/register.html')
 def register_funct():
