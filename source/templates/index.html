@@ -24,15 +24,6 @@
     <!-- Bootstrap Stylesheet -->
     <link href="../static/css/style.css" rel="stylesheet">
 
-    <!--Other Bootstrap Libraries for the dropdown menu-->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <!-- Date and Main Scripts-->
-    <script src="../static/js/date.js"></script>
-    <script src="../static/js/main.js"></script>
-
 </head>
 
 <body>
@@ -45,31 +36,26 @@
                         <li class="nav-item border-right border-secondary">
                             <a class="nav-link text-body small"> <span id="currentDate"></span></a>
                         </li>
-
-                        <li class="nav-item border-right border-secondary">
-                            <a class="nav-link text-body small" href="#">Contacto</a> <!-- LINK!!!-->
-                        </li>
                         <li class="nav-item">
-                            <a class="nav-link text-body small" href="perfil.html">Login</a>
+                            <a class="nav-link text-body small" href="{{ url_for('go_to_login') }}">Login</a>
                         </li>
                     </ul>
                 </nav>
             </div>
             <div class="col-lg-3 text-right d-none d-md-block">
-                <!-- We can put something in the upper right part of the black bar at the top of the screen -->>
+                <!-- We can put something in the upper right part of the black bar at the top of the screen -->
             </div>
         </div>
 
         <div class="row align-items-center bg-white py-3 px-lg-5">
             <div class="col-lg-4">
-                <img src="../static/img/logos/high_res/logo_color_tbg_hd.png" alt="" class="img-fluid" width="200" href="index.html">
+                <img src="../static/img/truthpaper_name.png" alt="" class="img-fluid" width="200" href="index.html">
             </div>
 
-            <!-- Example of an advertisement
         <div class="col-lg-8 text-center text-lg-right">
-            <a href="https://htmlcodex.com"><img class="img-fluid" src="img/ads-728x90.png" alt=""></a>
+            <a href="https://htmlcodex.com"><img class="img-fluid" src="../static/img/ads-728x90.png" alt=""></a>
         </div>
-        -->
+
 
         </div>
     </div>
@@ -83,18 +69,24 @@
                         class="text-white font-weight-normal">paper</span></h1>
             </a>
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"> </span>
             </button>
+            <a href="{{ url_for('index')}}" class="nav-item nav-link ">  <img src="../static/img/logos/favicon/favicon_color.png" style="width: 40px; object-fit: cover;"> </a>
             <div class="collapse navbar-collapse justify-content-between px-0 px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav mr-auto py-0">
-                    <a href="index.html" class="nav-item nav-link active">Inicio</a>
-                    <a href="category.html" class="nav-item nav-link">Noticias Guardadas</a>
+                    <a href="{{ url_for('index')}}" class="nav-item nav-link ">Inicio</a>
+                    <a href="{{url_for('index')}}" class="nav-item nav-link" > Noticias Guardadas</a>
                     <!--Add more items on the menu-->
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Categorías</a>
-                        {% block categories %} {% endblock %}
+                        <div class="dropdown-menu rounded-0 m-0">
+                            {% block categories %}
+
+                            {% endblock %}
+                        </div>
                     </div>
                 </div>
+
 
 
                 <!-- search by keywords -->
@@ -111,12 +103,10 @@
 
                 <!-- Icon to enter in login-->
                 <div class="login-icon">
-                    <a href="login.html" class="nav-item nav-link">
+                    <a href= "{{ url_for('go_to_profile') }}" class="nav-item nav-link">
                         <i class="fas fa-user"></i>
                     </a>
-
                 </div>
-            </div>
         </nav>
     </div>
     <!-- Navbar End -->
@@ -170,7 +160,7 @@
                             <h4 class="m-0 text-uppercase font-weight-bold">Noticias recomendadas</h4>
                         </div>
                         <div class="bg-white border border-top-0 p-3">
-                            {% block recommended_news %} {% endblock%}   
+                            {% block noticias %} {% endblock%}
                         </div>
                     </div>
                 </div>
@@ -179,4 +169,16 @@
         </div>
     </div>
     <!-- News With Sidebar End -->
+
+    <!--Other Bootstrap Libraries for the dropdown menu-->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+
+
+        <!-- Date and Main Scripts-->
+        <script src="../static/js/date.js"></script>
+        <script src="../static/js/main.js"></script>
 </body>

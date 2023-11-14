@@ -81,9 +81,9 @@
                 <div class="navbar-nav mr-auto py-0">
                     <a href="{{ url_for('index_admin') }}" class="nav-item nav-link">Inicio</a>
                     <a href="{{ url_for('verify_users') }}" class="nav-item nav-link">Verificación</a>
-                    <a href="{{ url_for('charts') }}" class="nav-item nav-link">Gráficos</a>
+                    <a href="{{ url_for('charts') }}" class="nav-item nav-link active">Gráficos</a>
                     <a href="{{ url_for('comments') }}" class="nav-item nav-link">Comentarios</a>
-                    <a href="{{ url_for('edit_users') }}" class="nav-item nav-link active">Editar Usuarios</a>
+                    <a href="{{ url_for('edit_users') }}" class="nav-item nav-link">Editar Usuarios</a>
                 </div>
 
                 <!-- Icon to enter in login-->
@@ -108,21 +108,44 @@
                         <div class="section-title mb-0">
                             <h4 class="m-0 text-uppercase font-weight-bold">Gráficos </h4>
                         </div>
+
                         <div class="bg-white border border-top-0 p-3">
                             <h5> Noticias por fuente: </h5>
                             <img src="../../static/img/graphs/news_per_source.png" alt="Gráfico de noticias por fuente">
+                            <form action="/generate_chart_source" method="post">
+                                <input type="submit" value="Generar Gráfico">
+                            </form>
+
                         </div>
                         <div class="bg-white border border-top-0 p-3">
                             <h5> Gráfico de visualizaciones de categorías: </h5>
                             <img src="../../static/img/graphs/news_per_source.png" alt="Gráfico de visualizaciones de categorías">
+                            <form action="/generate_chart_category" method="post">
+                                <input type="submit" value="Generar Gráfico 2">
+                            </form>
                         </div>
+
+                         <div class="bg-white border border-top-0 p-3">
+                             <h5> Nube de palabras: </h5>
+                             <img src="../../static/img/graphs/news_per_source.png" alt="Nube de palabras">
+                             <form action="/generate_wordcloud" method="post">
+                                <label for="categoria">Selecciona una categoría:</label>
+                                <select id="categoria" name="categoria">
+                                    {% for categoria in categorias %}
+                                        <option value="{{ categoria }}">{{ categoria }}</option> <br>
+                                    {% endfor %}
+                                </select>
+                                <input type="submit" value="Generar Gráfico">
+                            </form>
+                        </div>
+
                         <div class="bg-white border border-top-0 p-3">
                             <h5> Visualizaciones: </h5>
                             <img src="../../static/img/graphs/news_per_source.png" alt="Visualizaciones">
-                        </div>
-                        <div class="bg-white border border-top-0 p-3">
-                            <h5> Nube de palabras: </h5>
-                            <img src="../../static/img/graphs/news_per_source.png" alt="Nube de palabras">
+                            {% for i in categorias %}
+                                <p>{{ i }}</p> <br>
+                            {% endfor %}
+
                         </div>
                     </div>
                 </div>

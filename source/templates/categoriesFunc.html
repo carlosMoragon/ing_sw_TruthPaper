@@ -1,4 +1,4 @@
-{% extends 'index.html' %}
+{% extends 'categories.html' %}
 
 {% block categories %}
      {% for category in categories_list %}
@@ -13,7 +13,7 @@
 <div class="carousel-item active" style="height: 500px;">
     <a href="{{ data.urls[0] }}">
         <img class="img-fluid w-100" src="{{ data.imgs[0] }}" style="object-fit: cover;">
-    </a> 
+    </a>
     <div class="overlay">
         <div class="mb-2">
             <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
@@ -30,7 +30,7 @@
     <a href="{{ data.urls[1] }}">
         <img class="img-fluid w-100" src="{{ data.imgs[1] }}" style="object-fit: cover;">
     </a>
-    
+
     <div class="overlay">
         <div class="mb-2">
             <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
@@ -148,4 +148,3 @@
     {% endfor %}
 </div>
 {% endblock %}
-

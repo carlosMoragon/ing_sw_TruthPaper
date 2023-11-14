@@ -22,13 +22,14 @@ def validate_email(email: str) -> bool:
 # Estructura de un comentario de una publicación
 class Comment:
 
-    def __init__(self, id: int, likes: int, views: int, content: str, img: str, userclient_id: int):
+    def __init__(self, id: int, likes: int, views: int, content: str, img: str, userclient_id: int, container_id: int):
         self._id = id
         self._likes = likes
         self._views = views
         self._content = content
         self._img = img
         self._userclient_id = userclient_id
+        self._container_id = container_id
 
     def get_id(self) -> int:
         return self._id
@@ -66,8 +67,28 @@ class Comment:
     def set_userclient_id(self, userclient_id):
         self._userclient_id = userclient_id
 
+    def set_containerid(self, container_id):
+        self._container_id = container_id
+    def get_containerid(self):
+        return self._container_id
+
+
     def __str__(self) -> str:
         return f"id: {self._id}, likes: {self._likes}, views: {self._views}, content: {self._content}, img: {self._img}, userclient_id: {self._userclient_id}"
+
+class container:
+    def __init__(self, id: int, likes: int):
+        self._id = id
+        self._likes = likes
+    def set_id(self, id):
+        self._id = id
+    def get_id(self):
+        return self._id
+    def set_likes(self, likes):
+        self._likes = likes
+
+    def get_likes(self):
+        return self._likes
 
 
 # Users declarations
@@ -317,19 +338,34 @@ class Note:
 
 # Estructura de una Noticia
 class News:
-    def __init__(self, id: int, owner: str, title: str, image: str, url: str, content: str, container: int, journalist: int, date: str, category: str):
+    def __init__(self, id: int, owner: str, title: str, image: str, url: str, content: str,  journalist: int, date: str, category: str, likes: int, views: int, container_id: int):
         self._id = id
         self._owner = owner
         self._title = title
         self._image = image
         self._url = url
         self._content = content
-        self._container = container
         self._journalist = journalist
         self._date = date
         self._category = category
+        self._likes = likes
+        self._views = views
+        self._container_id = container_id
 
     # Getters y Setters
+
+    def get_likes(self) -> int:
+        return self._likes
+
+    def set_likes(self, likes):
+        self._likes = likes
+
+    def get_views(self) -> int:
+        return self._views
+
+    def set_views(self, views):
+        self._views = views
+
     def get_category(self) -> str:
         return self._category
 
@@ -372,11 +408,11 @@ class News:
     def set_content(self, content):
         self._content = content
 
-    def get_container(self) -> int:
-        return self._container
+    def get_container_id(self) -> int:
+        return self._container_id
 
-    def set_container(self, container):
-        self._container = container
+    def set_container_id(self, container_id):
+        self._container_id = container_id
 
     def get_journalist(self) -> int:
         return self._journalist
@@ -394,7 +430,24 @@ class News:
         return f"id: {self._id}, owner: {self._owner}, title: {self._title}, image: {self._image}, url: {self._url}, content: {self._content}, container: {self._container}, journalist: {self._journalist}, date: {self._date}"
 
     def __eq__(self, other):
-        return self._id == other.get_id() and self._owner == other.get_owner() and self._title == other.get_title() and self._image == other.get_image() and self._url == other.get_url() and self._content == other.get_content() and self._container == other.get_container() and self._journalist == other.get_journalist() and self._date == other.get_date()
+        return self._id == other.get_id() and self._owner == other.get_owner() and self._title == other.get_title() and self._image == other.get_image() and self._url == other.get_url() and self._content == other.get_content() and self._container == other.get_container_id() and self._journalist == other.get_journalist() and self._date == other.get_date()
 
     def __hash__(self):
         return hash(self._id)
+    
+class Container:
+        def __init__(self, id: int, likes: str):
+            self._id = id
+            self._likes = likes
+
+        def get_id(self) -> int:
+            return self._id
+
+        def set_id(self, id):
+            self._id = id
+
+        def get_likes(self) -> str:
+            return self._likes
+
+        def set_likes(self, likes):
+            self._likes = likes

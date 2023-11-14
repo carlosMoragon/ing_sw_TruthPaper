@@ -52,7 +52,7 @@
                 </nav>
             </div>
             <div class="col-lg-3 text-right d-none d-md-block">
-                <!-- We can put something in the upper right part of the black bar at the top of the screen -->>
+                <!-- We can put something in the upper right part of the black bar at the top of the screen -->
             </div>
         </div>
 
@@ -68,7 +68,7 @@
     <!-- Navbar Start -->
     <div class="container-fluid p-0">
         <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-2 py-lg-0 px-lg-5">
-            <a href="indexAdmin.html" class="navbar-brand d-block d-lg-none">
+            <a href="{{ 'index_admin' }}" class="navbar-brand d-block d-lg-none">
                 <h1 class="m-0 display-4 text-uppercase text-primary">Truth<span
                         class="text-white font-weight-normal">paper</span></h1>
             </a>
@@ -111,14 +111,11 @@
                                 <script>
                                     document.addEventListener('DOMContentLoaded', function() {
                                         var urlParams = new URLSearchParams(window.location.search);
-                                        var pdfUrl = urlParams.get('pdf_url');
-                                        //var pdfUrl = "pdfPrueba.pdf";
-                                        
-                                        if (pdfUrl) {
+                                        var certificate_base64 = "{{ certificate_base64 }}";  
+                                        if (certificate_base64) {
                                             var pdfContainer = document.getElementById('pdfContainer');
                                             var embedTag = document.createElement('embed');
-                                            embedTag.src = "data:application/pdf;base64," + pdfContent; // Usa data URI para mostrar el pdf
-                                            //embedTag.src = pdfUrl;
+                                            embedTag.src = "data:application/pdf;base64," + certificate_base64;
                                             embedTag.type = 'application/pdf';
                                             embedTag.width = '100%';
                                             embedTag.height = '600px';
