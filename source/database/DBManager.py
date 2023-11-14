@@ -212,13 +212,6 @@ def load_comments(id: int) -> List[cl.Comment]:
     print("COMENTARIOS CARGADOS")
     print(comments_objects)
     return comments_objects
-'''
-def is_update(fecha_actual: str) -> bool:
-    # print(db.session.query( New.date).order_by(desc( New.date)).first())
-    
-    return fecha_actual == db.session.query( New.date).order_by(desc( New.date)).first()
-
-'''
 
 def is_update(fecha_actual: str) -> bool:
 
@@ -227,12 +220,6 @@ def is_update(fecha_actual: str) -> bool:
     print(f"{fecha_db == fecha_actual}")
     return fecha_actual == str(fecha_db)
 
-'''
-def last_id() -> int:
-    return db.session.query( New).order_by(desc( New.id)).first()
-'''
-
-
 def last_id() -> int:
     latest_new = db.session.query( New).order_by(desc( New.id)).first()
     if latest_new:
@@ -240,29 +227,19 @@ def last_id() -> int:
     else:
         return 0
 
-
-#Methods for images 
-def transform_images_to_jpeg(photo_bytes):
+def transform_images_to_base64(photo_bytes):
     pil_image = Image.open(BytesIO(photo_bytes))
     if pil_image.mode == 'RGBA':
         pil_image = pil_image.convert('RGB')
-    jpeg_image_io = BytesIO()
-    pil_image.save(jpeg_image_io, 'JPEG')
-    jpeg_image_io.seek(0)
-    return jpeg_image_io
-
-def serve_pil_image(pil_img):
-    img_io = BytesIO()
-    pil_img.save(img_io, 'JPEG')
-    img_io.seek(0)
-    return send_file(img_io, mimetype='image/jpeg')
+    base64_image = base64.b64encode(photo_bytes).decode('utf-8')
+    return base64_image
 
 def load_image(user_id):
     user =  Userclient.query.filter_by(client_id=user_id).first()
     if user and user.photo:
         image_bytes = user.photo
-        jpeg_image_io = transform_images_to_jpeg(image_bytes)
-        return serve_pil_image(Image.open(jpeg_image_io))
+        base64_image = transform_images_to_base64(image_bytes)
+        return base64_image
     else:
         return None
 
@@ -277,20 +254,7 @@ def load_container():
         )
         container_objects.append(container_obj)
     return container_objects
-'''
-def add_container(app, news: List[cl.News]):
-    with app.app_context():
-        for news_item in news:
-            container_id = set(news_item.get_container_id())  # Call the method to get the integer value
-            new_container =  Container(
-                id=container_id,
-                likes=0
-            )
-            db.session.add(new_container)
-        db.session.commit()
 
-<<<<<<< HEAD
-'''
 def add_container(app, news: List[cl.News]):
     ids = set()
     with app.app_context():
@@ -305,11 +269,6 @@ def add_container(app, news: List[cl.News]):
                 db.session.add(new_container)
         db.session.commit()
 
-'''
-def get_last_container_id(app) -> int:
-    with app.app_context():
-        return db.session.query(Container).order_by(desc(Container.id)).first()
-'''
 
 def get_last_container_id(app) -> int:
     with app.app_context():
@@ -332,54 +291,6 @@ def get_username(user_id):
     user =  User.query.filter_by(id=user_id).first()
     return user.username
 
-# def render_pdf(user_id):
-#     pdf_bytes = load_pdf_certificate(user_id)
-
-#     pdf_document = fitz.open(BytesIO(pdf_bytes))
-#     images_base64 = []
-
-#     #for page_num in range(pdf_document.page_count):
-#             # page = pdf_document[page_num]
-#     page = pdf_document[0]
-#     image = page.get_pixmap()
-#     image_data = image.get_image_data()
-#     image_base64 = base64.b64encode(image_data).decode('utf-8')
-#     images_base64.append(image_base64)
-
-#     return send_file(images_base64, mimetype='image/jpeg')
-#     #return images_base64
-    
-# def load_pdf_certificate(user_id):
-#     journalistuser =  Journalistuser.query.filter_by(journalistuser_id=user_id).first()
-#     # print(journalistuser)
-#     if journalistuser and journalistuser.certificate: 
-#         certificate = journalistuser.certificate 
-#         # documento = Image.open(BytesIO(certificate))
-#         # print(type(documento))
-#         return convert_pdf_to_images(certificate)
-#     else:
-#         return None
-    
-
-# def convert_pdf_to_images(pdf_data):
-#     try:
-#         # Usa io.BytesIO en lugar de fitz.BytesIO
-#         pdf_stream = io.BytesIO(pdf_data)
-#         pdf_document = fitz.open(pdf_stream)
-#         images = []
-        
-#         for page_number in range(pdf_document.page_count):
-#             page = pdf_document[page_number]
-#             # Convierte la página en imagen RGBA (formato compatible con PIL)
-#             image_data = page.get_pixmap()
-#             img = Image.frombytes("RGB", [image_data.width, image_data.height], image_data.samples)
-#             # Agrega la imagen a la lista de imágenes
-#             images.append(img)
-        
-#         return images
-#     except Exception as e:
-#         print(f"Error al procesar el PDF: {e}")
-#         return None
 
 #Methos for pdf's
 def load_pdf_certificate(user_id):

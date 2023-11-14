@@ -144,21 +144,23 @@ def _add_news_background():
 def login_users(): 
     respuesta_login = manager.login(request.form['username'], request.form['password'])
     if (type(respuesta_login) == bool and respuesta_login == True):
-        # user = users.User.query.filter_by(username=request.form['username']).first()
-        # client_id = user.id
-        # image = manager.load_image(client_id)
-        # return image
+        user = manager.User.query.filter_by(username=request.form['username']).first()
         
-        # user = users.User.query.filter_by(username=request.form['username']).first()
         # journalist_id = user.id       
         # certificate_base64 = manager.load_pdf_certificate(journalist_id)
         # render_template('userAdmin/pdfreader.html', certificate_base64=certificate_base64)
         
+        #return mostrar_perfil_usuarios(user.id, user.username)
         return index()
     elif (type(respuesta_login) != bool):
         return render_template('userAdmin/profileAdmin.html')    
     else:
         return render_template('fail_login.html')
+
+def mostrar_perfil_usuarios(user_id, user_name):
+    user_image = manager.load_image(user_id)
+    return render_template('perfil.html', user_id=user_id, user_name = user_name, user_image=user_image)
+
 
 @app.route('/register.html')
 def register_funct():
