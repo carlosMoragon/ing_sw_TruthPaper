@@ -3,9 +3,6 @@ from bs4 import BeautifulSoup
 from modules import classes as cl
 from typing import List, Dict
 from datetime import datetime
-import os
-import html
-#import glob
 import re
 from concurrent.futures import ThreadPoolExecutor
 from collections import defaultdict
@@ -13,7 +10,18 @@ import threading
 import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-nltk.download('punkt')
+
+
+def isInstaled():
+    try:
+        nltk.data.find('tokenizers/punkt')
+        return True
+    except LookupError:
+        return False
+
+if not isInstaled():
+    nltk.download('punkt')
+
 
 
 def _build_news(titles: List[str], urls: List[str], imgs: List[str], owner: str, date: str, category: str) -> List[cl.News]:
@@ -43,7 +51,7 @@ def add_new_container(news: List[cl.News]) -> List[cl.News]:
     threshold = 0.7
 
     # Encontrar noticias relacionadas y asignarles un contenedor
-    n_cont = 0
+    n_cont = manager.get_last_container_id() + 1
     for i in range(len(news)):
         for j in range(i + 1, len(news)):
             if cosine_similarities[i][j] >= threshold:

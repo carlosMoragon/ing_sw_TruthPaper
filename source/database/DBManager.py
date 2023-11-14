@@ -256,16 +256,21 @@ def add_container(app, news: List[cl.News]):
 
 '''
 def add_container(app, news: List[cl.News]):
+    ids = set()
     with app.app_context():
-        for idx in set([new.get_container_id for new in news]):
-            print(idx)
-            new_container = users.Container(
-                id=idx,
-                likes=0
-            )
-            db.session.add(new_container)
+        for new in news:
+            idx = new.get_container_id()
+            if idx not in ids:
+                ids.add(idx)
+                new_container = users.Container(
+                    id=idx,
+                    likes=0
+                )
+                db.session.add(new_container)
         db.session.commit()
 
+def get_last_container_id():
+    return db.session.query(users.Container).order_by(desc(users.Container.id)).first()
 
 
 # def render_pdf(user_id):

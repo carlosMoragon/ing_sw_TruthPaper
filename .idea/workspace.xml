@@ -6,7 +6,48 @@
   <component name="ChangeListManager">
     <list default="true" id="c0860c78-4c1e-47fd-805e-c74259889eca" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/antena3_2023-10-03.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/antena3_2023-10-04.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/antena3_2023-10-05.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/antena3_2023-10-07.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/antena3_2023-10-08.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/antena3_2023-10-09.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/antena3_2023-10-10.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/antena3_2023-10-11.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/antena3_2023-10-12.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/antena3_2023-10-13.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/antena3_2023-10-14.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/antena3_2023-10-15.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/lasexta_2023-10-03.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/lasexta_2023-10-04.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/lasexta_2023-10-05.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/lasexta_2023-10-07.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/lasexta_2023-10-08.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/lasexta_2023-10-09.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/lasexta_2023-10-10.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/lasexta_2023-10-11.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/lasexta_2023-10-12.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/lasexta_2023-10-13.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/lasexta_2023-10-14.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/lasexta_2023-10-15.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/marca_2023-10-07.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/marca_2023-10-08.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/marca_2023-10-09.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/marca_2023-10-10.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/marca_2023-10-11.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/marca_2023-10-12.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/marca_2023-10-13.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/marca_2023-10-15.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/nytimes_2023-10-07.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/nytimes_2023-10-08.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/nytimes_2023-10-09.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/nytimes_2023-10-10.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/nytimes_2023-10-11.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/nytimes_2023-10-12.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/nytimes_2023-10-13.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/almacenTemporalHTML/nytimes_2023-10-15.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/source/database/DBManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/database/DBManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/modules/web_scrapping.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/modules/web_scrapping.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -177,7 +218,7 @@
       <workItem from="1699185333568" duration="7586000" />
       <workItem from="1699342822549" duration="5231000" />
       <workItem from="1699477403482" duration="2312000" />
-      <workItem from="1699723919663" duration="1644000" />
+      <workItem from="1699723919663" duration="5972000" />
     </task>
     <servers />
   </component>
