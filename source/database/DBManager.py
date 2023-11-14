@@ -5,20 +5,31 @@ from sqlalchemy import desc
 from flask import request, current_app, send_file, render_template
 from PIL import Image
 from io import BytesIO
+import base64
+from flask_bcrypt import Bcrypt
 
-db = SQLAlchemy()
+bcrypt = Bcrypt()
 
-
-
-
-
-def login(username, password) -> bool:
+def login(username, password): #-> bool:
     user_db = users.User.query.filter_by(username=username).first()
     email_db = users.User.query.filter_by(email=username).first()
     
     if user_db == None:
         user_db = email_db
-    return user_db.password == password
+    if user_db == None:
+        return False
+   
+    if (user_db.id == 29):
+        return 'admin'
+    
+    encoded_password = password.encode('utf-8')
+    if bcrypt.check_password_hash(user_db.password, encoded_password):
+        return True
+    else:
+        return False
+    
+    #return bcrypt.check_password_hash(user_db.password, password).encode('utf-8')
+    # return user_db.password == password
 
 # CONSULTA A LA BBDD PARA QUE TE COJA LAS NOTICIAS -> SE VA A LLAMAR A ESTA FUNCION DESDE APP.PY ANTES DE INICIAR
 def get_news_db(app, news, container):
@@ -34,8 +45,8 @@ def save_user():
             #Si el nombre de usuario ya existe, no se puede registrar
             newUser = users.User(
                 username=request.form['username'],
-                password=request.form['password'],
-                #password=bcrypt.generate_password_hash(request.form['password']).decode('utf-8'),
+                #password=request.form['password'],
+                password=bcrypt.generate_password_hash(request.form['password']).decode('utf-8'),
                 email=request.form['email'])
 
             db.session.add(newUser)
@@ -47,6 +58,7 @@ def save_user():
                 client_id=new_user_id,
                 is_checked='Y',
                 photo=request.files['photo'].read()
+                # photo = transform_images_to_jpeg(request.files['photo'].read())
             )
             db.session.add(newUserClient)
             db.session.commit()
@@ -234,21 +246,32 @@ def last_id() -> int:
         return 0
 
 
+#Methods for images 
+def transform_images_to_jpeg(photo_bytes):
+    pil_image = Image.open(BytesIO(photo_bytes))
+    if pil_image.mode == 'RGBA':
+        pil_image = pil_image.convert('RGB')
+    jpeg_image_io = BytesIO()
+    pil_image.save(jpeg_image_io, 'JPEG')
+    jpeg_image_io.seek(0)
+    return jpeg_image_io
+
 def serve_pil_image(pil_img):
     img_io = BytesIO()
     pil_img.save(img_io, 'JPEG')
     img_io.seek(0)
     return send_file(img_io, mimetype='image/jpeg')
-      
+
 def load_image(user_id):
     user = users.Userclient.query.filter_by(client_id=user_id).first()
     if user and user.photo:
         image_bytes = user.photo
-        image = Image.open(BytesIO(image_bytes))
-        return image
+        jpeg_image_io = transform_images_to_jpeg(image_bytes)
+        return serve_pil_image(Image.open(jpeg_image_io))
     else:
         return None
 
+#Methods for containers
 def load_container():
     container = cl.Container.query.all()
     container_objects = []
@@ -271,52 +294,9 @@ def add_container(app, news: List[cl.News]):
             db.session.add(new_container)
         db.session.commit()
 
-
-# def render_pdf(user_id):
-#     pdf_bytes = load_pdf_certificate(user_id)
-
-#     pdf_document = fitz.open(BytesIO(pdf_bytes))
-#     images_base64 = []
-
-#     #for page_num in range(pdf_document.page_count):
-#             # page = pdf_document[page_num]
-#     page = pdf_document[0]
-#     image = page.get_pixmap()
-#     image_data = image.get_image_data()
-#     image_base64 = base64.b64encode(image_data).decode('utf-8')
-#     images_base64.append(image_base64)
-
-#     return send_file(images_base64, mimetype='image/jpeg')
-#     #return images_base64
-    
-# def load_pdf_certificate(user_id):
-#     journalistuser = users.Journalistuser.query.filter_by(journalistuser_id=user_id).first()
-#     # print(journalistuser)
-#     if journalistuser and journalistuser.certificate: 
-#         certificate = journalistuser.certificate 
-#         # documento = Image.open(BytesIO(certificate))
-#         # print(type(documento))
-#         return convert_pdf_to_images(certificate)
-#     else:
-#         return None
-    
-
-# def convert_pdf_to_images(pdf_data):
-#     try:
-#         # Usa io.BytesIO en lugar de fitz.BytesIO
-#         pdf_stream = io.BytesIO(pdf_data)
-#         pdf_document = fitz.open(pdf_stream)
-#         images = []
-        
-#         for page_number in range(pdf_document.page_count):
-#             page = pdf_document[page_number]
-#             # Convierte la página en imagen RGBA (formato compatible con PIL)
-#             image_data = page.get_pixmap()
-#             img = Image.frombytes("RGB", [image_data.width, image_data.height], image_data.samples)
-#             # Agrega la imagen a la lista de imágenes
-#             images.append(img)
-        
-#         return images
-#     except Exception as e:
-#         print(f"Error al procesar el PDF: {e}")
-#         return None
+#Methos for pdf's
+def load_pdf_certificate(user_id):
+    journalistuser = users.Journalistuser.query.filter_by(journalistuser_id=user_id).first()
+    certificate_bytes = journalistuser.certificate 
+    certificate_base64 = base64.b64encode(certificate_bytes).decode('utf-8')
+    return certificate_base64

@@ -11,5 +11,5 @@ nltk
 wordcloud
 PyPDF2
 PyMuPDFs
-fitz
 pdf2image
+flask_bcrypt

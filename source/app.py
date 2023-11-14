@@ -7,7 +7,9 @@ from flask_sqlalchemy import SQLAlchemy
 from typing import List, Dict
 import threading
 from datetime import datetime
-from pdf2image import convert_from_bytes
+#import fitz
+from io import BytesIO
+#from pdf2image import convert_from_bytes
 
 db = manager.db
 app = Flask(__name__)
@@ -77,12 +79,10 @@ def _add_news_background():
     manager.save_news(app, new_news)
 
 
-def convert_pdf_to_images(pdf_bytes):
-    images = convert_from_bytes(pdf_bytes)
-    return images
-
 # CAMBIAR LA RUTA
+'''
 @app.route('/login_users', methods=['POST'])
+
 def login_users():
     try:
         if manager.login(request.form['username'], request.form['password']):
@@ -95,6 +95,26 @@ def login_users():
         flash("Ocurrió un error durante el inicio de sesión. Por favor, inténtalo de nuevo más tarde.", "error")
         return redirect(url_for('start'))
 
+'''
+@app.route('/login_users', methods=['POST'])
+def login_users(): 
+    respuesta_login = manager.login(request.form['username'], request.form['password'])
+    if (type(respuesta_login) == bool and respuesta_login == True):
+        # user = users.User.query.filter_by(username=request.form['username']).first()
+        # client_id = user.id
+        # image = manager.load_image(client_id)
+        # return image
+        
+        # user = users.User.query.filter_by(username=request.form['username']).first()
+        # journalist_id = user.id       
+        # certificate_base64 = manager.load_pdf_certificate(journalist_id)
+        # render_template('userAdmin/pdfreader.html', certificate_base64=certificate_base64)
+        
+        return index()
+    elif (type(respuesta_login) != bool):
+        return 'Yes bae'    
+    else:
+        return render_template('fail_login.html')
 
 @app.route('/register.html')
 def register_funct():
