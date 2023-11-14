@@ -1,3 +1,4 @@
+'''
 from database import DBManager as manager
 db = manager.db
 
@@ -132,3 +133,4 @@ class Container(db.Model):
         self.id = id
         self.likes = likes
 
+'''

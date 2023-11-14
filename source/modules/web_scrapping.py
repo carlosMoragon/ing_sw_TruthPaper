@@ -3,9 +3,6 @@ from bs4 import BeautifulSoup
 from modules import classes as cl
 from typing import List, Dict
 from datetime import datetime
-import os
-import html
-#import glob
 import re
 from concurrent.futures import ThreadPoolExecutor
 from collections import defaultdict
@@ -13,8 +10,24 @@ import threading
 import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-nltk.download('punkt')
+from database import DBManager as manager
 
+def isInstaled():
+    try:
+        nltk.data.find('tokenizers/punkt')
+        return True
+    except LookupError:
+        return False
+
+if not isInstaled():
+    nltk.download('punkt')
+
+def get_news_db(app, news, container):
+    with app.app_context():
+        print("entra")
+        news.extend(manager.load_news())
+        container.update(split_by_container(news))
+        #container.update(ws.split_by_container(ws.add_new_container(news)))
 
 def _build_news(titles: List[str], urls: List[str], imgs: List[str], owner: str, date: str, category: str) -> List[cl.News]:
     news = []
@@ -26,7 +39,7 @@ def _build_news(titles: List[str], urls: List[str], imgs: List[str], owner: str,
 
     return news
 
-def add_new_container(news: List[cl.News]) -> List[cl.News]:
+def add_new_container(news: List[cl.News], app) -> List[cl.News]:
     # Lista de noticias
     news_content = [new.get_content() for new in news]
 
@@ -43,7 +56,7 @@ def add_new_container(news: List[cl.News]) -> List[cl.News]:
     threshold = 0.7
 
     # Encontrar noticias relacionadas y asignarles un contenedor
-    n_cont = 0
+    n_cont = (manager.get_last_container_id(app)) + 1
     for i in range(len(news)):
         for j in range(i + 1, len(news)):
             if cosine_similarities[i][j] >= threshold:
@@ -239,8 +252,8 @@ def get_news() -> List[cl.News]:
     return news
 
 
-def get_containers(news: List[cl.News]) -> Dict[int, List[cl.News]]:
-    return split_by_container(add_new_container(news))
+def get_containers(news: List[cl.News], app) -> Dict[int, List[cl.News]]:
+    return split_by_container(add_new_container(news, app))
 
 def get_content(url: str) -> str:
     try:

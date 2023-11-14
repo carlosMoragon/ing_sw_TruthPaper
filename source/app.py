@@ -7,14 +7,16 @@ from flask_sqlalchemy import SQLAlchemy
 from typing import List, Dict
 import threading
 from datetime import datetime
-from pdf2image import convert_from_bytes
+#import fitz
+from io import BytesIO
+#from pdf2image import convert_from_bytes
 
 db = manager.db
 app = Flask(__name__)
 
 news: List[cl.News] = []
 containers: Dict[int, List[cl.News]] = {}
-init_news = threading.Thread(target=manager.get_news_db, args=(app, news, containers))
+init_news = threading.Thread(target=ws.get_news_db, args=(app, news, containers))
 app.secret_key = 'truthpaper' # Clave secreta para flash (alerts errores)
 
 
@@ -23,7 +25,7 @@ def index():
     global news
     global containers
     print("llega")
-    #init_news.join()
+    init_news.join()
     for new in news:
         print(f"{new.get_container_id()}\n")
     data = {
@@ -113,7 +115,7 @@ def start():
      if not news:
 
         # ESTA ES LA DE LAS BBDD QUE SON LAS QUE MAS RAPIDO TIENEN QUE IR
-        #init_news.start()
+        init_news.start()
 
         # ESTAS SON LAS QUE SON NUEVAS QUE SE VAN A IR AÑADIENDO A LO LARGO DE LA EJECUCION
         if not manager.is_update(datetime.now().strftime(f'%Y-%m-%d')):
@@ -134,17 +136,15 @@ def _add_news_background():
     global news, containers
     new_news = ws.get_news()
     news.extend(new_news)
-    containers = ws.get_containers(news)
+    containers = ws.get_containers(news, app)
     manager.add_container(app, new_news)
     manager.save_news(app, new_news)
 
 
-def convert_pdf_to_images(pdf_bytes):
-    images = convert_from_bytes(pdf_bytes)
-    return images
-
 # CAMBIAR LA RUTA
+'''
 @app.route('/login_users', methods=['POST'])
+
 def login_users():
     try:
         if manager.login(request.form['username'], request.form['password']):
@@ -157,6 +157,26 @@ def login_users():
         flash("Ocurrió un error durante el inicio de sesión. Por favor, inténtalo de nuevo más tarde.", "error")
         return redirect(url_for('start'))
 
+'''
+@app.route('/login_users', methods=['POST'])
+def login_users(): 
+    respuesta_login = manager.login(request.form['username'], request.form['password'])
+    if (type(respuesta_login) == bool and respuesta_login == True):
+        # user = users.User.query.filter_by(username=request.form['username']).first()
+        # client_id = user.id
+        # image = manager.load_image(client_id)
+        # return image
+        
+        # user = users.User.query.filter_by(username=request.form['username']).first()
+        # journalist_id = user.id       
+        # certificate_base64 = manager.load_pdf_certificate(journalist_id)
+        # render_template('userAdmin/pdfreader.html', certificate_base64=certificate_base64)
+        
+        return index()
+    elif (type(respuesta_login) != bool):
+        return 'Yes bae'    
+    else:
+        return render_template('fail_login.html')
 
 @app.route('/register.html')
 def register_funct():

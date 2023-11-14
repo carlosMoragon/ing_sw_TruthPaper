@@ -16,3 +16,13 @@
 * Python v3.9
 * MariaDB v11.3.0
 
+## Usuarios y Contraseñas para ingresar a la app
+orianna       HolaMundo1234*
+NotLoki       Encriptado1234*
+AgentMobius   Jetskis1111*
+MissMinutes   ForAllTimes6666*
+scarletW    MarvelFreak1234*
+spiderman   MarvelFreak1236*
+gwendolin   MarvelFreak1237*
+DoctorStrange  MarvelFreak1238*
+mariahill   MarvelFreak1239*

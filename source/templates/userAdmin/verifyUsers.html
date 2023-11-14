@@ -129,10 +129,13 @@
                                                     actionInput.value = 'deny';
                                                 }
 
+                                                <!-- Agregar boton que redireccione a pdfreader-->
+            
                                                 var buttons = document.querySelectorAll('input[type="submit"]');
                                                     buttons.forEach(function(button) {
                                                         button.addEventListener('click', setAction);
                                                     });
+                                                
                                             }
                                         </script>
                                     </form>
