@@ -8,10 +8,17 @@ import threading
 db = manager.db
 app = Flask(__name__)
 
-news: List[cl.News] = []
-containers: Dict[int, List[cl.News]] = {}
+news: List[cl.News] = []    # Se está definiendo una lista de noticias
+containers: Dict[int, List[cl.News]] = {} # Se define un diccionario para los contenedores
 init_news = threading.Thread(target=manager.get_news_db, args=(news, containers))
 
+
+@app.route('/')
+def home():
+    # TODO: Terminar la implementación de una página Home 
+    # IDEA: Que sea una descripción con lo que es la página y que salga la navbar  
+    # para navegar a los demás apartados
+    return ("Hola Mundo")
 
 @app.route('/index')
 def index():
@@ -34,7 +41,7 @@ def expand_container(id):
     container = containers.get(id)
     return render_template('containerNews.html', container=container)
 
-@app.route('/')
+@app.route('/login')
 def start():
      global news, containers
      if not news:
