@@ -42,73 +42,6 @@ def index():
     categories_list_unique = list(set(categories_list))
     return render_template('indexFunc.html', data=data, containers=containers, categories_list=categories_list_unique)
 
-# Método para ver un contenedor específico
-@app.route('/ver_contenedor/<int:id>')
-def expand_container(id):
-    container = containers.get(id)
-    comments = manager.load_comments(id)
-    data = {
-        'content': [comment.get_content() for comment in comments],
-        'username': [manager.get_username(comment.get_userclient_id()) for comment in comments],
-        'id': [comment.get_id() for comment in comments],
-        'likes': [comment.get_likes() for comment in comments],
-        'views': [comment.get_views() for comment in comments],
-        'img': [comment.get_img() for comment in comments],
-    }
-    if comments is None:
-        return render_template('containerNews.html', container=container)
-    return render_template('containerNews.html', container=container, data=data)
-''' comments
-data = {
-        'content': [comment.get_content() for comment in comments],
-        'username': [manager.get_username(comment.get_userclient_id) for comment in comment],
-        'id': [comment.get_id() for comment in comments],
-        'likes': [comment.get_likes() for comment in comments],
-        'views': [comment.get_views() for comment in comments],
-        'img': [comment.get_img() for comment in comments],
-        'userclient_id': [comment.get_userclient_id() for comment in comments],
-        'container_id': [comment.get_container_id() for comment in comments]
-    }
-    
-    En el HTML pondremos
-    Nombre usuario: {{data.username}}
-    Contenido: {{data.content}}
-    Likes: {{data.likes}}
-    Views: {{data.views}}
-    
-'''
-
-# Método que inserta un comentario en un contenedor
-@app.route('/insert_comment', methods=['POST'])
-def insert_comment(id_container):
-    comment_content = request.form.get('comment_content')
-    manager.insert_comment(user_id=manager.user_id, container_id=id_container, content=comment_content)
-    if manager.user_id is not None:
-        # Insertar el comentario en la base de datos
-        insert_comment(manager.user_id, id, comment_content)
-    return redirect(url_for('expand_container', id=id_container))
-
-
-# Función que muestra una categoría general compuesta por N específicas
-
-@app.route('/category/<string:category>')
-def expand_category(category):
-    # category --> categoria general
-    categories_list = gr.get_general_categories(category)
-    print(categories_list)
-    global news
-    global containers
-    filtered_news = f.filter_by_general_categories(categories_list, news)
-    data = {
-        'imgs': [new.get_image() for new in filtered_news],
-        'titles': [str(new.get_title()) for new in filtered_news],
-        'urls': [new.get_url() for new in filtered_news],
-        'dates': [new.get_date() for new in filtered_news],
-        'categories': [new.get_category() for new in filtered_news],
-        'likes': [new.get_likes() for new in filtered_news],
-        'views': [new.get_views() for new in filtered_news]
-    }
-    return render_template('categoriesFunc.html', data=data, containers=containers)
 @app.route('/')
 def start():
      global news, containers
@@ -164,6 +97,78 @@ def login_users():
         print(f"Ocurrió un error durante el inicio de sesión: {str(e)}")
         flash("Ocurrió un error durante el inicio de sesión. Por favor, inténtalo de nuevo más tarde.", "error")
         return redirect(url_for('start'))
+
+@app.route('/ver_contenedor/<int:id>')
+def expand_container(id):
+    global firsstime
+    container = containers.get(id)
+
+    comments = manager.load_comments(id)
+    data = {
+        'content': [comment.get_content() for comment in comments],
+        # 'username': [manager.get_username(comment.get_userclient_id) for comment in comments], # NO FUNCIONA
+        'id': [comment.get_id() for comment in comments],
+        'likes': [comment.get_likes() for comment in comments],
+        'views': [comment.get_views() for comment in comments],
+        'img': [comment.get_img() for comment in comments],
+        'userclient_id': [comment.get_userclient_id() for comment in comments],
+        'container_id': [comment.get_containerid() for comment in comments]
+    }
+    if comments is None:
+        return render_template('containerNews.html', container=container)
+    return render_template('containerNews.html', container=container, data=data, firsttime=firsstime)
+
+@app.route('/like_news', methods=['POST'])
+def like_news():
+    news_id = request.form.get('news_id')
+    print(f"Se ha dado like a la noticia con ID {news_id}")
+    new = manager.get_new_by_id(news_id)
+    if new is not None:
+        manager.increment_likes(int(news_id))
+        print("Se ha incrementado el número de likes de la noticia")
+    else:
+        print("No se ha podido dar like a la noticia con ID {news_id}")
+    id_container = new.container_id
+    return redirect(url_for('expand_container', id=id_container))
+
+# Método que insertar comentarios de la base de datos en un contenedor específico
+@app.route('/insert_comment', methods=['POST'])
+def insert_comment(id_container):
+    comment_content = request.form.get('comment_content')
+    manager.insert_comment(user_id=manager.user_id, container_id=id_container, content=comment_content)
+    if manager.user_id is not None:
+        # Insertar el comentario en la base de datos
+        insert_comment(manager.user_id, id_container, comment_content)
+    return redirect(url_for('expand_container', id=id_container))
+
+# Método para publicar comentarios en un contenedor específico
+@app.route('/publish_comment/<int:id_container>', methods=['POST'])
+def publish_comment(id_container):
+    if request.method == 'POST':
+        comment_content = request.form.get('comment_content')
+        manager.insert_comment(user_id=manager.user_id, container_id=id_container, content=comment_content)
+
+    return redirect(url_for('expand_container', id=id_container))
+
+# Función que muestra una categoría general compuesta por N específicas
+@app.route('/category/<string:category>')
+def expand_category(category):
+    # category --> categoria general
+    categories_list = gr.get_general_categories(category)
+    print(categories_list)
+    global news
+    global containers
+    filtered_news = f.filter_by_general_categories(categories_list, news)
+    data = {
+        'imgs': [new.get_image() for new in filtered_news],
+        'titles': [str(new.get_title()) for new in filtered_news],
+        'urls': [new.get_url() for new in filtered_news],
+        'dates': [new.get_date() for new in filtered_news],
+        'categories': [new.get_category() for new in filtered_news],
+        'likes': [new.get_likes() for new in filtered_news],
+        'views': [new.get_views() for new in filtered_news]
+    }
+    return render_template('categoriesFunc.html', data=data, containers=containers)
 
 @app.route('/register.html')
 def register_funct():

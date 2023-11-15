@@ -7,7 +7,6 @@ class TestWebScrapping(unittest.TestCase):
         news = ws.get_news()
 
 
-
 class TestVerificationAlgorithms(unittest.TestCase):
     def test_verification_date_good(self):
         self.assertEqual(cl.validate_date("2023-11-19"), True)

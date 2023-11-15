@@ -124,14 +124,13 @@
                         <div class="overlay">
                             <div class="mb-2">
                                 <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                                    href="">{{ news_item.get_owner() }}</a>
+                                    href="">{{ news_item.get_category() }}</a>
                                 <a class="text-white" href="">{{ news_item.get_date() }}</a>
                             </div>
                             <a class="h2 m-0 text-white text-uppercase font-weight-bold" href="{{ url_for('expand_container', id=container_id) }}">{{ news_item.get_title() }}</a>
-                            <button type="button" class="btn btn-outline-secondary" style="color: white;">
-                              <i class="fa fa-thumbs-up"></i> {{ news_item.get_likes() }}
-                            </button>
-
+                                <button type="button" class="btn btn-outline-secondary" style="color: white;" onclick="like_news({{ news_item.id }})">
+                                    <i class="fa fa-thumbs-up"></i> {{ news_item.get_likes() }}
+                                </button>
                         </div>
                     </div>
                 {% endfor %}

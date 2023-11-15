@@ -12,10 +12,11 @@ from flask_sqlalchemy import SQLAlchemy
 bcrypt = Bcrypt()
 db = SQLAlchemy()
 
-'''
-# Hay que implementar como coger el id del usuario que se acaba de registrar
+
+# Hay que implementar como coger el id del usuario que se acaba de registrar --> NECESARIO HASTA QUE SE CAMBIE
 user_id = 11
 
+'''
 def login(username, password) -> bool:
 '''
 def login(username, password): #-> bool:
@@ -196,7 +197,7 @@ def load_news() -> List[cl.News]:
    return news_objects
 
 def load_comments(id: int) -> List[cl.Comment]:
-    all_comments = db.session.query( Comment).filter_by(container_id=id).all()
+    all_comments = db.session.query(Comment).filter_by(container_id=id).all()
     comments_objects = []
     for comment in all_comments:
         comment_obj = cl.Comment(
@@ -277,20 +278,12 @@ def load_container():
         )
         container_objects.append(container_obj)
     return container_objects
-'''
-def add_container(app, news: List[cl.News]):
-    with app.app_context():
-        for news_item in news:
-            container_id = set(news_item.get_container_id())  # Call the method to get the integer value
-            new_container =  Container(
-                id=container_id,
-                likes=0
-            )
-            db.session.add(new_container)
-        db.session.commit()
 
-<<<<<<< HEAD
-'''
+def insert_comment_container(container_id, content, userID):
+    # Crea una nueva instancia de Comment
+    new_comment = Comment(container_id=container_id, content=content, userclient_id=userID) # No permite subir fotos
+    db.session.add(new_comment)
+    db.session.commit()
 def add_container(app, news: List[cl.News]):
     ids = set()
     with app.app_context():
@@ -331,6 +324,10 @@ def insert_comment(user_id, container_id, content):
 def get_username(user_id):
     user =  User.query.filter_by(id=user_id).first()
     return user.username
+
+def get_new_by_id(new_id):
+    new=New.query.filter_by(id=new_id).first()
+    return new
 
 # def render_pdf(user_id):
 #     pdf_bytes = load_pdf_certificate(user_id)
@@ -387,6 +384,13 @@ def load_pdf_certificate(user_id):
     certificate_bytes = journalistuser.certificate 
     certificate_base64 = base64.b64encode(certificate_bytes).decode('utf-8')
     return certificate_base64
+
+
+def increment_likes(new_id: int):
+    noticia = New.query.filter_by(id=new_id).first()
+    noticia.likes = noticia.likes + 1
+    print("Like a la noticia con id: " + str(noticia.id))
+    db.session.commit()
 
 
 class User(db.Model):
@@ -493,6 +497,7 @@ class New(db.Model):
         self.likes = likes
         self.views = views
         self.container_id = container_id
+
 
 
 class Comment(db.Model):

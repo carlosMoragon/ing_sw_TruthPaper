@@ -83,16 +83,9 @@
             <div class="collapse navbar-collapse justify-content-between px-0 px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav mr-auto py-0">
                     <a href="{{ url_for('index')}}" class="nav-item nav-link ">Inicio</a>
-                    <a href="{{url_for('index')}}" class="nav-item nav-link">Noticias Guardadas</a>
-                    <!--Add more items on the menu-->
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Categorías</a>
-                        <div class="dropdown-menu rounded-0 m-0">
-                            <a href="#" class="dropdown-item">Economía</a>
-                            <a href="#" class="dropdown-item">Tecnología</a>
-                            <a href="#" class="dropdown-item">Salud</a>
-                        </div>
-                    </div>
+                    <a href="{{url_for('index')}}" class="nav-item nav-link" > Noticias Guardadas</a>
+                    <a href="{{url_for('go_to_categories')}}" class="nav-item nav-link" > Categorías</a>
+
                 </div>
 
 
@@ -134,64 +127,66 @@
                             <h4 class="m-0 text-uppercase font-weight-bold">Noticias</h4>
                         </div>
                         <div class="bg-white border border-top-0 p-3">
-                            <ul>
-                                {% for index in range(container|length) %}
+                             <ul>
+                                {% for news_item in container %}
                                     <li class="position-relative overflow-hidden" style="height: 300px;">
                                         <div style=" height: 100%;" !important>
-                                            <img class="img-fluid" src="{{container[index].get_image()}}" href="{{container[index].get_url()}}" style="width: 100%;" />
+                                            <img class="img-fluid" src="{{news_item.get_image()}}" href="{{news_item.get_url()}}" style="width: 100%;" />
                                             <p> </p>
                                         </div>
 
                                         <div class="overlay">
                                             <div class="mb-2">
                                                 <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                                                    href="">{{ container[index].get_category() }}</a>
-                                                <a class="text-white" href=""><small>{{container[index].get_date()}}</small></a>
+                                                    href="">{{ news_item.get_category() }}</a>
+                                                <a class="text-white" href=""><small>{{news_item.get_date()}}</small></a>
                                             </div>
-                                            <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="{{container[index].get_url()}}">{{container[index].get_title()}}</a>
+                                            <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="{{news_item.get_url()}}">{{news_item.get_title()}}</a>
+                                            {% if firsttime == True %}
+                                                <form method="post" action="{{ url_for('like_news', news_id=news_item.get_id()) }}" >
+
+                                                    <button type="submit" class="btn btn-outline-primary" style="margin-top: 1%">
+                                                        <i class="fa fa-thumbs-up"></i> {{ news_item.get_likes() }}
+                                                    </button>
+                                                    <input type="hidden" name="news_id" value="{{ news_item.get_id() }}">
+                                                </form>
+                                            {% else %}
+                                                <i class="fa fa-thumbs-up"></i> {{ news_item.get_likes() + 1}}
+                                            {% endif %}
+
                                         </div>
                                     </li>
                                 {% endfor %}
+                            </ul>
 
                                 <!-- html para comentarios -->
                                 {% block print_comments %}
-                                    <div class="container" style="margin-top: 5%;">
-                                        {% for comment in data %}
-                                            <div class="card mb-3">
-                                                <div class="card-header">
-                                                    Usuario: {{ comment.username}}
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class = "like-views-row" style="margin-bottom: 5%; display: flex;">
-                                                        <button type="button" class="btn btn-outline-primary" style="color: #0d0d0f; margin-bottom: 5%"> <i class="fa fa-thumbs-up"></i> {{ comment.likes }} </button>
-                                                        <button type="button" class="btn btn-primary btn-link" style="color: #0d0d0f; height: 50%">
-                                                            <i class="fa fa-eye"></i> {{ comment.views }}
-                                                        </button>
+                                    {% if data %}
+                                        <div class="container" style="margin-top: 5%;">
+                                           {% for i in range(data['id']|length) %}
+                                                <div class="card mb-3">
+
+                                                    <div class="card-body">
+                                                        <div class = "like-views-row" style="margin-bottom: 5%; display: flex;">
+                                                            <button type="button" class="btn btn-outline-primary" style="color: #0d0d0f; margin-bottom: 5%"> <i class="fa fa-thumbs-up"></i> {{data['likes'][i] }} </button>
+                                                            <button type="button" class="btn btn-primary btn-link" style="color: #0d0d0f; height: 50%">
+                                                                <i class="fa fa-eye"></i> {{ data['views'][i] }}
+                                                            </button>
+                                                        </div>
+                                                        <p class="card-text" style="color: black;">{{ data['content'][i] }}</p>
+                                                       {% if data['img'][i] %}
+                                                            <img src="{{ data['img'][i] }}" alt="Imagen del comentario" class="img-fluid">
+                                                        {% endif %}
                                                     </div>
-                                                    <p class="card-text">{{ comment.content}}</p>
-                                                    {% if comment.img %}
-                                                        <img src="{{ comment.img }}" class="img-fluid" alt="Imagen del comentario">
-                                                    {% endif %}
                                                 </div>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-
-
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
                                 {% endblock %}
 
-                                {% block publish_comments %}
-                                    <form method="post" action="{{ url_for('insert_comment', id=container.id) }}" style="margin-top: 5%;">
-                                      <div class="form-group">
-                                          <label for="comment">Deja tu comentario:</label>
-                                          <input type="hidden" name="id_new" value="">
-                                          <textarea class="form-control" name="comment_content" id="comment_content" rows="5" required></textarea>
+                                <!-- html para insertar comentarios -->
 
-                                      </div>
-                                      <button type="submit" class="btn btn-primary">Enviar</button>
-                                    </form>
 
-                                {% endblock %}
                             </ul>
                         </div>
                     </div>
