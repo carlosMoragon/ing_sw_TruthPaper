@@ -100,7 +100,6 @@ def login_users():
 
 @app.route('/ver_contenedor/<int:id>')
 def expand_container(id):
-    global firsstime
     container = containers.get(id)
 
     comments = manager.load_comments(id)
@@ -116,10 +115,12 @@ def expand_container(id):
     }
     if comments is None:
         return render_template('containerNews.html', container=container)
-    return render_template('containerNews.html', container=container, data=data, firsttime=firsstime)
+    else:
+        return render_template('containerNews.html', container=container, data=data)
 
 @app.route('/like_news', methods=['POST'])
 def like_news():
+    global news
     news_id = request.form.get('news_id')
     print(f"Se ha dado like a la noticia con ID {news_id}")
     new = manager.get_new_by_id(news_id)
@@ -129,6 +130,10 @@ def like_news():
     else:
         print("No se ha podido dar like a la noticia con ID {news_id}")
     id_container = new.container_id
+    for new in news:
+        if new.get_id() == id_container:
+            new.set_likes(new.get_likes()+1)
+            break
     return redirect(url_for('expand_container', id=id_container))
 
 # Método que insertar comentarios de la base de datos en un contenedor específico

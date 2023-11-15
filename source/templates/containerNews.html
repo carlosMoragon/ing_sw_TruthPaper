@@ -142,17 +142,14 @@
                                                 <a class="text-white" href=""><small>{{news_item.get_date()}}</small></a>
                                             </div>
                                             <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="{{news_item.get_url()}}">{{news_item.get_title()}}</a>
-                                            {% if firsttime == True %}
-                                                <form method="post" action="{{ url_for('like_news', news_id=news_item.get_id()) }}" >
 
-                                                    <button type="submit" class="btn btn-outline-primary" style="margin-top: 1%">
-                                                        <i class="fa fa-thumbs-up"></i> {{ news_item.get_likes() }}
-                                                    </button>
-                                                    <input type="hidden" name="news_id" value="{{ news_item.get_id() }}">
-                                                </form>
-                                            {% else %}
-                                                <i class="fa fa-thumbs-up"></i> {{ news_item.get_likes() + 1}}
-                                            {% endif %}
+                                            <form method="post" action="{{ url_for('like_news', news_id=news_item.get_id()) }}" class="like-form">
+                                                <button type="submit" class="btn btn-outline-primary like-btn" style="margin-top: 1%" data-news-id="{{ news_item.get_id() }}">
+                                                    <i class="fa fa-thumbs-up"></i> <span class="likes-count">{{ news_item.get_likes() }}</span>
+                                                </button>
+                                                <input type="hidden" name="news_id" value="{{ news_item.get_id() }}">
+                                            </form>
+
 
                                         </div>
                                     </li>
@@ -191,6 +188,28 @@
                         </div>
                     </div>
                 </div>
+               <script>
+                $(document).ready(function() {
+                    $('.like-form').submit(function(e) {
+                        e.preventDefault();
+
+                        // Obtener el contador de likes y el contenedor del botón
+                        var likesCount = $(this).find('.likes-count');
+
+                        // Mostrar solo el ícono sin número de likes
+                        var newIcon = $('<i class="fa fa-thumbs-up"></i>');
+                        $(this).find('.like-btn').html(newIcon);
+
+                        // Deshabilitar el botón para evitar clics adicionales
+                        $(this).find('.like-btn').prop('disabled', true);
+
+                        // Enviar la solicitud al servidor
+                        var newsId = $(this).find('.like-btn').data('news-id');
+                        $.post('/like_news', { news_id: newsId });
+                    });
+                });
+            </script>
+
                 <!-- Tranding News End -->
             </div>
         </div>
