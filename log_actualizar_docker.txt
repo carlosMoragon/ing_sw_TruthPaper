@@ -1,0 +1,25 @@
+sudo docker login
+
+
+if __name__ == '__main__':
+    #ws.save_html()
+    # app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=4000)
+    
+ASEGURAR QUE ESTA ASO ASI
+
+
+sudo docker build -t {nombre}
+
+
+sudo docker run -it -p 4000:4000 -d flaskapp:latest
+
+
+hostname -I
+
+
+http://IP:4000
+
+sudo docker tag flaskapp cmoragon/flaskapp:v2
+
+sudo docker push cmoragon/flaskapp:v2
