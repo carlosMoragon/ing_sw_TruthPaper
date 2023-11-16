@@ -13,6 +13,7 @@ from flask import jsonify
 db = manager.db
 app = Flask(__name__)
 
+
 news: List[cl.News] = []
 containers: Dict[int, List[cl.News]] = {}
 init_news = threading.Thread(target=ws.get_news_db, args=(app, news, containers))
@@ -165,11 +166,6 @@ def expand_category(category):
     }
     return render_template('categoriesFunc.html', data=data, containers=containers)
 
-def mostrar_perfil_usuarios(user_id, user_name):
-    user_image = manager.load_image(user_id)
-    return render_template('perfil.html', user_id=user_id, user_name = user_name, user_image=user_image)
-
-
 @app.route('/register.html')
 def register_funct():
     return render_template('register.html')
@@ -178,9 +174,15 @@ def register_funct():
 def go_to_login():
     return render_template('login.html')
 
+def mostrar_perfil_usuarios(user_id, user_name):
+    user_image = manager.load_image(user_id)
+    return render_template('perfil.html', user_id=user_id, user_name = user_name, user_image=user_image)
+
 @app.route('/perfil')
 def go_to_profile():
-    return render_template('perfil.html')
+    user_id = 12
+    user_name = 'Mobius'
+    return mostrar_perfil_usuarios(user_id, user_name)
 
 @app.route('/termsandConditions')
 def termsConditions():
