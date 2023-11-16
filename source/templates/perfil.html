@@ -106,15 +106,19 @@
             <div class="row justify-content-md-center">
                 <div class="col-lg-8">
                     <div class="section-title mb-0">
-                        <h4 class="m-0 text-uppercase font-weight-bold">Olivia Araceli Morales Quezada</h4> <!-- nombre -->
+                        <h4 class="m-0 text-uppercase font-weight-bold">{{ user_name }}</h4>
                     </div>
                     <div class="bg-white border border-top-0 p-4 mb-3">
                         <div class="mb-4">
                             <div class="container">
                                 <div class="row">
                                     <div class="col col-lg-3">
-                                        <img class="img-fluid" src="../static/img/User-Profile.png"
-                                            style="object-fit: cover; margin-bottom: 10%;">
+                                        {% if user_image %}
+                                        <img class="img-fluid" src="data:image/jpeg;base64,{{ user_image }}"
+                                             style="object-fit: cover; margin-bottom: 10%;">
+                                    {% else %}
+                                        <p>Error al cargar la imagen</p>
+                                    {% endif %}
                                     </div>
                                     <div class="col">
                                         <h6 class="text-uppercase font-weight-bold">Descripción</h6>

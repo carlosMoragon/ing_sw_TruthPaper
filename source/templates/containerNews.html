@@ -145,7 +145,7 @@
 
                                             <form method="post" action="{{ url_for('like_news', news_id=news_item.get_id()) }}" class="like-form">
                                                 <button type="submit" class="btn btn-outline-primary like-btn" style="margin-top: 1%" data-news-id="{{ news_item.get_id() }}">
-                                                    <i class="fa fa-thumbs-up"></i> <span class="likes-count">{{ news_item.get_likes() }}</span>
+                                                    <i class="fa fa-thumbs-up"></i> {{ news_item.get_likes() }}
                                                 </button>
                                                 <input type="hidden" name="news_id" value="{{ news_item.get_id() }}">
                                             </form>
@@ -155,34 +155,33 @@
                                     </li>
                                 {% endfor %}
                             </ul>
-                            <!-- html para insertar comentarios -->
-                            {% block print_comments %}
-                                {% if data %}
-                                    <div class="container" style="margin-top: 5%;">
-                                        {% for i in range(data['id']|length) %}
-                                            <div class="card mb-3">
-                                                <div class="card-body">
-                                                    <div class="like-views-row" style="margin-bottom: 5%; display: flex;">
-                                                        <form method="post" action="{{ url_for('like_comment', comment_id=data['id'][i]) }}" class="like-form">
-                                                            <button type="submit" class="btn btn-outline-primary like-btn" style="color: #0d0d0f; margin-bottom: 5%" data-comment-id="{{ data['id'][i] }}">
-                                                                <i class="fa fa-thumbs-up"></i> {{ data['likes'][i] }}
-                                                            </button>
-                                                            <input type="hidden" name="comment_id" value="{{ data['id'][i] }}">
-                                                        </form>
-                                                        <button type="button" class="btn btn-primary btn-link" style="color: #0d0d0f; height: 50%">
-                                                            <i class="fa fa-eye"></i> {{ data['views'][i] }}
-                                                        </button>
-                                                    </div>
-                                                    <p class="card-text" style="color: black;">{{ data['content'][i] }}</p>
-                                                    {% if data['img'][i] %}
-                                                        <img src="{{ data['img'][i] }}" alt="Imagen del comentario" class="img-fluid">
-                                                    {% endif %}
+
+                        <!-- html para imprimir comentarios -->
+                        {% block print_comments %}
+                            {% if data %}
+                                <div class="container" style="margin-top: 5%;">
+                                    {% for i in range(data['id']|length) %}
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <div class="like-views-row" style="margin-bottom: 5%; display: flex;">
+                                                    <button type="button" class="btn btn-outline-primary" style="color: #0d0d0f; margin-bottom: 5%">
+                                                        <i class="fa fa-thumbs-up"></i> {{data['likes'][i] }}
+                                                    </button>
+                                                    <button type="button" class="btn btn-primary btn-link" style="color: #0d0d0f; height: 50%">
+                                                        <i class="fa fa-eye"></i> {{ data['views'][i] }}
+                                                    </button>
                                                 </div>
+                                                <p class="card-text" style="color: black;">{{ data['content'][i] }}</p>
+                                                {% if data['img'][i] %}
+                                                    <img src="{{ data['img'][i] }}" alt="Imagen del comentario" class="img-fluid">
+                                                {% endif %}
                                             </div>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            {% endblock %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        {% endblock %}
+
 
                             <!-- html para insertar comentarios -->
                             <!-- Agrega este formulario donde desees que los usuarios ingresen nuevos comentarios -->
@@ -202,29 +201,25 @@
 
                         </div>
                     </div>
-                </div>
-               <script>
-                $(document).ready(function() {
-                    $('.like-form').submit(function(e) {
-                        e.preventDefault();
+                   </div>
+                    <script>
+                         $(document).ready(function() {
+                             $('.like-form').submit(function(e) {
+                                 // Obtener el botón de like
+                                 var likeButton = $(this).find('.like-btn');
 
-                        // Obtener el contador de likes y el contenedor del botón
-                        var likesCount = $(this).find('.likes-count');
+                                 // Deshabilitar el botón para evitar clics adicionales
+                                 likeButton.prop('disabled', true);
 
-                        // Mostrar solo el ícono sin número de likes
-                        var newIcon = $('<i class="fa fa-thumbs-up"></i>');
-                        $(this).find('.like-btn').html(newIcon);
+                                 // Cambiar el estilo del botón a uno sin borde
+                                 likeButton.removeClass('btn-outline-primary');
+                                 likeButton.addClass('btn-primary');
 
-                        // Deshabilitar el botón para evitar clics adicionales
-                        $(this).find('.like-btn').prop('disabled', true);
-
-                        // Enviar la solicitud al servidor
-                        var newsId = $(this).find('.like-btn').data('news-id');
-                        $.post('/like_news', { news_id: newsId });
-                    });
-                });
-            </script>
-
+                                 // Cambiar el contenido del botón a solo el ícono
+                                 likeButton.html('<i class="fa fa-thumbs-up"></i>');
+                             });
+                         });
+                    </script>
                 <!-- Tranding News End -->
             </div>
         </div>

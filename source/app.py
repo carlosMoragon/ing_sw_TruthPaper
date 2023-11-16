@@ -7,9 +7,8 @@ from flask_sqlalchemy import SQLAlchemy
 from typing import List, Dict
 import threading
 from datetime import datetime
-#import fitz
 from io import BytesIO
-#from pdf2image import convert_from_bytes
+from flask import jsonify
 
 db = manager.db
 app = Flask(__name__)
@@ -64,34 +63,19 @@ def _add_news_background():
     manager.save_news(app, new_news)
 
 
-# CAMBIAR LA RUTA
-'''
-@app.route('/login_users', methods=['POST'])
 
-def login_users():
-    try:
-        if manager.login(request.form['username'], request.form['password']):
-            return index()
-        else:
-            flash("Datos introducidos incorrectos", "error")
-            return redirect(url_for('start'))
-    except Exception as e:
-        print(f"Ocurrió un error durante el inicio de sesión: {str(e)}")
-        flash("Ocurrió un error durante el inicio de sesión. Por favor, inténtalo de nuevo más tarde.", "error")
-        return redirect(url_for('start'))
-
-'''
 @app.route('/login_users', methods=['POST'])
 def login_users():
     respuesta_login = manager.login(request.form['username'], request.form['password'])
     try:
         if (type(respuesta_login) == bool and respuesta_login == True):
+            user = manager.User.query.filter_by(username=request.form['username']).first()
             return index()
         elif (type(respuesta_login) != bool):
-            return 'Yes bae'
+            return render_template('userAdmin/profileAdmin.html')
         else:
             flash("Datos introducidos incorrectos", "error")
-            print("datos introducidos incorrectos")
+            print("Datos introducidos incorrectos en el login")
             return redirect(url_for('start'))
     except Exception as e:
         print(f"Ocurrió un error durante el inicio de sesión: {str(e)}")
@@ -114,7 +98,8 @@ def expand_container(id):
         'container_id': [comment.get_containerid() for comment in comments]
     }
     if comments is None:
-        return render_template('containerNews.html', container=container)
+        return render_template('containerNews.html', container=container, id_contenedor=id)
+
     else:
         return render_template('containerNews.html', container=container, data=data, id_contenedor=id)
 
@@ -131,7 +116,7 @@ def like_news():
         print("No se ha podido dar like a la noticia con ID {news_id}")
     id_container = new.container_id
     for new in news:
-        if new.get_id() == id_container:
+        if new.get_container_id() == id_container:
             new.set_likes(new.get_likes()+1)
             break
     return redirect(url_for('expand_container', id=id_container))
@@ -159,7 +144,7 @@ def publish_comment():
     comment_id = manager.insert_comment(user_id, container_id, content)
     print(f"Se ha insertado el comentario con ID {comment_id}")
 
-cd 
+    return redirect(url_for('expand_container', id=container_id))
 # Función que muestra una categoría general compuesta por N específicas
 @app.route('/category/<string:category>')
 def expand_category(category):
@@ -179,6 +164,11 @@ def expand_category(category):
         'views': [new.get_views() for new in filtered_news]
     }
     return render_template('categoriesFunc.html', data=data, containers=containers)
+
+def mostrar_perfil_usuarios(user_id, user_name):
+    user_image = manager.load_image(user_id)
+    return render_template('perfil.html', user_id=user_id, user_name = user_name, user_image=user_image)
+
 
 @app.route('/register.html')
 def register_funct():
@@ -230,8 +220,6 @@ def save_keyword():
 #     }   
 #     return render_template('pruebaArticulos.html', data=data)
 
-#Aun en PROCESO se MEJORA y DEPURACIÓN
-@app.route('/save_commonuser', methods=['POST'])
 def handle_user_registration(user_type):
     result = manager.save_user()
     if result == -1:
