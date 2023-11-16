@@ -314,8 +314,7 @@ def get_last_container_id(app) -> int:
 
 def insert_comment(user_id, container_id, content):
     # Crea una nueva instancia de Comment
-    new_comment =  Comment(user_id=user_id, container_id=container_id, content=content)
-
+    new_comment = Comment(userclient_id=user_id, container_id=container_id, content=content, likes=0, views=0, image=None)
     # Agrega la nueva instancia a la sesión y guarda en la base de datos
     db.session.add(new_comment)
     db.session.commit()
@@ -328,6 +327,10 @@ def get_username(user_id):
 def get_new_by_id(new_id):
     new=New.query.filter_by(id=new_id).first()
     return new
+
+def get_comment_by_id(comment_id):
+    comment=Comment.query.filter_by(id=comment_id).first()
+    return comment
 
 # def render_pdf(user_id):
 #     pdf_bytes = load_pdf_certificate(user_id)
@@ -391,6 +394,13 @@ def increment_likes(new_id: int):
     noticia.likes = noticia.likes + 1
     print("Like a la noticia con id: " + str(noticia.id))
     db.session.commit()
+
+def comment_likes(comment_id: int):
+    comment = Comment.query.filter_by(id=comment_id).first()
+    comment.likes = comment.likes + 1
+    print("Like al comentario con id: " + str(comment.id))
+    db.session.commit()
+
 
 
 class User(db.Model):

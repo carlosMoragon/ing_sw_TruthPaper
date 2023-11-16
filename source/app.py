@@ -116,7 +116,7 @@ def expand_container(id):
     if comments is None:
         return render_template('containerNews.html', container=container)
     else:
-        return render_template('containerNews.html', container=container, data=data)
+        return render_template('containerNews.html', container=container, data=data, id_contenedor=id)
 
 @app.route('/like_news', methods=['POST'])
 def like_news():
@@ -136,24 +136,30 @@ def like_news():
             break
     return redirect(url_for('expand_container', id=id_container))
 
-# Método que insertar comentarios de la base de datos en un contenedor específico
-@app.route('/insert_comment', methods=['POST'])
-def insert_comment(id_container):
-    comment_content = request.form.get('comment_content')
-    manager.insert_comment(user_id=manager.user_id, container_id=id_container, content=comment_content)
-    if manager.user_id is not None:
-        # Insertar el comentario en la base de datos
-        insert_comment(manager.user_id, id_container, comment_content)
+@app.route('/like_comment', methods=['POST'])
+def like_comment():
+    global comments
+    comment_id = request.form.get('comment_id')
+    print(f"Se ha dado like al comentario con ID {comment_id}")
+    comment = manager.get_comment_by_id(comment_id)
+    if comment is not None:
+        manager.comment_likes(int(comment_id))
+        print("Se ha incrementado el número de likes del comentario"  )
+    else:
+        print("No se ha podido dar like al comentario con ID {comment_id}")
+    id_container = comment.container_id
     return redirect(url_for('expand_container', id=id_container))
 
-# Método para publicar comentarios en un contenedor específico
-@app.route('/publish_comment/<int:id_container>', methods=['POST'])
-def publish_comment(id_container):
-    if request.method == 'POST':
-        comment_content = request.form.get('comment_content')
-        manager.insert_comment(user_id=manager.user_id, container_id=id_container, content=comment_content)
+@app.route('/publish_comment', methods=['POST'])
+def publish_comment():
+    user_id = 11 # CAMBIAR POR EL ID DEL USUARIO QUE ESTÉ LOGUEADO
+    container_id = request.form.get('container_id')
+    content = request.form.get('content')
 
-    return redirect(url_for('expand_container', id=id_container))
+    comment_id = manager.insert_comment(user_id, container_id, content)
+    print(f"Se ha insertado el comentario con ID {comment_id}")
+
+    return redirect(url_for('expand_container', id=container_id))
 
 # Función que muestra una categoría general compuesta por N específicas
 @app.route('/category/<string:category>')
@@ -183,7 +189,7 @@ def register_funct():
 def go_to_login():
     return render_template('login.html')
 
-@app.route('/login_back')
+@app.route('/perfil')
 def go_to_profile():
     return render_template('perfil.html')
 

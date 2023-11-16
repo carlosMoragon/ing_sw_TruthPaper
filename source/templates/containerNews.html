@@ -155,36 +155,51 @@
                                     </li>
                                 {% endfor %}
                             </ul>
-
-                                <!-- html para comentarios -->
-                                {% block print_comments %}
-                                    {% if data %}
-                                        <div class="container" style="margin-top: 5%;">
-                                           {% for i in range(data['id']|length) %}
-                                                <div class="card mb-3">
-
-                                                    <div class="card-body">
-                                                        <div class = "like-views-row" style="margin-bottom: 5%; display: flex;">
-                                                            <button type="button" class="btn btn-outline-primary" style="color: #0d0d0f; margin-bottom: 5%"> <i class="fa fa-thumbs-up"></i> {{data['likes'][i] }} </button>
-                                                            <button type="button" class="btn btn-primary btn-link" style="color: #0d0d0f; height: 50%">
-                                                                <i class="fa fa-eye"></i> {{ data['views'][i] }}
+                            <!-- html para insertar comentarios -->
+                            {% block print_comments %}
+                                {% if data %}
+                                    <div class="container" style="margin-top: 5%;">
+                                        {% for i in range(data['id']|length) %}
+                                            <div class="card mb-3">
+                                                <div class="card-body">
+                                                    <div class="like-views-row" style="margin-bottom: 5%; display: flex;">
+                                                        <form method="post" action="{{ url_for('like_comment', comment_id=data['id'][i]) }}" class="like-form">
+                                                            <button type="submit" class="btn btn-outline-primary like-btn" style="color: #0d0d0f; margin-bottom: 5%" data-comment-id="{{ data['id'][i] }}">
+                                                                <i class="fa fa-thumbs-up"></i> {{ data['likes'][i] }}
                                                             </button>
-                                                        </div>
-                                                        <p class="card-text" style="color: black;">{{ data['content'][i] }}</p>
-                                                       {% if data['img'][i] %}
-                                                            <img src="{{ data['img'][i] }}" alt="Imagen del comentario" class="img-fluid">
-                                                        {% endif %}
+                                                            <input type="hidden" name="comment_id" value="{{ data['id'][i] }}">
+                                                        </form>
+                                                        <button type="button" class="btn btn-primary btn-link" style="color: #0d0d0f; height: 50%">
+                                                            <i class="fa fa-eye"></i> {{ data['views'][i] }}
+                                                        </button>
                                                     </div>
+                                                    <p class="card-text" style="color: black;">{{ data['content'][i] }}</p>
+                                                    {% if data['img'][i] %}
+                                                        <img src="{{ data['img'][i] }}" alt="Imagen del comentario" class="img-fluid">
+                                                    {% endif %}
                                                 </div>
-                                            {% endfor %}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            {% endblock %}
+
+                            <!-- html para insertar comentarios -->
+                            <!-- Agrega este formulario donde desees que los usuarios ingresen nuevos comentarios -->
+                            <h3>Comentarios</h3>
+                            <p> Para el contenedor {{ id_contenedor }} </p>
+
+                                    <form id="comment-form" method="post" action="{{ url_for('publish_comment') }}">
+                                        <div class="form-group">
+                                            <label for="comment_content"> Nuevo comentario :</label>
+                                            <textarea class="form-control" id="comment_content" name="content" rows="3" required></textarea>
                                         </div>
-                                    {% endif %}
-                                {% endblock %}
+                                        <input type="hidden" name="user_id" value="{{ user_id }}">  <!-- Ajusta según tu lógica de autenticación -->
+                                        <input type="hidden" name="container_id" value="{{ id_contenedor }}">  <!-- Ajusta según tus necesidades -->
 
-                                <!-- html para insertar comentarios -->
+                                        <button type="submit" class="btn btn-primary">Enviar Comentario</button>
+                                    </form>
 
-
-                            </ul>
                         </div>
                     </div>
                 </div>

@@ -122,14 +122,29 @@
             <form action="/login_users" method="post">
                 <label for="username">Usuario o email:</label>
                 <input type="text" id="username" name="username" required><br>
-                <label for="password">Contraseña:</label>
-                <input type="password" id="password" name="password" required><br>
+
+                <div class="form-group">
+                    <label for="password">Contraseña:</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="password" name="password" required>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-outline-secondary" id="showPassword">
+                                <i class="fas fa-eye" style="font-size: 14px;"></i>
+                            </button>
+                        </div>
+                        <div class="invalid-feedback">Este campo es obligatorio.</div>
+                    </div>
+                </div>
+
                 <label for="terms">Acepta los <a href="{{ url_for('termsConditions') }}"> Términos y condiciones:
                     </a></label>
                 <input type="checkbox" name="terms" value="terms" style=" float: right; margin-left: 30px;"
                     required><br>
+
                 <input type="submit" value="Iniciar Sesión">
+
             </form>
+
             <p>¿Nuevo aquí? <a href="register.html">Regístrate</a></p>
             <p><a href="forgotten_passwd.html">¿Olvidaste tu contraseña?</a></p>
 
@@ -137,6 +152,15 @@
             <a href="{{ url_for('index_admin') }}">Usuario Administrador</a>
         </div>
     </div>
-
+    <script>
+        document.getElementById('showPassword').addEventListener('click', function() {
+            var passwordInput = document.getElementById('password');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+            } else {
+                passwordInput.type = 'password';
+            }
+        });
+    </script>
     <script src="../static/js/date.js"></script>
 </body>
