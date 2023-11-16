@@ -159,8 +159,7 @@ def publish_comment():
     comment_id = manager.insert_comment(user_id, container_id, content)
     print(f"Se ha insertado el comentario con ID {comment_id}")
 
-    return redirect(url_for('expand_container', id=container_id))
-
+cd 
 # Función que muestra una categoría general compuesta por N específicas
 @app.route('/category/<string:category>')
 def expand_category(category):
