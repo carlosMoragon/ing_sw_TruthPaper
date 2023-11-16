@@ -6,4 +6,4 @@ else
 fi
 sudo docker pull cmoragon/flaskapp:v1
 
-sudo docker run -it -p 4000:4000 -d cmoragon/flaskapp:v1
+sudo docker run -it -p 4000:4000 -d cmoragon/flaskapp:v2
