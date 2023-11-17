@@ -51,14 +51,16 @@ def filter_by_categories(category: str, news: List[cl.News]) -> List[cl.News]:
     return matches
 '''
 
-def filter_by_categories(category: str, news: List[cl.News]) -> List[cl.News]:
+
+def filter_by_categories(category: List[str], news: List[cl.News]) -> List[cl.News]:
     """ Esta función filtra las noticias por categorias que pertenecen a la lista"""
     matches = []
     for new in news:
         # Si la categoría de la New pertenece a la lista de categorias
         if new.get_category() in category:
-            matches.append(new) # Agregamos la New a la lista de matches
+            matches.append(new)  # Agregamos la New a la lista de matches
     return matches
+
 
 def filter_by_date(search: str, news: List[cl.News]) -> List[cl.News]:
     matches = []

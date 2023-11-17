@@ -79,11 +79,6 @@
                     <!--Add more items on the menu-->
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle active" data-toggle="dropdown">Categorías</a>
-                        <div class="dropdown-menu rounded-0 m-0">
-                            {% block categories %}
-
-                            {% endblock %}
-                        </div>
                     </div>
                 </div>
             </div>
@@ -127,7 +122,6 @@
                         <div class="bg-white border border-top-0 p-3">
 
                             {% block pruebas_noticias %}
-
                                 <ul>
                                     {% for news_item in news %}
                                         <li class="position-relative overflow-hidden" style="height: 300px;">

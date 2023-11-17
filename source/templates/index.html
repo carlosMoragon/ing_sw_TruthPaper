@@ -81,8 +81,11 @@
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Categorías</a>
                         <div class="dropdown-menu rounded-0 m-0">
                             {% block categories %}
-
+                                 {% for category in categories_list_unique %}
+                                     <a href="/category/{{ category }}" class="dropdown-item">{{ category }}</a>
+                                 {% endfor %}
                             {% endblock %}
+
                         </div>
                     </div>
                 </div>
@@ -107,6 +110,7 @@
                         <i class="fas fa-user"></i>
                     </a>
                 </div>
+            </div>
         </nav>
     </div>
     <!-- Navbar End -->

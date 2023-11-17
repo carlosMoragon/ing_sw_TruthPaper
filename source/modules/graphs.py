@@ -201,10 +201,11 @@ def get_specific_categories(general_category: str) -> List[str]:
     specific_categories = category_mapping[general_category]
     return specific_categories
 
+''''
 # Ejemplo de uso
 general_category = 'Deportes'
 specific_categories_list = get_specific_categories(general_category)
-
+'''
 
 
 ''' Categorias
