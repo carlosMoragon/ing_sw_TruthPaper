@@ -190,7 +190,7 @@ def get_general_categories(categories: List[str]) -> List[str]:
                 found = True
                 break
         if not found:
-            result.append(None)  # Si no se encuentra una categoría general, se agrega None a la lista resultante
+            result.append('General')  # Si no se encuentra una categoría general, se agrega None a la lista resultante
 
     return result
 
