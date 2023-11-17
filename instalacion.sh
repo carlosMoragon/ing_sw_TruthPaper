@@ -4,7 +4,7 @@ if [ -x "$(command -v docker)" ]; then
 else 
   sudo apt  install docker.io 
 fi
-sudo docker pull cmoragon/flaskapp:v1
+sudo docker pull cmoragon/flaskapp:v2
 
 sudo docker run -it -p 4000:4000 -d cmoragon/flaskapp:v2
 
