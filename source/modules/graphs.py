@@ -197,8 +197,8 @@ def get_general_categories(categories: List[str]) -> List[str]:
 # Funcion que dada una categoria general, devuelve una lista con las categorias especificas
 def get_specific_categories(general_category: str) -> List[str]:
     global category_mapping
-    specific_categories = category_mapping.get(general_category, [])
-
+    # dada la general_category devuelve una lista de categorias especificas
+    specific_categories = category_mapping[general_category]
     return specific_categories
 
 # Ejemplo de uso

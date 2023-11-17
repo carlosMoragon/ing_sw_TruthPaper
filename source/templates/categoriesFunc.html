@@ -6,62 +6,6 @@
      {% endfor %}
 {% endblock %}
 
-
-
-
-{% block primera_noticia %}
-<div class="carousel-item active" style="height: 500px;">
-    <a href="{{ data.urls[0] }}">
-        <img class="img-fluid w-100" src="{{ data.imgs[0] }}" style="object-fit: cover;">
-    </a>
-    <div class="overlay">
-        <div class="mb-2">
-            <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                href="">{{ data.categories[0] }}</a>
-            <a class="text-white" href="">{{data.dates[0]}}</a>
-        </div>
-        <a class="h2 m-0 text-white text-uppercase font-weight-bold" href="{{ data.urls[0] }}">{{ data.titles[0] }}</a>
-    </div>
-</div>
-{% endblock %}
-
-{% block segunda_noticia %}
-<div class="carousel-item" style="height: 500px;">
-    <a href="{{ data.urls[1] }}">
-        <img class="img-fluid w-100" src="{{ data.imgs[1] }}" style="object-fit: cover;">
-    </a>
-
-    <div class="overlay">
-        <div class="mb-2">
-            <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                href="">{{ data.categories[1] }}</a>
-            <a class="text-white" href="">{{ data.dates[1] }}</a>
-        </div>
-        <a class="h2 m-0 text-white text-uppercase font-weight-bold" href="{{ data.urls[1] }}">{{ data.titles[1] }}</a>
-    </div>
-</div>
-
-{% endblock %}
-
-{% block mini_slide %}
-{% for i in range(2, 6) %}
-<div class="col-md-6 px-0">
-    <div class="position-relative overflow-hidden" style="height: 250px;">
-        <img class="img-fluid w-100 h-100" src="{{data.imgs[i]}}" style="object-fit: cover;" href="{{data.urls[i]}}">
-        <div class="overlay">
-            <div class="mb-2">
-                <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                    href="">{{ data.categories[i] }}</a>
-                <a class="text-white" href=""><small>{{data.dates[i]}}</small></a>
-            </div>
-            <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="{{data.urls[i]}}"> {{data.titles[i]}}</a>
-        </div>
-    </div>
-</div>
-{% endfor %}
-{% endblock%}
-
-
 {% block carousel_news %}
 <!-- Contenedor del Carrusel -->
 <div id="myCarousel" class="carousel slide" data-ride="carousel">

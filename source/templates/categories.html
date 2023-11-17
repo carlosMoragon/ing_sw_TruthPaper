@@ -122,10 +122,20 @@
                 <div class="col-md-11">
                     <div>
                         <div class="section-title mb-0">
-                            <h4 class="m-0 text-uppercase font-weight-bold">Noticias recomendadas</h4>
+                            <h4 class="m-0 text-uppercase font-weight-bold">{{ category }}</h4>
                         </div>
                         <div class="bg-white border border-top-0 p-3">
-                            {% block noticias %} {% endblock%}
+                            {% block noticias %}
+                            {% endblock%}
+
+                            {% block pruebas_noticias %}
+                                {% for new in data %}
+                                <p> Título: {{ new['titles'] }}</p>
+                                <p> Likes: {{ new.likes }}</p>
+                                <p> Views: {{ new.views }}</p>
+                                <img src="{{ new.image }}" alt="" class="img-fluid">
+                            {% endfor %}
+                        {% endblock %}
                         </div>
                     </div>
                 </div>

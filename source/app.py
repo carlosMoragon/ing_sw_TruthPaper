@@ -149,11 +149,15 @@ def publish_comment():
 @app.route('/category/<string:category>')
 def expand_category(category):
     # category --> categoria general
-    categories_list = gr.get_general_categories(category)
+    categories_list = gr.get_specific_categories(category)
     print(categories_list)
     global news
     global containers
-    filtered_news = f.filter_by_general_categories(categories_list, news)
+    filtered_news = f.filter_by_categories(categories_list, news)
+    if filtered_news:
+        print("noticias no vacias")
+    else:
+        print("noticias vacias")
     data = {
         'imgs': [new.get_image() for new in filtered_news],
         'titles': [str(new.get_title()) for new in filtered_news],
@@ -163,7 +167,9 @@ def expand_category(category):
         'likes': [new.get_likes() for new in filtered_news],
         'views': [new.get_views() for new in filtered_news]
     }
-    return render_template('categoriesFunc.html', data=data, containers=containers)
+    print(data['titles'])
+
+    return render_template('categoriesFunc.html', data=data, containers=containers, category=category)
 
 def mostrar_perfil_usuarios(user_id, user_name):
     user_image = manager.load_image(user_id)

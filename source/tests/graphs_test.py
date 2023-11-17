@@ -1,6 +1,8 @@
 import unittest
-from ..modules import graph_news_per_source, graph_news_per_category, wordcloud_per_category, get_categories
+# from modules import  graphs
+# from ..modules/graphs import graph_news_per_source, graph_news_per_category, wordcloud_per_category, get_categories
 from ..modules.classes import News
+from ..modules.graphs import graph_news_per_source, graph_news_per_category, wordcloud_per_category, get_categories
 
 class TestGraphFunctions(unittest.TestCase):
 
