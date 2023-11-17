@@ -122,14 +122,13 @@ def loadUncheckedUsers():
     uncheckedUserList = []
     for user in  Userclient.query.all():
         if user.is_checked == 'N':
-            usuario =  User.query.filter_by(id=user.client_id).first()
+            usuario = User.query.filter_by(id=user.client_id).first()
             uncheckedUserList.append([usuario.username, usuario.password, usuario.email, user.client_id])
     return uncheckedUserList
 
 # Método reescribir el estado de is_checked a 'Y'
 def updateUserChecked(id):
     user =  Userclient.query.filter_by(client_id=id).first()
-    print(user.is_checked)
     user.is_checked = 'Y'
     db.session.commit()
 

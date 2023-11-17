@@ -282,6 +282,9 @@ def register_user_journalist():
 # Métodos para el ADMINISTRADOR
 @app.route('/indexAdmin')
 def index_admin():
+    # Habrñia que cargar las noticias porque si no entras en index no se cargan
+    # opción 1: cargarlas aquí
+    # opción 2: Index >> botón: Usuario Admin >> indexAdmin
     unchecked_users = manager.loadUncheckedUsers()
     return render_template('userAdmin/indexAdmin.html', unchecked_users=unchecked_users)
 
@@ -289,6 +292,7 @@ def index_admin():
 @app.route('/verifyUsers')
 def verify_users():
     unchecked_users = manager.loadUncheckedUsers()
+    print("Unchecked Users: " + str(unchecked_users))
     return render_template('userAdmin/verifyUsers.html', unchecked_users=unchecked_users)
 
 
