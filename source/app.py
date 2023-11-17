@@ -13,6 +13,7 @@ from flask import jsonify
 db = manager.db
 app = Flask(__name__)
 
+
 news: List[cl.News] = []
 containers: Dict[int, List[cl.News]] = {}
 init_news = threading.Thread(target=ws.get_news_db, args=(app, news, containers))
@@ -171,11 +172,6 @@ def expand_category(category):
 
     return render_template('categoriesFunc.html', data=data, containers=containers, category=category)
 
-def mostrar_perfil_usuarios(user_id, user_name):
-    user_image = manager.load_image(user_id)
-    return render_template('perfil.html', user_id=user_id, user_name = user_name, user_image=user_image)
-
-
 @app.route('/register.html')
 def register_funct():
     return render_template('register.html')
@@ -184,9 +180,15 @@ def register_funct():
 def go_to_login():
     return render_template('login.html')
 
+def mostrar_perfil_usuarios(user_id, user_name):
+    user_image = manager.load_image(user_id)
+    return render_template('perfil.html', user_id=user_id, user_name = user_name, user_image=user_image)
+
 @app.route('/perfil')
 def go_to_profile():
-    return render_template('perfil.html')
+    user_id = 12
+    user_name = 'Mobius'
+    return mostrar_perfil_usuarios(user_id, user_name)
 
 @app.route('/termsandConditions')
 def termsConditions():
@@ -325,7 +327,7 @@ def pdf_reader():
 
 # MySQL Connection
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://administrador_truthpaper:Periodico55deVerdad@truthpaper-server.mysql.database.azure.com:3306/truthpaper_ddbb?charset=utf8mb4&ssl_ca=DigiCertGlobalRootCA.crt.pem'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://administrador_truthpaper:Periodico55deVerdad@truthpaper-server.mysql.database.azure.com:3306/truthpaper_ddbb?charset=utf8mb4&ssl_ca=source\\DigiCertGlobalRootCA.crt.pem'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://administrador_truthpaper:Periodico55deVerdad@truthpaper-server.mysql.database.azure.com:3306/truthpaper_ddbb?charset=utf8mb4&ssl_ca=source/DigiCertGlobalRootCA.crt.pem'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
@@ -334,5 +336,6 @@ db.init_app(app)
 
 if __name__ == '__main__':
     #ws.save_html()
-    app.run(debug=True)
+    # app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=4000)
 
