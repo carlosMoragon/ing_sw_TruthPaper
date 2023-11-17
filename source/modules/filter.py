@@ -14,7 +14,7 @@ def filter_by_words(search: str, news: List[cl.News]) -> List[cl.News]:
             # FILTRAR POR TITULO, CATEGORIA y CONTENIDO
             all_news = (all_news +
                         _filter_by_title(word, news) +
-                        filter_by_categories(word, news) +
+                        # filter_by_categories(word, news) +
                         _filter_by_content(word, news))
 
     # SI HAY ALGUNA NEW REPETIDA QUE SE ELIMINE set() y después lo converitmos en list()
@@ -40,23 +40,25 @@ def _filter_by_content(word: str, news: List[cl.News]) -> List[cl.News]:
     return matches
 
 
+'''
 def filter_by_categories(category: str, news: List[cl.News]) -> List[cl.News]:
+    """ Esta función filtra por categorias, si la categoria no existe devuelve una lista vacia"""
     matches = []
     if cl.validate_date(category):
         for new in news:
             if category == str(new.get_category().lower()):
                 matches.append(new)
     return matches
+'''
 
-
-def filter_by_categories(categories: List[str], news: List[cl.News]) -> List[cl.News]:
-    """ Función que filtra las noticias dada una lista de categorías"""
+def filter_by_categories(category: str, news: List[cl.News]) -> List[cl.News]:
+    """ Esta función filtra las noticias por categorias que pertenecen a la lista"""
     matches = []
     for new in news:
-        if new.get_category() in categories:
-            matches.append(new)
-    return matches  # Devuelve una lista de noticias
-
+        # Si la categoría de la New pertenece a la lista de categorias
+        if new.get_category() in category:
+            matches.append(new) # Agregamos la New a la lista de matches
+    return matches
 
 def filter_by_date(search: str, news: List[cl.News]) -> List[cl.News]:
     matches = []

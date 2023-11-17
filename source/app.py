@@ -155,10 +155,11 @@ def expand_category(category):
     global news
     global containers
     filtered_news = f.filter_by_categories(categories_list, news)
-    if filtered_news:
-        print("noticias no vacias")
+    if len(filtered_news) < 3:
+        print("Menos de 3 noticias después de aplicar el filtro por categorías.")
     else:
-        print("noticias vacias")
+        print("Más de 3 noticias después de aplicar el filtro por categorías.")
+
     data = {
         'imgs': [new.get_image() for new in filtered_news],
         'titles': [str(new.get_title()) for new in filtered_news],
@@ -168,9 +169,9 @@ def expand_category(category):
         'likes': [new.get_likes() for new in filtered_news],
         'views': [new.get_views() for new in filtered_news]
     }
-    print(data['titles'])
+    print(data['categories'])
 
-    return render_template('categoriesFunc.html', data=data, containers=containers, category=category)
+    return render_template('categoriesFunc.html', data=data, containers=containers, category=category, news = filtered_news)
 
 @app.route('/register.html')
 def register_funct():

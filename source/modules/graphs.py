@@ -169,7 +169,7 @@ category_mapping = {
         'General': ['general', 'Tiempo'],
         'Economía': ['Economía', 'España'],
         'España': ['España', 'Andalucía', 'Elecciones', 'Espejo Público', 'Cataluña', 'Valencia', 'Madrid'],
-        'Deportes': ['Ciclismo', 'Deportes Jugones', 'Motor Fórmula 1', 'Baloncesto', 'Tenis', 'Motor', 'Tecnología', 'Fútbol'],
+        'Deportes': ['Ciclismo', 'Deportes Jugones', 'Motor Fórmula 1', 'Baloncesto', 'Tenis', 'Motor', 'Fútbol'],
         'Salud': ['Salud', 'Bienestar'],
         'Internacional': ['Guerra Ucrania', 'Mundo', 'Europa', 'Internacional'],
         'Ciencia y Tecnología': ['Ciencia y tecnología', 'Ciencia'],
