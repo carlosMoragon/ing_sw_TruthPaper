@@ -73,6 +73,26 @@ def login_users():
             user = manager.User.query.filter_by(username=request.form['username']).first()
             return index()
         elif (type(respuesta_login) != bool):
+            # Se tiene que meter en index para que se carguen las noticias
+            return render_template('index.html')
+        else:
+            flash("Datos introducidos incorrectos", "error")
+            print("Datos introducidos incorrectos en el login")
+            return redirect(url_for('start'))
+    except Exception as e:
+        print(f"Ocurrió un error durante el inicio de sesión: {str(e)}")
+        flash("Ocurrió un error durante el inicio de sesión. Por favor, inténtalo de nuevo más tarde.", "error")
+        return redirect(url_for('start'))
+
+@app.route('/login_admin', methods=['POST'])
+def login_admin():
+    # ADMINISTRADOR --> falta lógica login de administradores
+    respuesta_login = manager.login(request.form['username'], request.form['password'])
+    try:
+        if (type(respuesta_login) == bool and respuesta_login == True):
+            user = manager.User.query.filter_by(username=request.form['username']).first()
+            return index()
+        elif (type(respuesta_login) != bool):
             return render_template('userAdmin/profileAdmin.html')
         else:
             flash("Datos introducidos incorrectos", "error")
@@ -82,6 +102,7 @@ def login_users():
         print(f"Ocurrió un error durante el inicio de sesión: {str(e)}")
         flash("Ocurrió un error durante el inicio de sesión. Por favor, inténtalo de nuevo más tarde.", "error")
         return redirect(url_for('start'))
+
 
 
 @app.route('/ver_contenedor/<int:id>')
@@ -212,6 +233,10 @@ def termsConditions():
 @app.route('/categories')
 def go_to_categories():
     return render_template('categories.html')
+
+@app.route('/login_admin')
+def go_to_admin():
+    return render_template('loginAdmin.html')
 
 
 @app.route('/save_keyword', methods=['post'])

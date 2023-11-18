@@ -48,6 +48,9 @@
                         <li class="nav-item border-right border-secondary">
                             <a class="nav-link text-body small">Administrador </a> <!-- LINK!!!-->
                         </li>
+                         <li class="nav-item">
+                            <a class="nav-link text-body small" href="{{ url_for('go_to_login') }}">Login</a>
+                        </li>
                     </ul>
                 </nav>
             </div>
@@ -102,6 +105,22 @@
     <div class="container-fluid" style="margin-top: 5%;">
         <div >
             <div class="row justify-content-md-center">
+            <!-- Bienvenida Administrador -->
+                <div class="col-md-11" style="margin-bottom: 5%">
+                    <div>
+                        <div class="bg-white border border-top-0 p-3">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                              <div style="flex: 1; margin-right: 20px;">
+                                <h5 style="margin-bottom: 10px;">Bienvenido Administrador</h5>
+                                <p>En esta página podrás ver los usuarios que se han registrado en la plataforma y verificarlos.</p>
+                                <p>Además, cuentas con gráficos acerca de las noticias.</p>
+                              </div>
+                              <img src="../../static/img/administrador.png" alt="Administrador" style="width: 50%; height: auto; vertical-align: middle;">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
                 <!-- Verificación de Usuarios-->
                 <div class="col-md-11">
                     <div>
@@ -147,28 +166,6 @@
                     </div>
                 </div>
                 <!--  Verificación End -->
-                <!-- Gráficos-->
-                <div class="col-md-11" style="margin-top: 5%;">
-                    <div>
-                        <div class="section-title mb-0">
-                            <h4 class="m-0 text-uppercase font-weight-bold">Gráficos </h4>
-                        </div>
-                        <div class="bg-white border border-top-0 p-3">
-                            <h5> Noticias por fuente: </h5>
-                            <img src="../../static/img/graphs/news_per_source.png" alt="Gráfico de noticias por fuente">
-                        </div>
-                        <div class="bg-white border border-top-0 p-3">
-                            <h5> Gráfico de visualizaciones de categorías: </h5>
-                            <img src="../../static/img/graphs/news_per_source.png" alt="Gráfico de visualizaciones de categorías">
-                        </div>
-                        <div class="bg-white border border-top-0 p-3">
-                            <h5> Nube de palabras: </h5>
-                            <img src="../../static/img/graphs/news_per_source.png" alt="Nube de palabras">
-                        </div>
-                    </div>
-                </div>
-                <!--  Gráficos End -->
-
             </div>
         </div>
     </div>

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>TruthPaper</title>
+    <title>TruthPaper Administrador</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
@@ -80,10 +80,6 @@
                         <li class="nav-item border-right border-secondary">
                             <a class="nav-link text-body small" href="#"><span id="currentDate"></span></a>
                         </li>
-
-                        <li class="nav-item border-right border-secondary">
-                            <a class="nav-link text-body small" href="#">Contacto</a> <!-- LINK!!!-->
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-body small" href="{{ url_for('go_to_login') }}">Login</a> <!-- LINK!!!-->
                         </li>
@@ -100,8 +96,9 @@
     <!-- Login -->
     <div class="row align-items-center h-100">
         <div class="col h-100">
-            <div class="bg-image" style="background-image: url('../static/img/no_image.jpg'); height: 100vh;"></div>
+          <div class="bg-image" style="background-image: url('../static/img/vertical_admin.png'); background-repeat: no-repeat; background-size: cover; height: 100vh;"></div>
         </div>
+
         <div class="col">
             <br>
             <h2>Iniciar Sesión</h2>
@@ -119,7 +116,7 @@
                     {% endfor %}
                 {% endif %}
             {% endwith %}
-            <form action="/login_users" method="post">
+            <form action="/login_admin" method="post">
                 <label for="username">Usuario o email:</label>
                 <input type="text" id="username" name="username" required><br>
 
@@ -136,18 +133,11 @@
                     </div>
                 </div>
 
-                <label for="terms">Acepta los <a href="{{ url_for('termsConditions') }}"> Términos y condiciones:
-                    </a></label>
-                <input type="checkbox" name="terms" value="terms" style=" float: right; margin-left: 30px;"
-                    required><br>
-
                 <input type="submit" value="Iniciar Sesión">
 
             </form>
 
-            <p>¿Nuevo aquí? <a href="register.html">Regístrate</a></p>
             <p><a href="forgotten_passwd.html">¿Olvidaste tu contraseña?</a></p>
-
         </div>
     </div>
     <script>
