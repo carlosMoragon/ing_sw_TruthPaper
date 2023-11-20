@@ -242,6 +242,14 @@ def load_image(user_id):
         return base64_image
     else:
         return None
+def load_image_comment(comment_id):
+    comment =  Comment.query.filter_by(id=comment_id).first()
+    if comment and comment.image:
+        image_bytes = comment.image
+        base64_image = transform_images_to_base64(image_bytes)
+        return base64_image
+    else:
+        return None
 
 #Methods for containers
 def load_container():
@@ -284,9 +292,9 @@ def get_last_container_id(app) -> int:
         else:
             return 0  # or any default value if no containers exist
 
-def insert_comment(user_id, container_id, content):
+def insert_comment(user_id, container_id, content, image_bytes):
     # Crea una nueva instancia de Comment
-    new_comment = Comment(userclient_id=user_id, container_id=container_id, content=content, likes=0, views=0, image=None)
+    new_comment = Comment(userclient_id=user_id, container_id=container_id, content=content, likes=0, views=0, image=image_bytes)
     # Agrega la nueva instancia a la sesión y guarda en la base de datos
     db.session.add(new_comment)
     db.session.commit()

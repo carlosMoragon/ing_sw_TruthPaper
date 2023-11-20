@@ -120,7 +120,7 @@
                                         <input type="submit" value="Aceptar" class="btn btn-primary" style="width: 100px; color: green;">
                                         <!-- Boton para leer los pdf si son periodistas -->
                                         {% if user_list.1 == 'periodista' %}
-                                            <a href="{{ url_for('pdf_reader', user_id=user_list.3) }}" class="btn btn-primary" style="width: 100px; color: green;">Leer PDF</a>
+                                            <a href="{{ url_for('pdf_reader', user_id=user_list.3) }}" class="btn btn-primary" style="width: 100px; color: green;"> Leer PDF</a>
                                         {% endif %}
                                         <!-- Falta implementar la lógica para saber si es periodista y sacar el pdf : pdfreader.html-->
 

@@ -114,7 +114,7 @@
                                 <script>
                                     document.addEventListener('DOMContentLoaded', function() {
                                         var urlParams = new URLSearchParams(window.location.search);
-                                        var certificate_base64 = "{{ certificate_base64 }}";  
+                                        var certificate_base64 = "{{ pdf }}";
                                         if (certificate_base64) {
                                             var pdfContainer = document.getElementById('pdfContainer');
                                             var embedTag = document.createElement('embed');

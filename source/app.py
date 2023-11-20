@@ -7,8 +7,8 @@ from flask_sqlalchemy import SQLAlchemy
 from typing import List, Dict
 import threading
 from datetime import datetime
-from io import BytesIO
-from flask import jsonify
+from werkzeug.utils import secure_filename
+import os
 
 db = manager.db
 app = Flask(__name__)
@@ -110,16 +110,14 @@ def expand_container(id):
     container = containers.get(id)
 
     comments = manager.load_comments(id)
-    data = {
-        'content': [comment.get_content() for comment in comments],
-        # 'username': [manager.get_username(comment.get_userclient_id) for comment in comments], # NO FUNCIONA
-        'id': [comment.get_id() for comment in comments],
-        'likes': [comment.get_likes() for comment in comments],
-        'views': [comment.get_views() for comment in comments],
-        'img': [comment.get_img() for comment in comments],
-        'userclient_id': [comment.get_userclient_id() for comment in comments],
-        'container_id': [comment.get_containerid() for comment in comments]
-    }
+    data = {'content': [comment.get_content() for comment in comments],
+            'id': [comment.get_id() for comment in comments], 'likes': [comment.get_likes() for comment in comments],
+            'views': [comment.get_views() for comment in comments],
+            'img': [manager.load_image_comment(comment.get_userclient_id()) for comment in comments],
+            'userclient_id': [comment.get_userclient_id() for comment in comments],
+            'container_id': [comment.get_containerid() for comment in comments]
+            }
+
     if comments is None:
         return render_template('containerNews.html', container=container, id_contenedor=id)
 
@@ -167,7 +165,13 @@ def publish_comment():
     container_id = request.form.get('container_id')
     content = request.form.get('content')
 
-    comment_id = manager.insert_comment(user_id, container_id, content)
+    # Manejar la carga de la imagen
+    file = request.files['image']
+    if file and allowed_file(file.filename):
+        image_bytes = file.read()
+    else:
+        image_bytes = None
+    comment_id = manager.insert_comment(user_id, container_id, content, image_bytes)
     print(f"Se ha insertado el comentario con ID {comment_id}")
 
     return redirect(url_for('expand_container', id=container_id))
@@ -317,6 +321,14 @@ def index_admin():
 @app.route('/verifyUsers')
 def verify_users():
     unchecked_users = manager.loadUncheckedUsers()
+    # Si el user_id de algun unchecked_user está en la tabla journalistusers, se devuelve True
+    '''
+    for user in unchecked_users:
+        if(manager.is_journalist(user[3])):
+            user.append(True)
+        else:
+            user.append(False)
+    '''
     print("Unchecked Users: " + str(unchecked_users))
     return render_template('userAdmin/verifyUsers.html', unchecked_users=unchecked_users)
 
@@ -331,6 +343,12 @@ def process_verification():
         manager.updateUserChecked(user_id)
     return redirect('/verifyUsers')
 
+
+@app.route('/pdfReader/<int:user_id>') # id del usuario
+def pdf_reader(user_id):
+    # Enviar pdf según el id del usuario
+    pdf = manager.load_pdf_certificate(user_id) # certification_base64
+    return render_template('userAdmin/pdfReader.html', pdf=pdf)
 
 @app.route('/charts')
 def charts():
@@ -375,16 +393,22 @@ def profile_admin():
     return render_template('userAdmin/profileAdmin.html')
 
 
-@app.route('/pdfreader')
-def pdf_reader():
-    return render_template('userAdmin/pdfReader.html')
-
 
 # MySQL Connection
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://administrador_truthpaper:Periodico55deVerdad@truthpaper-server.mysql.database.azure.com:3306/truthpaper_ddbb?charset=utf8mb4&ssl_ca=DigiCertGlobalRootCA.crt.pem'
+
+# Configuración para subir imágenes en comentarios
+UPLOAD_FOLDER = 'uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 app.config[
     'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://administrador_truthpaper:Periodico55deVerdad@truthpaper-server.mysql.database.azure.com:3306/truthpaper_ddbb?charset=utf8mb4&ssl_ca=source/DigiCertGlobalRootCA.crt.pem'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 
 db.init_app(app)
 
