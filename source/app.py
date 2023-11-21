@@ -108,6 +108,7 @@ def login_admin():
 @app.route('/ver_contenedor/<int:id>')
 def expand_container(id):
     container = containers.get(id)
+    manager.increment_views(id) # Se incrementan los likes a uno de la noticia
 
     comments = manager.load_comments(id)
     data = {'content': [comment.get_content() for comment in comments],

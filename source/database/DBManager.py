@@ -327,6 +327,15 @@ def increment_likes(new_id: int):
     print("Like a la noticia con id: " + str(noticia.id))
     db.session.commit()
 
+
+def increment_views(id_container: int):
+    comentarios = Comment.query.filter_by(container_id=id_container).all()
+    for comentario in comentarios:
+        comentario.views += 1
+        print("Vista al comentario con id: " + str(comentario.id))
+    db.session.commit()
+
+
 def comment_likes(comment_id: int):
     comment = Comment.query.filter_by(id=comment_id).first()
     comment.likes = comment.likes + 1
