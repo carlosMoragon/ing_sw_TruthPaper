@@ -163,7 +163,7 @@
                                         {% for i in range(data['id']|length) %}
                                             <div class="card mb-3">
                                                 <div class="card-body">
-                                                    <div class="like-views-row" style="margin-bottom: 5%; display: flex;">
+                                                    <div class="like-views-row" style="display: flex;">
                                                         <button type="button" class="btn btn-outline-primary" style="color: #0d0d0f; margin-bottom: 5%">
                                                             <i class="fa fa-thumbs-up"></i> {{data['likes'][i] }}
                                                         </button>
@@ -172,14 +172,9 @@
                                                         </button>
                                                     </div>
                                                     <p class="card-text" style="color: black;">{{ data['content'][i] }}</p>
-                                                    <!-- Imagen del comentario -->
                                                     {% if data['img'][i] %}
-                                                        <img src="data:image/png;base64,{{ data['img'][i] }}" alt="Imagen del comentario" class="img-fluid">
-                                                    {% endif %}
-
-
-
-
+                                                            <img src="data:image/png;base64,{{ data['img'][i] }}" alt="Imagen del comentario" class="img-fluid" style="max-width: 30%; margin-left: 3%; height: 50%;">
+                                                        {% endif %}
                                                 </div>
                                             </div>
                                         {% endfor %}

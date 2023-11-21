@@ -111,9 +111,11 @@ def expand_container(id):
 
     comments = manager.load_comments(id)
     data = {'content': [comment.get_content() for comment in comments],
-            'id': [comment.get_id() for comment in comments], 'likes': [comment.get_likes() for comment in comments],
+            'id': [comment.get_id() for comment in comments],
+            'likes': [comment.get_likes() for comment in comments],
             'views': [comment.get_views() for comment in comments],
-            'img': [manager.load_image_comment(comment.get_userclient_id()) for comment in comments],
+            'img': [manager.load_image_comment(comment.get_id()) for comment in comments],
+            # 'img': [manager.load_image_comment(14)],
             'userclient_id': [comment.get_userclient_id() for comment in comments],
             'container_id': [comment.get_containerid() for comment in comments]
             }
