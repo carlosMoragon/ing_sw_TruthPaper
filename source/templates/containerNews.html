@@ -144,10 +144,15 @@
                                             <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="{{news_item.get_url()}}">{{news_item.get_title()}}</a>
 
                                             <form method="post" action="{{ url_for('like_news', news_id=news_item.get_id()) }}" class="like-form">
-                                                <button type="submit" class="btn btn-outline-primary like-btn" style="margin-top: 1%" data-news-id="{{ news_item.get_id() }}">
-                                                    <i class="fa fa-thumbs-up"></i> {{ news_item.get_likes() }}
-                                                </button>
-                                                <input type="hidden" name="news_id" value="{{ news_item.get_id() }}">
+                                                <div style= "display: flex;">
+                                                    <button type="button" class="btn btn-outline-secondary" style="color: white;" onclick="like_news({{ news_item.id }})">
+                                                        <i class="fa fa-thumbs-up"></i> {{ news_item.get_likes() }}
+                                                    </button>
+                                                    <input type="hidden" name="news_id" value="{{ news_item.get_id() }}">
+                                                    <button type="button" class="btn btn-primary">
+                                                        <i class="fas fa-save"></i>
+                                                    </button>
+                                                </div>
                                             </form>
 
 
@@ -170,6 +175,7 @@
                                                         <button type="button" class="btn btn-primary btn-link" style="color: #0d0d0f; height: 50%">
                                                             <i class="fa fa-eye"></i> {{ data['views'][i] }}
                                                         </button>
+
                                                     </div>
                                                     <p class="card-text" style="color: black;">{{ data['content'][i] }}</p>
                                                     {% if data['img'][i] %}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>TruthPaper</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <!-- Add your other head elements here -->
+
+</head>
+
+<body>
+    <!-- Topbar and Navbar code here -->
+
+    <!-- News Display Start -->
+    <div class="container-fluid" style="width: 100%; height: 100%;">
+        <div class="row justify-content-md-center">
+            <div class="col-md-11">
+                <div>
+                    <div class="section-title mb-0">
+                        <h4 class="m-0 text-uppercase font-weight-bold">Noticias Guardadas</h4>
+                    </div>
+                    <!-- NOTICIAS GUARDADAS -->
+                    {% for news_item in container %}
+                    <div class="bg-white border border-top-0 p-3">
+                        <div class="position-relative overflow-hidden" style="height: 300px;">
+                            <img class="img-fluid" src="{{news_item.get_image()}}" href="{{news_item.get_url()}}" style="width: 100%;" />
+                            <p> </p>
+                        </div>
+
+                        <div class="overlay">
+                            <div class="mb-2">
+                                <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="">{{ news_item.get_category() }}</a>
+                                <a class="text-white" href=""><small>{{news_item.get_date()}}</small></a>
+                            </div>
+                            <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="{{news_item.get_url()}}">{{news_item.get_title()}}</a>
+
+                            <form method="post" action="{{ url_for('like_news', news_id=news_item.get_id()) }}" class="like-form">
+                                <button type="submit" class="btn btn-outline-primary like-btn" style="margin-top: 1%" data-news-id="{{ news_item.get_id() }}">
+                                    <i class="fa fa-thumbs-up"></i> {{ news_item.get_likes() }}
+                                </button>
+                                <input type="hidden" name="news_id" value="{{ news_item.get_id() }}">
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- News Display End -->
+</body>
+
+</html>
