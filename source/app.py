@@ -16,6 +16,7 @@ app = Flask(__name__)
 news: List[cl.News] = []
 containers: Dict[int, List[cl.News]] = {}
 init_news = threading.Thread(target=ws.get_news_db, args=(app, news, containers))
+semaphore = threading.Semaphore(1)
 app.secret_key = 'truthpaper'  # Clave secreta para flash (alerts errores)
 
 
@@ -25,6 +26,7 @@ def index():
     global containers
     print("llega")
     init_news.join()
+    semaphore.release()
     for new in news:
         print(f"{new.get_container_id()}\n")
     data = {
@@ -46,7 +48,11 @@ def index():
 @app.route('/')
 def start():
     global news, containers
+    
     if not news:
+        semaphore.acquire()
+        if news:
+            return render_template('login.html')
         # ESTA ES LA DE LAS BBDD QUE SON LAS QUE MAS RAPIDO TIENEN QUE IR
         init_news.start()
         # ESTAS SON LAS QUE SON NUEVAS QUE SE VAN A IR AÑADIENDO A LO LARGO DE LA EJECUCION
