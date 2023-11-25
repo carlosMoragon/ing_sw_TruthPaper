@@ -6,10 +6,10 @@ from flask import request, current_app, send_file, render_template
 from PIL import Image
 from io import BytesIO
 import base64
-from flask_bcrypt import Bcrypt
+#from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 
-bcrypt = Bcrypt()
+#bcrypt = Bcrypt()
 db = SQLAlchemy()
 
 
@@ -19,23 +19,19 @@ user_id = 11
 '''
 def login(username, password) -> bool:
 '''
-def login(username, password): #-> bool:
-    user_db =  User.query.filter_by(username=username).first()
-    email_db =  User.query.filter_by(email=username).first()
-    
-    if user_db == None:
-        user_db = email_db
-    if user_db == None:
-        return False
+# def login(username, password): #-> bool:
+#     user_db =  usermappers.UserMapper().find_user_by_username_or_email(username)
+#     if user_db == None:
+#         return False
    
-    if (user_db.id == 29):
-        return 'admin'
+#     if (user_db.id == 29):
+#         return 'admin'
     
-    encoded_password = password.encode('utf-8')
-    if bcrypt.check_password_hash(user_db.password, encoded_password):
-        return True
-    else:
-        return False
+#     encoded_password = password.encode('utf-8')
+#     if bcrypt.check_password_hash(user_db.password, encoded_password):
+#         return True
+#     else:
+#         return False
     
     #return bcrypt.check_password_hash(user_db.password, password).encode('utf-8')
     # return user_db.password == password
@@ -51,80 +47,80 @@ def get_news_db(app, news, container):
         container.update(ws.split_by_container(news))
         #container.update(ws.split_by_container(ws.add_new_container(news)))
 '''
-def save_user():
-    if cl.validate_password(request.form['password']):
-        if cl.validate_email(request.form['email']):
-            #Si el nombre de usuario ya existe, no se puede registrar
-            newUser =  User(
-                username=request.form['username'],
-                #password=request.form['password'],
-                password=bcrypt.generate_password_hash(request.form['password']).decode('utf-8'),
-                email=request.form['email'])
+# def save_user():
+#     if cl.validate_password(request.form['password']):
+#         if cl.validate_email(request.form['email']):
+#             #Si el nombre de usuario ya existe, no se puede registrar
+#             newUser =  User(
+#                 username=request.form['username'],
+#                 #password=request.form['password'],
+#                 password=bcrypt.generate_password_hash(request.form['password']).decode('utf-8'),
+#                 email=request.form['email'])
 
-            db.session.add(newUser)
-            db.session.commit()
+#             db.session.add(newUser)
+#             db.session.commit()
 
-            new_user_id = newUser.id
+#             new_user_id = newUser.id
 
-            newUserClient =  Userclient(
-                client_id=new_user_id,
-                is_checked='Y',
-                photo=request.files['photo'].read()
-                # photo = transform_images_to_jpeg(request.files['photo'].read())
-            )
-            db.session.add(newUserClient)
-            db.session.commit()
+#             newUserClient =  Userclient(
+#                 client_id=new_user_id,
+#                 is_checked='Y',
+#                 photo=request.files['photo'].read()
+#                 # photo = transform_images_to_jpeg(request.files['photo'].read())
+#             )
+#             db.session.add(newUserClient)
+#             db.session.commit()
 
-            return new_user_id
-        else:
-            print("EMAIL NO VÁLIDO")
-            return -2
-    else:
-        print("CONTRASEÑA DÉBIL")
-        return -1
+#             return new_user_id
+#         else:
+#             print("EMAIL NO VÁLIDO")
+#             return -2
+#     else:
+#         print("CONTRASEÑA DÉBIL")
+#         return -1
     
-def save_commonuser(new_user_id) -> bool:
-        newCommonUser =  Commonuser(
-            commonuser_id = new_user_id, 
-            name = request.form['c_user_name'],
-            lastname = request.form['c_user_lastname'],
-            bankaccount = request.form['bankaccount']
-        )
-        db.session.add(newCommonUser)
-        db.session.commit()
-        return True
+# def save_commonuser(new_user_id) -> bool:
+#         newCommonUser =  Commonuser(
+#             commonuser_id = new_user_id, 
+#             name = request.form['c_user_name'],
+#             lastname = request.form['c_user_lastname'],
+#             bankaccount = request.form['bankaccount']
+#         )
+#         db.session.add(newCommonUser)
+#         db.session.commit()
+#         return True
     
-def save_companyuser(new_user_id) -> bool:
-        newCompanyUser =  Companyuser(
-                companyuser_id = new_user_id, 
-                name = request.form['company_name'],
-                bankaccount = request.form['bankaccount'],
-                NIF = request.form['company_nif']
-            )
-        db.session.add(newCompanyUser)
-        db.session.commit()
-        return True
+# def save_companyuser(new_user_id) -> bool:
+#         newCompanyUser =  Companyuser(
+#                 companyuser_id = new_user_id, 
+#                 name = request.form['company_name'],
+#                 bankaccount = request.form['bankaccount'],
+#                 NIF = request.form['company_nif']
+#             )
+#         db.session.add(newCompanyUser)
+#         db.session.commit()
+#         return True
 
-def save_journalistuser(new_user_id) -> bool:
-        newJournalistUser =  Journalistuser(
-                journalistuser_id = new_user_id, 
-                name = request.form['journalist_name'],
-                lastname = request.form['journalist_lastname'],
-                certificate = request.files['certificate'].read()
-            )
-        db.session.add(newJournalistUser)
-        db.session.commit()
-        return True
+# def save_journalistuser(new_user_id) -> bool:
+#         newJournalistUser =  Journalistuser(
+#                 journalistuser_id = new_user_id, 
+#                 name = request.form['journalist_name'],
+#                 lastname = request.form['journalist_lastname'],
+#                 certificate = request.files['certificate'].read()
+#             )
+#         db.session.add(newJournalistUser)
+#         db.session.commit()
+#         return True
 
 
 #Method for admin information 
-def loadUncheckedUsers():
-    uncheckedUserList = []
-    for user in  Userclient.query.all():
-        if user.is_checked == 'N':
-            usuario = User.query.filter_by(id=user.client_id).first()
-            uncheckedUserList.append([usuario.username, usuario.password, usuario.email, user.client_id])
-    return uncheckedUserList
+# def loadUncheckedUsers():
+#     uncheckedUserList = []
+#     for user in  Userclient.query.all():
+#         if user.is_checked == 'N':
+#             usuario = User.query.filter_by(id=user.client_id).first()
+#             uncheckedUserList.append([usuario.username, usuario.password, usuario.email, user.client_id])
+#     return uncheckedUserList
 
 # Método reescribir el estado de is_checked a 'Y'
 def updateUserChecked(id):
@@ -300,9 +296,9 @@ def insert_comment(user_id, container_id, content, image_bytes):
     db.session.commit()
 
 
-def get_username(user_id):
-    user =  User.query.filter_by(id=user_id).first()
-    return user.username
+# def get_username(user_id):
+#     user =  User.query.filter_by(id=user_id).first()
+#     return user.username
 
 
 def get_new_by_id(new_id):
@@ -344,16 +340,16 @@ def comment_likes(comment_id: int):
 
 
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
-    username = db.Column(db.String(30), nullable=False)
-    password = db.Column(db.String(30), nullable=False)
-    email = db.Column(db.Text, nullable=True)
+# class User(db.Model):
+#     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
+#     username = db.Column(db.String(30), nullable=False)
+#     password = db.Column(db.String(30), nullable=False)
+#     email = db.Column(db.Text, nullable=True)
 
-    def __init__(self, username, password, email):
-        self.username = username
-        self.password = password
-        self.email = email
+#     def __init__(self, username, password, email):
+#         self.username = username
+#         self.password = password
+#         self.email = email
 
 
 class Userclient(db.Model):

@@ -1,7 +1,7 @@
 # Importar los módulos necesarios
 
 from flask import Flask, render_template, request, flash, redirect, url_for, send_file
-from modules import web_scrapping as ws, users, filter as f, classes as cl, graphs as gr
+from modules import web_scrapping as ws, users, filter as f, classes as cl, graphs as gr, usermappers 
 from database import DBManager as manager
 from flask_sqlalchemy import SQLAlchemy
 from typing import List, Dict
@@ -52,7 +52,7 @@ def start():
         # ESTAS SON LAS QUE SON NUEVAS QUE SE VAN A IR AÑADIENDO A LO LARGO DE LA EJECUCION
         if not manager.is_update(datetime.now().strftime(f'%Y-%m-%d')):
             print("SE ACTUALIZAN LAS NOTICIAS")
-            threading.Thread(target=_add_news_background).start()
+            threading.Thread(target=_add_news_background).start()        
     return render_template('login.html')
 
 
@@ -67,11 +67,16 @@ def _add_news_background():
 
 @app.route('/login_users', methods=['POST'])
 def login_users():
-    respuesta_login = manager.login(request.form['username'], request.form['password'])
+    respuesta_login = usermappers.User.login(request.form['username'], request.form['password'])
     try:
         if (type(respuesta_login) == bool and respuesta_login == True):
-            user = manager.User.query.filter_by(username=request.form['username']).first()
-            return index()
+            #aqui se tiene que crear un objeto usuario
+            mapped_user = usermappers.User.getAllUserData(request.form['username']) 
+            usuario = cl.UserInApp(mapped_user.id, mapped_user.username, mapped_user.password, mapped_user.email) #No interesa mucho mapear la contraseña
+            idAdminPRUEBA = usermappers.User.save_user()
+            probando = usermappers.AdministratorUser.saveUserAdmin(idAdminPRUEBA)
+            return probando
+            #return index()
         elif (type(respuesta_login) != bool):
             # Se tiene que meter en index para que se carguen las noticias
             return render_template('index.html')
@@ -90,7 +95,6 @@ def login_admin():
     respuesta_login = manager.login(request.form['username'], request.form['password'])
     try:
         if (type(respuesta_login) == bool and respuesta_login == True):
-            user = manager.User.query.filter_by(username=request.form['username']).first()
             return index()
         elif (type(respuesta_login) != bool):
             return render_template('userAdmin/profileAdmin.html')
