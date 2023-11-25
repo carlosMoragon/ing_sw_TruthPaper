@@ -27,7 +27,7 @@ def login(username, password): #-> bool:
         user_db = email_db
     if user_db == None:
         return False
-   
+
     if (user_db.id == 29):
         return 'admin'
     
@@ -350,7 +350,8 @@ class User(db.Model):
     password = db.Column(db.String(30), nullable=False)
     email = db.Column(db.Text, nullable=True)
 
-    def __init__(self, username, password, email):
+    def __init__(self, id, username, password, email):
+        self.id = id
         self.username = username
         self.password = password
         self.email = email

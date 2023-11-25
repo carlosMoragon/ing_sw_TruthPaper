@@ -1,6 +1,6 @@
 # Importar los módulos necesarios
 
-from flask import Flask, render_template, request, flash, redirect, url_for, send_file
+from flask import Flask, render_template, request, flash, redirect, url_for, send_file, session
 from modules import web_scrapping as ws, users, filter as f, classes as cl, graphs as gr
 from database import DBManager as manager
 from flask_sqlalchemy import SQLAlchemy
@@ -40,6 +40,8 @@ def index():
     categories_list = gr.get_general_categories(categories)
     categories_list_unique = list(set(categories_list))
     print(categories_list_unique)
+    #print("User object: " + str(user))
+    print("User id: " + str(session['user_id']))
     return render_template('indexFunc.html', data=data, containers=containers, categories_list_unique=categories_list_unique)
 
 
@@ -70,7 +72,9 @@ def login_users():
     respuesta_login = manager.login(request.form['username'], request.form['password'])
     try:
         if (type(respuesta_login) == bool and respuesta_login == True):
+            global user 
             user = manager.User.query.filter_by(username=request.form['username']).first()
+            session['user_id'] = user.id
             return index()
         elif (type(respuesta_login) != bool):
             # Se tiene que meter en index para que se carguen las noticias
