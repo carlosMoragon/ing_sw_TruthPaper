@@ -323,7 +323,7 @@ def process_verification():
 @app.route('/pdfReader/<int:user_id>') # id del usuario
 def pdf_reader(user_id):
     # Enviar pdf según el id del usuario
-    pdf = manager.load_pdf_certificate(user_id) # certification_base64
+    pdf = usermappers.Journalistuser.load_pdf_certificate(user_id) 
     return render_template('userAdmin/pdfReader.html', pdf=pdf)
 
 @app.route('/charts')

@@ -223,14 +223,6 @@ def get_comment_by_id(comment_id):
     comment=Comment.query.filter_by(id=comment_id).first()
     return comment
 
-# #Methos for pdf's
-# def load_pdf_certificate(user_id):
-#     journalistuser =  Journalistuser.query.filter_by(journalistuser_id=user_id).first()
-#     certificate_bytes = journalistuser.certificate 
-#     certificate_base64 = base64.b64encode(certificate_bytes).decode('utf-8')
-#     return certificate_base64
-
-
 def increment_likes(new_id: int):
     noticia = New.query.filter_by(id=new_id).first()
     noticia.likes = noticia.likes + 1

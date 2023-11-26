@@ -1,7 +1,9 @@
 from database.DBManager import db 
 from flask_bcrypt import Bcrypt
-import re 
 from flask import request
+import base64
+import re 
+
 
 bcrypt = Bcrypt()
 
@@ -196,6 +198,12 @@ class Journalistuser(db.Model):
         db.session.add(newJournalistUser)
         db.session.commit()
         return True
+    
+    def load_pdf_certificate(user_id):
+        journalistuser =  Journalistuser.query.filter_by(journalistuser_id=user_id).first()
+        certificate_bytes = journalistuser.certificate 
+        certificate_base64 = base64.b64encode(certificate_bytes).decode('utf-8')
+        return certificate_base64
 
 
 
