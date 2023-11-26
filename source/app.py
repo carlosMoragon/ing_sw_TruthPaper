@@ -1,7 +1,7 @@
 # Importar los módulos necesarios
 
 from flask import Flask, render_template, request, flash, redirect, url_for, send_file, session
-from modules import web_scrapping as ws, users, filter as f, classes as cl, graphs as gr, usermappers, entitymappers
+from modules import web_scrapping as ws, filter as f, classes as cl, graphs as gr, usermappers, entitymappers
 from database import DBManager as manager
 from flask_sqlalchemy import SQLAlchemy
 from typing import List, Dict
