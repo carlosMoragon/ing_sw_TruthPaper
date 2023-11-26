@@ -1,5 +1,5 @@
-import re
 from typing import List
+import re
 
 class UserInApp:
     def __init__(self, id: int, username: str, password: str, email: str):
@@ -34,97 +34,6 @@ class UserInApp:
 
     def __eq__(self, other):
         return self._id == other.get_id()
-
-
-
-
-def validate_date(date: str) -> bool:
-    # yyyy-mm-dd
-    return bool(re.match(r'^\d{4}-\d{2}-\d{2}$', date))
-
-
-# def validate_password(password: str) -> bool:
-#     # Busca que tenga al menos 4 numeros, 1 mayuscula, 1 caracter especial y 8 digitos
-#     return bool(re.match(r'^(?=.*\d{4,})(?=.*[A-Z])(?=.*[\W_]).{8,}$', password))
-
-
-# def validate_email(email: str) -> bool:
-#     # Busca una expresión del tipo (string1)@(string2).(2+characters)
-#     return bool(re.match(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+', email))
-
-
-# Estructura de un comentario de una publicación
-class Comment:
-
-    def __init__(self, id: int, likes: int, views: int, content: str, img: str, userclient_id: int, container_id: int):
-        self._id = id
-        self._likes = likes
-        self._views = views
-        self._content = content
-        self._img = img
-        self._userclient_id = userclient_id
-        self._container_id = container_id
-
-    def get_id(self) -> int:
-        return self._id
-
-    def set_id(self, id):
-        self._id = id
-
-    def get_likes(self) -> int:
-        return self._likes
-
-    def set_likes(self, likes):
-        self._likes = likes
-
-    def get_views(self) -> int:
-        return self._views
-
-    def set_views(self, views):
-        self._views = views
-
-    def get_content(self) -> str:
-        return self._content
-
-    def set_content(self, content):
-        self._content = content
-
-    def get_img(self) -> str:
-        return self._img
-
-    def set_img(self, img):
-        self._img = img
-
-    def get_userclient_id(self) -> int:
-        return self._userclient_id
-
-    def set_userclient_id(self, userclient_id):
-        self._userclient_id = userclient_id
-
-    def set_containerid(self, container_id):
-        self._container_id = container_id
-    def get_containerid(self):
-        return self._container_id
-
-
-    def __str__(self) -> str:
-        return f"id: {self._id}, likes: {self._likes}, views: {self._views}, content: {self._content}, img: {self._img}, userclient_id: {self._userclient_id}"
-
-class container:
-    def __init__(self, id: int, likes: int):
-        self._id = id
-        self._likes = likes
-    def set_id(self, id):
-        self._id = id
-    def get_id(self):
-        return self._id
-    def set_likes(self, likes):
-        self._likes = likes
-
-    def get_likes(self):
-        return self._likes
-
-
 
 
 # class UserClient(User):
@@ -256,6 +165,63 @@ class container:
 #         return f"id: {self._id}, username: {self._username}, password: {self._password}, email: {self._email}, photo: {self._photo}, is_checked: {self._is_checked}, name: {self._name}, lastname: {self._lastname}, certification: {self._certification}"
 
 
+# Estructura de un comentario de una publicación
+class Comment:
+
+    def __init__(self, id: int, likes: int, views: int, content: str, img: str, userclient_id: int, container_id: int):
+        self._id = id
+        self._likes = likes
+        self._views = views
+        self._content = content
+        self._img = img
+        self._userclient_id = userclient_id
+        self._container_id = container_id
+
+    def get_id(self) -> int:
+        return self._id
+
+    def set_id(self, id):
+        self._id = id
+
+    def get_likes(self) -> int:
+        return self._likes
+
+    def set_likes(self, likes):
+        self._likes = likes
+
+    def get_views(self) -> int:
+        return self._views
+
+    def set_views(self, views):
+        self._views = views
+
+    def get_content(self) -> str:
+        return self._content
+
+    def set_content(self, content):
+        self._content = content
+
+    def get_img(self) -> str:
+        return self._img
+
+    def set_img(self, img):
+        self._img = img
+
+    def get_userclient_id(self) -> int:
+        return self._userclient_id
+
+    def set_userclient_id(self, userclient_id):
+        self._userclient_id = userclient_id
+
+    def set_containerid(self, container_id):
+        self._container_id = container_id
+    def get_containerid(self):
+        return self._container_id
+
+
+    def __str__(self) -> str:
+        return f"id: {self._id}, likes: {self._likes}, views: {self._views}, content: {self._content}, img: {self._img}, userclient_id: {self._userclient_id}"
+
 class advertisement:
     def __init__(self, id: int, image, content: str, url: str, views: int, companyuser_id: int):
         self._id = id
@@ -307,7 +273,6 @@ class advertisement:
     def __eq__(self, other):
         return self._id == other.get_id()
 
-
 class Note:
     def __init__(self, id: int, content: str, userclient_id: int):
         self._id = id
@@ -337,7 +302,6 @@ class Note:
 
     def __eq__(self, other):
         return self._id == other.get_id()
-
 
 # Estructura de una Noticia
 class News:
@@ -454,3 +418,21 @@ class Container:
 
         def set_likes(self, likes):
             self._likes = likes
+class container:
+    def __init__(self, id: int, likes: int):
+        self._id = id
+        self._likes = likes
+    def set_id(self, id):
+        self._id = id
+    def get_id(self):
+        return self._id
+    def set_likes(self, likes):
+        self._likes = likes
+
+    def get_likes(self):
+        return self._likes
+
+
+def validate_date(date: str) -> bool:
+    # yyyy-mm-dd
+    return bool(re.match(r'^\d{4}-\d{2}-\d{2}$', date))

@@ -71,8 +71,8 @@ def login_users():
     try:
         if (type(respuesta_login) == bool and respuesta_login == True):
             #aqui se tiene que crear un objeto usuario
-            # mapped_user = usermappers.User.getAllUserData(request.form['username']) 
-            # usuario = cl.UserInApp(mapped_user.id, mapped_user.username, mapped_user.password, mapped_user.email) #No interesa mucho mapear la contraseña
+            mapped_user = usermappers.User.getAllUserData(request.form['username']) 
+            USUARIO_EN_SESION = cl.UserInApp(mapped_user.id, mapped_user.username, mapped_user.password, mapped_user.email) #No interesa mucho mapear la contraseña
             return index()
         elif (type(respuesta_login) != bool and respuesta_login == 'admin'):
             # Se tiene que meter en index para que se carguen las noticias
@@ -201,7 +201,7 @@ def register_funct():
 def go_to_login():
     return render_template('login.html')
 
-
+############################################################################333
 def mostrar_perfil_usuarios(user_id, user_name):
     user_image = manager.load_image(user_id)
     return render_template('perfil.html', user_id=user_id, user_name=user_name, user_image=user_image)
@@ -210,6 +210,7 @@ def mostrar_perfil_usuarios(user_id, user_name):
 @app.route('/perfil')
 def go_to_profile():
     user_id = 12
+    #user_id = USUARIO_EN_SESION
     user_name = 'Mobius'
     return mostrar_perfil_usuarios(user_id, user_name)
 
