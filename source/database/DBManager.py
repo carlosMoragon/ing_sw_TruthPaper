@@ -137,21 +137,14 @@ def last_id() -> int:
     else:
         return 0
 
-def transform_images_to_base64(photo_bytes):
-    pil_image = Image.open(BytesIO(photo_bytes))
-    if pil_image.mode == 'RGBA':
-        pil_image = pil_image.convert('RGB')
-    base64_image = base64.b64encode(photo_bytes).decode('utf-8')
-    return base64_image
-
-# def load_image(user_id):
-#     user =  Userclient.query.filter_by(client_id=user_id).first()
-#     if user and user.photo:
-#         image_bytes = user.photo
-#         base64_image = transform_images_to_base64(image_bytes)
-#         return base64_image
-#     else:
-#         return None
+# def transform_images_to_base64(photo_bytes):
+#     pil_image = Image.open(BytesIO(photo_bytes))
+#     if pil_image.mode == 'RGBA':
+#         pil_image = pil_image.convert('RGB')
+#     base64_image = base64.b64encode(photo_bytes).decode('utf-8')
+#     return base64_image
+    
+    
 # def load_image_comment(comment_id):
 #     comment =  Comment.query.filter_by(id=comment_id).first()
 #     if comment and comment.image:

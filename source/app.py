@@ -13,7 +13,7 @@ import os
 
 usuarios_en_sesion = cl.UsersInSession()
 #anaMencionoUnIdDeSesion
-user_id = 12
+global USER_ID_SESION #Se inicializa en login_users
     
 db = manager.db
 app = Flask(__name__)
@@ -45,8 +45,6 @@ def index():
     categories_list = gr.get_general_categories(categories)
     categories_list_unique = list(set(categories_list))
     print(categories_list_unique)
-    #print("User object: " + str(user))
-    print("User id: " + str(session['user_id']))
     return render_template('indexFunc.html', data=data, containers=containers, categories_list_unique=categories_list_unique)
 
 
@@ -81,7 +79,9 @@ def login_users():
             mapped_user = usermappers.User.getAllUserData(request.form['username']) 
             USUARIO_EN_SESION = cl.UserInApp(mapped_user.id, mapped_user.username, mapped_user.password, mapped_user.email) #No interesa mucho mapear la contraseña
             usuarios_en_sesion.add_user(USUARIO_EN_SESION)    
-                  
+            global USER_ID_SESION #Cutre... ya lo se 
+            USER_ID_SESION = USUARIO_EN_SESION.get_id()
+
             return index()
         elif type(respuesta_login) != bool and respuesta_login == 'admin':
             # Se tiene que meter en index para que se carguen las noticias
@@ -212,15 +212,16 @@ def go_to_login():
 
 ############################################################################333
 def mostrar_perfil_usuarios(user_id, user_name):
-    user_image = manager.load_image(user_id)
+    user_image = usermappers.Userclient.load_image(user_id)
     return render_template('perfil.html', user_id=user_id, user_name=user_name, user_image=user_image)
 
 
 @app.route('/perfil')
 def go_to_profile():
-    usuario_actual = usuarios_en_sesion.get_user_by_id(user_id)
+    #print("User id: " + str(USER_ID_SESION))
+    usuario_actual = usuarios_en_sesion.get_user_by_id(USER_ID_SESION)
     user_name = usuario_actual.get_username()
-    return mostrar_perfil_usuarios(user_id, user_name)
+    return mostrar_perfil_usuarios(USER_ID_SESION, user_name)
 
 
 @app.route('/termsandConditions')

@@ -1,9 +1,10 @@
 from database.DBManager import db 
 from flask_bcrypt import Bcrypt
 from flask import request
+from io import BytesIO
+from PIL import Image
 import base64
 import re 
-
 
 bcrypt = Bcrypt()
 
@@ -123,6 +124,17 @@ class Userclient(db.Model):
         self.photo = photo
         self.is_checked = is_checked
 
+    def load_image(user_id):
+        user =  Userclient.query.filter_by(client_id=user_id).first()
+        if user and user.photo:
+            image_bytes = user.photo
+            base64_image = transform_images_to_base64(image_bytes)
+            return base64_image
+        else:
+            return None
+
+
+
 
 class Commonuser(db.Model):
     __tablename__ = 'commonuser'
@@ -221,3 +233,10 @@ def validate_not_duplicates(username, email) -> bool:
         return False
     else:
         return True
+    
+def transform_images_to_base64(photo_bytes):
+    pil_image = Image.open(BytesIO(photo_bytes))
+    if pil_image.mode == 'RGBA':
+        pil_image = pil_image.convert('RGB')
+    base64_image = base64.b64encode(photo_bytes).decode('utf-8')
+    return base64_image
