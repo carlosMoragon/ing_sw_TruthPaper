@@ -19,6 +19,9 @@ class User(db.Model):
         self.password = password
         self.email = email
     
+    def get_user_email(id):
+        return User.query.filter_by(id=id).first().email
+    
     def getAllUserData(username): #maybe debería ser id 
         return User.query.filter_by(username=username).first()
 

@@ -209,10 +209,10 @@ def register_funct():
 def go_to_login():
     return render_template('login.html')
 
-############################################################################333
 def mostrar_perfil_usuarios(user_id, user_name):
     user_image = usermappers.Userclient.load_image(user_id)
-    return render_template('perfil.html', user_id=user_id, user_name=user_name, user_image=user_image)
+    user_email = usermappers.User.get_user_email(user_id)
+    return render_template('perfil.html', user_id=user_id, user_name=user_name, user_image=user_image, user_email = user_email)
 
 
 @app.route('/perfil')
