@@ -10,6 +10,11 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 import os
 
+
+usuarios_en_sesion = cl.UsersInSession()
+#anaMencionoUnIdDeSesion
+user_id = 12
+    
 db = manager.db
 app = Flask(__name__)
 
@@ -69,12 +74,14 @@ def _add_news_background():
 def login_users():
     respuesta_login = usermappers.User.login(request.form['username'], request.form['password'])
     try:
-        if (type(respuesta_login) == bool and respuesta_login == True):
-            #aqui se tiene que crear un objeto usuario
+        if type(respuesta_login) == bool and respuesta_login == True:
+
             mapped_user = usermappers.User.getAllUserData(request.form['username']) 
             USUARIO_EN_SESION = cl.UserInApp(mapped_user.id, mapped_user.username, mapped_user.password, mapped_user.email) #No interesa mucho mapear la contraseña
+            usuarios_en_sesion.add_user(USUARIO_EN_SESION)    
+                  
             return index()
-        elif (type(respuesta_login) != bool and respuesta_login == 'admin'):
+        elif type(respuesta_login) != bool and respuesta_login == 'admin':
             # Se tiene que meter en index para que se carguen las noticias
             return render_template('userAdmin/profileAdmin.html')
         else:
@@ -209,9 +216,8 @@ def mostrar_perfil_usuarios(user_id, user_name):
 
 @app.route('/perfil')
 def go_to_profile():
-    user_id = 12
-    #user_id = USUARIO_EN_SESION
-    user_name = 'Mobius'
+    usuario_actual = usuarios_en_sesion.get_user_by_id(user_id)
+    user_name = usuario_actual.get_username()
     return mostrar_perfil_usuarios(user_id, user_name)
 
 

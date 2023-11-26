@@ -36,6 +36,40 @@ class UserInApp:
         return self._id == other.get_id()
 
 
+class UsersInSession:
+    def __init__(self):
+        self._users = []
+
+    def add_user(self, user: UserInApp):
+        self._users.append(user)
+
+    def remove_user(self, user: UserInApp):
+        self._users.remove(user)
+
+    def get_users(self) -> List[UserInApp]:
+        return self._users
+
+    def get_user_by_id(self, id: int) -> UserInApp:
+        for user in self._users:
+            if user.get_id() == id:
+                return user
+        return None
+
+    def get_user_by_username(self, username: str) -> UserInApp:
+        for user in self._users:
+            if user.get_username() == username:
+                return user
+        return None
+
+    def get_user_by_email(self, email: str) -> UserInApp:
+        for user in self._users:
+            if user.get_email() == email:
+                return user
+        return None
+
+    def __str__(self) -> str:
+        return f"users: {self._users}"
+
 # class UserClient(User):
 
 #     def __init__(self, id: int, username: str, password: str, email: str, photo, is_checked: bool):
