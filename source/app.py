@@ -25,8 +25,8 @@ def index():
     global containers
     print("llega")
     init_news.join()
-    for new in news:
-        print(f"{new.get_container_id()}\n")
+    # for new in news:
+    #     print(f"{new.get_container_id()}\n")
     data = {
         'imgs': [new.get_image() for new in news],
         'titles': [str(new.get_title()) for new in news],
@@ -71,32 +71,11 @@ def login_users():
     try:
         if (type(respuesta_login) == bool and respuesta_login == True):
             #aqui se tiene que crear un objeto usuario
-            mapped_user = usermappers.User.getAllUserData(request.form['username']) 
-            usuario = cl.UserInApp(mapped_user.id, mapped_user.username, mapped_user.password, mapped_user.email) #No interesa mucho mapear la contraseña
-            idAdminPRUEBA = usermappers.User.save_user()
-            probando = usermappers.AdministratorUser.saveUserAdmin(idAdminPRUEBA)
-            return probando
-            #return index()
-        elif (type(respuesta_login) != bool):
-            # Se tiene que meter en index para que se carguen las noticias
-            return render_template('index.html')
-        else:
-            flash("Datos introducidos incorrectos", "error")
-            print("Datos introducidos incorrectos en el login")
-            return redirect(url_for('start'))
-    except Exception as e:
-        print(f"Ocurrió un error durante el inicio de sesión: {str(e)}")
-        flash("Ocurrió un error durante el inicio de sesión. Por favor, inténtalo de nuevo más tarde.", "error")
-        return redirect(url_for('start'))
-
-@app.route('/login_admin', methods=['POST'])
-def login_admin():
-    # ADMINISTRADOR --> falta lógica login de administradores
-    respuesta_login = manager.login(request.form['username'], request.form['password'])
-    try:
-        if (type(respuesta_login) == bool and respuesta_login == True):
+            # mapped_user = usermappers.User.getAllUserData(request.form['username']) 
+            # usuario = cl.UserInApp(mapped_user.id, mapped_user.username, mapped_user.password, mapped_user.email) #No interesa mucho mapear la contraseña
             return index()
-        elif (type(respuesta_login) != bool):
+        elif (type(respuesta_login) != bool and respuesta_login == 'admin'):
+            # Se tiene que meter en index para que se carguen las noticias
             return render_template('userAdmin/profileAdmin.html')
         else:
             flash("Datos introducidos incorrectos", "error")
@@ -106,7 +85,6 @@ def login_admin():
         print(f"Ocurrió un error durante el inicio de sesión: {str(e)}")
         flash("Ocurrió un error durante el inicio de sesión. Por favor, inténtalo de nuevo más tarde.", "error")
         return redirect(url_for('start'))
-
 
 
 @app.route('/ver_contenedor/<int:id>')
@@ -268,32 +246,23 @@ def save_keyword():
     return render_template('categoriesFunc.html', data=data)
 
 
-# @app.route('/pruebaArticulos')
-# def prueba_articulos():
-#     global news
-#     # news = ws.get_news()
-#     data = {
-#         'imgs' : [new.get_image() for new in news],
-#         'titles' : [new.get_title() for new in news],
-#         'urls' : [new.get_url() for new in news]
-#     }   
-#     return render_template('pruebaArticulos.html', data=data)
-
 def handle_user_registration(user_type):
-    result = manager.save_user()
+    result = usermappers.User.save_user()
     if result == -1:
         return render_template('register.html', registration_error="Contraseña débil", form=request.form)
     elif result == -2:
         return render_template('register.html', registration_error="Email inválido", form=request.form)
+    elif result == -3:
+        return render_template('register.html', registration_error="Nombre de usuario/email ya existente", form=request.form)
     else:
         if user_type == 'common':
-            if manager.save_commonuser(result):
+            if usermappers.Commonuser.save_commonuser(result):
                 return index()
         elif user_type == 'company':
-            if manager.save_companyuser(result):
+            if usermappers.Companyuser.save_companyuser(result):
                 return index()
         elif user_type == 'journalist':
-            if manager.save_journalistuser(result):
+            if usermappers.Journalistuser.save_journalistuser(result):
                 return index()
         else:
             # Manejar un tipo de usuario no válido, si es necesario

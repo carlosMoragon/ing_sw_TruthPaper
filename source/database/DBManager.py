@@ -16,27 +16,6 @@ db = SQLAlchemy()
 # Hay que implementar como coger el id del usuario que se acaba de registrar --> NECESARIO HASTA QUE SE CAMBIE
 user_id = 11
 
-'''
-def login(username, password) -> bool:
-'''
-# def login(username, password): #-> bool:
-#     user_db =  usermappers.UserMapper().find_user_by_username_or_email(username)
-#     if user_db == None:
-#         return False
-   
-#     if (user_db.id == 29):
-#         return 'admin'
-    
-#     encoded_password = password.encode('utf-8')
-#     if bcrypt.check_password_hash(user_db.password, encoded_password):
-#         return True
-#     else:
-#         return False
-    
-    #return bcrypt.check_password_hash(user_db.password, password).encode('utf-8')
-    # return user_db.password == password
-
-
 # CONSULTA A LA BBDD PARA QUE TE COJA LAS NOTICIAS -> SE VA A LLAMAR A ESTA FUNCION DESDE APP.PY ANTES DE INICIAR
 # ESTO QUE HACE AQUI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 '''
@@ -47,71 +26,6 @@ def get_news_db(app, news, container):
         container.update(ws.split_by_container(news))
         #container.update(ws.split_by_container(ws.add_new_container(news)))
 '''
-# def save_user():
-#     if cl.validate_password(request.form['password']):
-#         if cl.validate_email(request.form['email']):
-#             #Si el nombre de usuario ya existe, no se puede registrar
-#             newUser =  User(
-#                 username=request.form['username'],
-#                 #password=request.form['password'],
-#                 password=bcrypt.generate_password_hash(request.form['password']).decode('utf-8'),
-#                 email=request.form['email'])
-
-#             db.session.add(newUser)
-#             db.session.commit()
-
-#             new_user_id = newUser.id
-
-#             newUserClient =  Userclient(
-#                 client_id=new_user_id,
-#                 is_checked='Y',
-#                 photo=request.files['photo'].read()
-#                 # photo = transform_images_to_jpeg(request.files['photo'].read())
-#             )
-#             db.session.add(newUserClient)
-#             db.session.commit()
-
-#             return new_user_id
-#         else:
-#             print("EMAIL NO VÁLIDO")
-#             return -2
-#     else:
-#         print("CONTRASEÑA DÉBIL")
-#         return -1
-    
-# def save_commonuser(new_user_id) -> bool:
-#         newCommonUser =  Commonuser(
-#             commonuser_id = new_user_id, 
-#             name = request.form['c_user_name'],
-#             lastname = request.form['c_user_lastname'],
-#             bankaccount = request.form['bankaccount']
-#         )
-#         db.session.add(newCommonUser)
-#         db.session.commit()
-#         return True
-    
-# def save_companyuser(new_user_id) -> bool:
-#         newCompanyUser =  Companyuser(
-#                 companyuser_id = new_user_id, 
-#                 name = request.form['company_name'],
-#                 bankaccount = request.form['bankaccount'],
-#                 NIF = request.form['company_nif']
-#             )
-#         db.session.add(newCompanyUser)
-#         db.session.commit()
-#         return True
-
-# def save_journalistuser(new_user_id) -> bool:
-#         newJournalistUser =  Journalistuser(
-#                 journalistuser_id = new_user_id, 
-#                 name = request.form['journalist_name'],
-#                 lastname = request.form['journalist_lastname'],
-#                 certificate = request.files['certificate'].read()
-#             )
-#         db.session.add(newJournalistUser)
-#         db.session.commit()
-#         return True
-
 
 #Method for admin information 
 # def loadUncheckedUsers():
@@ -123,10 +37,10 @@ def get_news_db(app, news, container):
 #     return uncheckedUserList
 
 # Método reescribir el estado de is_checked a 'Y'
-def updateUserChecked(id):
-    user =  Userclient.query.filter_by(client_id=id).first()
-    user.is_checked = 'Y'
-    db.session.commit()
+# def updateUserChecked(id):
+#     user =  Userclient.query.filter_by(client_id=id).first()
+#     user.is_checked = 'Y'
+#     db.session.commit()
 
 def save_news(app, news: List[cl.News]) -> bool:
     with app.app_context():
@@ -230,22 +144,22 @@ def transform_images_to_base64(photo_bytes):
     base64_image = base64.b64encode(photo_bytes).decode('utf-8')
     return base64_image
 
-def load_image(user_id):
-    user =  Userclient.query.filter_by(client_id=user_id).first()
-    if user and user.photo:
-        image_bytes = user.photo
-        base64_image = transform_images_to_base64(image_bytes)
-        return base64_image
-    else:
-        return None
-def load_image_comment(comment_id):
-    comment =  Comment.query.filter_by(id=comment_id).first()
-    if comment and comment.image:
-        image_bytes = comment.image
-        base64_image = transform_images_to_base64(image_bytes)
-        return base64_image
-    else:
-        return None
+# def load_image(user_id):
+#     user =  Userclient.query.filter_by(client_id=user_id).first()
+#     if user and user.photo:
+#         image_bytes = user.photo
+#         base64_image = transform_images_to_base64(image_bytes)
+#         return base64_image
+#     else:
+#         return None
+# def load_image_comment(comment_id):
+#     comment =  Comment.query.filter_by(id=comment_id).first()
+#     if comment and comment.image:
+#         image_bytes = comment.image
+#         base64_image = transform_images_to_base64(image_bytes)
+#         return base64_image
+#     else:
+#         return None
 
 #Methods for containers
 def load_container():
@@ -309,12 +223,12 @@ def get_comment_by_id(comment_id):
     comment=Comment.query.filter_by(id=comment_id).first()
     return comment
 
-#Methos for pdf's
-def load_pdf_certificate(user_id):
-    journalistuser =  Journalistuser.query.filter_by(journalistuser_id=user_id).first()
-    certificate_bytes = journalistuser.certificate 
-    certificate_base64 = base64.b64encode(certificate_bytes).decode('utf-8')
-    return certificate_base64
+# #Methos for pdf's
+# def load_pdf_certificate(user_id):
+#     journalistuser =  Journalistuser.query.filter_by(journalistuser_id=user_id).first()
+#     certificate_bytes = journalistuser.certificate 
+#     certificate_base64 = base64.b64encode(certificate_bytes).decode('utf-8')
+#     return certificate_base64
 
 
 def increment_likes(new_id: int):
@@ -337,83 +251,6 @@ def comment_likes(comment_id: int):
     comment.likes = comment.likes + 1
     print("Like al comentario con id: " + str(comment.id))
     db.session.commit()
-
-
-
-# class User(db.Model):
-#     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
-#     username = db.Column(db.String(30), nullable=False)
-#     password = db.Column(db.String(30), nullable=False)
-#     email = db.Column(db.Text, nullable=True)
-
-#     def __init__(self, username, password, email):
-#         self.username = username
-#         self.password = password
-#         self.email = email
-
-
-class Userclient(db.Model):
-    client_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    photo = db.Column(db.LargeBinary, nullable=True)
-    is_checked = db.Column(db.Enum('Y', 'N'), nullable=False)
-
-    def __init__(self, client_id, photo, is_checked):
-        self.client_id = client_id
-        self.photo = photo
-        self.is_checked = is_checked
-
-
-class Commonuser(db.Model):
-    commonuser_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(30), nullable=False)
-    lastname = db.Column(db.String(30), nullable=False)
-    bankaccount = db.Column(db.String(70), nullable=False)
-
-    def __init__(self, commonuser_id, name, lastname, bankaccount):
-        self.commonuser_id = commonuser_id
-        self.name = name
-        self.lastname = lastname
-        self.bankaccount = bankaccount
-
-
-class Companyuser(db.Model):
-    companyuser_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(30), nullable=False)
-    NIF = db.Column(db.Integer, nullable=False)
-    bankaccount = db.Column(db.String(70), nullable=False)
-
-    def __init__(self, companyuser_id, name, NIF, bankaccount):
-        self.companyuser_id = companyuser_id
-        self.name = name
-
-        self.NIF = NIF
-        self.bankaccount = bankaccount
-
-
-class Journalistuser(db.Model):
-    journalistuser_id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
-    name = db.Column(db.String(50), nullable=False)
-    lastname = db.Column(db.String(50), nullable=False)
-    certificate = db.Column(db.LargeBinary, nullable=True)
-
-    def __init__(self, journalistuser_id, name, lastname, certificate):
-        self.journalistuser_id = journalistuser_id
-        self.name = name
-        self.lastname = lastname
-        self.certificate = certificate
-
-
-class AdministratorUser(db.Model):
-    admin_id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
-    can_create = db.Column(db.Boolean, nullable=False, default=True)
-    can_delete = db.Column(db.Boolean, nullable=False, default=True)
-    can_edit = db.Column(db.Boolean, nullable=False, default=True)
-
-    def _init_(self, admin_id, can_create, can_delete, can_edit):
-        self.admin_id = admin_id
-        self.can_create = can_create
-        self.can_delete = can_delete
-        self.can_edit = can_edit
 
 
 class New(db.Model):
