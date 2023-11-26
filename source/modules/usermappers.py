@@ -133,6 +133,19 @@ class Userclient(db.Model):
         else:
             return None
 
+    def loadUncheckedUsers():
+        uncheckedUserList = []
+        for user in  Userclient.query.all():
+            if user.is_checked == 'N':
+                usuario = User.query.filter_by(id=user.client_id).first()
+                uncheckedUserList.append([usuario.username, usuario.password, usuario.email, user.client_id])
+        return uncheckedUserList
+
+    def updateUserChecked(id):
+        user =  Userclient.query.filter_by(client_id=id).first()
+        user.is_checked = 'Y'
+        db.session.commit()
+
 
 
 
@@ -234,6 +247,8 @@ def validate_not_duplicates(username, email) -> bool:
     else:
         return True
     
+    
+#Lo podemos dejar en el manager, pero estoy probando otras cosas antes 
 def transform_images_to_base64(photo_bytes):
     pil_image = Image.open(BytesIO(photo_bytes))
     if pil_image.mode == 'RGBA':

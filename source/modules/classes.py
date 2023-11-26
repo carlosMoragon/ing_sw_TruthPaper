@@ -35,7 +35,6 @@ class UserInApp:
     def __eq__(self, other):
         return self._id == other.get_id()
 
-
 class UsersInSession:
     def __init__(self):
         self._users = []
@@ -70,138 +69,131 @@ class UsersInSession:
     def __str__(self) -> str:
         return f"users: {self._users}"
 
-# class UserClient(User):
+class UserClient(UserInApp):
+    def __init__(self, id: int, username: str, password: str, email: str, photo, is_checked: bool):
+        super().__init__(id, username, password, email)
+        self._photo = photo
+        self._is_checked = is_checked
 
-#     def __init__(self, id: int, username: str, password: str, email: str, photo, is_checked: bool):
-#         super().__init__(id, username, password, email)
-#         self._photo = photo
-#         self._is_checked = is_checked
+    def set_photo(self, photo):
+        self._photo = photo
 
-#     def set_photo(self, photo):
-#         self._photo = photo
+    def get_photo(self):
+        return self._photo
 
-#     def get_photo(self):
-#         return self._photo
+    def set_is_checked(self, is_checked):
+        self._is_checked = is_checked
 
-#     def set_is_checked(self, is_checked):
-#         self._is_checked = is_checked
+    def get_is_checked(self):
+        return self._is_checked
 
-#     def get_is_checked(self):
-#         return self._is_checked
+    def __str__(self):
+        return f"id: {self._id}, username: {self._username}, password: {self._password}, email: {self._email}, photo: {self._photo}, is_checked: {self._is_checked}"
 
-#     def __str__(self):
-#         return f"id: {self._id}, username: {self._username}, password: {self._password}, email: {self._email}, photo: {self._photo}, is_checked: {self._is_checked}"
+class AdministratorUser(UserInApp):
+    def __init__(self, username: str, password: str, email: str, can_create: bool, can_delete: bool, can_edit: bool):
+        super().__init__(username, password, email)
+        self._can_create = can_create
+        self._can_delete = can_delete
+        self._can_edit = can_edit
 
+    def get_can_create(self):
+        return self._can_create
 
-# class AdministratorUser(User):
-#     def __init__(self, username: str, password: str, email: str, can_create: bool, can_delete: bool, can_edit: bool):
-#         super().__init__(username, password, email)
-#         self._can_create = can_create
-#         self._can_delete = can_delete
-#         self._can_edit = can_edit
+    def get_can_delete(self):
+        return self._can_delete
 
-#     def get_can_create(self):
-#         return self._can_create
+    def get_can_edit(self):
+        return self._can_edit
 
-#     def get_can_delete(self):
-#         return self._can_delete
+    def __str__(self):
+        return f"username: {self._username}, password: {self._password}, email: {self._email}, can_create: {self._can_create}, can_delete: {self._can_delete}, can_edit: {self._can_edit}"
 
-#     def get_can_edit(self):
-#         return self._can_edit
+class CommonUser(UserClient):
+    def __init__(self, id: int, username: str, password: str, email: str, photo, is_checked: bool, name: str, lastname: str, banckaccount: str):
+        super().__init__(id, username, password, email, photo, is_checked)
+        self._name = name
+        self._lastname = lastname
+        self._banckaccount = banckaccount
 
-#     def __str__(self):
-#         return f"username: {self._username}, password: {self._password}, email: {self._email}, can_create: {self._can_create}, can_delete: {self._can_delete}, can_edit: {self._can_edit}"
+    def set_name(self, name):
+        self._name = name
 
+    def get_name(self):
+        return self._name
 
-# class CommonUser(UserClient):
-#     def __init__(self, id: int, username: str, password: str, email: str, photo, is_checked: bool, name: str, lastname: str, banckaccount: str):
-#         super().__init__(id, username, password, email, photo, is_checked)
-#         self._name = name
-#         self._lastname = lastname
-#         self._banckaccount = banckaccount
+    def set_lastname(self, lastname):
+        self._lastname = lastname
 
-#     def set_name(self, name):
-#         self._name = name
+    def get_lastname(self):
+        return self._lastname
 
-#     def get_name(self):
-#         return self._name
+    def set_banckaccount(self, banckaccount):
+        self._banckaccount = banckaccount
 
-#     def set_lastname(self, lastname):
-#         self._lastname = lastname
+    def get_banckaccount(self):
+        return self._banckaccount
 
-#     def get_lastname(self):
-#         return self._lastname
+    def __str__(self):
+        return f"id: {self._id}, username: {self._username}, password: {self._password}, email: {self._email}, photo: {self._photo}, is_checked: {self._is_checked}, name: {self._name}, lastname: {self._lastname}, banckaccount: {self._banckaccount}"
 
-#     def set_banckaccount(self, banckaccount):
-#         self._banckaccount = banckaccount
+class CompanyUser(UserClient):
+    def __init__(self, id: int, username: str, password: str, email: str, photo, is_checked: bool, company_name: str, NIF: str, certification: bool):
+        super().__init__(id, username, password, email, photo, is_checked)
+        self._company_name = company_name
+        self._NIF = NIF
+        self._certification = certification
 
-#     def get_banckaccount(self):
-#         return self._banckaccount
+    def set_company_name(self, company_name):
+        self._company_name = company_name
 
-#     def __str__(self):
-#         return f"id: {self._id}, username: {self._username}, password: {self._password}, email: {self._email}, photo: {self._photo}, is_checked: {self._is_checked}, name: {self._name}, lastname: {self._lastname}, banckaccount: {self._banckaccount}"
+    def get_company_name(self):
+        return self._company_name
 
+    def set_NIF(self, NIF):
+        self._NIF = NIF
 
-# class CompanyUser(UserClient):
-#     def __init__(self, id: int, username: str, password: str, email: str, photo, is_checked: bool, company_name: str, NIF: str, certification: bool):
-#         super().__init__(id, username, password, email, photo, is_checked)
-#         self._company_name = company_name
-#         self._NIF = NIF
-#         self._certification = certification
+    def get_NIF(self):
+        return self._NIF
 
-#     def set_company_name(self, company_name):
-#         self._company_name = company_name
+    def set_certification(self, certification):
+        self._certification = certification
 
-#     def get_company_name(self):
-#         return self._company_name
+    def get_certification(self):
+        return self._certification
 
-#     def set_NIF(self, NIF):
-#         self._NIF = NIF
+    def __str__(self):
+        return f"id: {self._id}, username: {self._username}, password: {self._password}, email: {self._email}, photo: {self._photo}, is_checked: {self._is_checked}, company_name: {self._company_name}, NIF: {self._NIF}, certification: {self._certification}"
 
-#     def get_NIF(self):
-#         return self._NIF
+class Journalist(UserClient):
+    def __init__(self,id: int, username: str, password: str, email: str, photo, is_checked: bool, name: str, lastname: str, certification: bool):
+        super().__init__(id, username, password, email, photo, is_checked)
+        self._name = name
+        self._lastname = lastname
+        self._certification = certification
 
-#     def set_certification(self, certification):
-#         self._certification = certification
+    def set_name(self, name):
+        self._name = name
 
-#     def get_certification(self):
-#         return self._certification
+    def get_name(self):
+        return self._name
 
-#     def __str__(self):
-#         return f"id: {self._id}, username: {self._username}, password: {self._password}, email: {self._email}, photo: {self._photo}, is_checked: {self._is_checked}, company_name: {self._company_name}, NIF: {self._NIF}, certification: {self._certification}"
+    def set_lastname(self, lastname):
+        self._lastname = lastname
 
-# class Journalist(UserClient):
-#     def __init__(self,id: int, username: str, password: str, email: str, photo, is_checked: bool, name: str, lastname: str, certification: bool):
-#         super().__init__(id, username, password, email, photo, is_checked)
-#         self._name = name
-#         self._lastname = lastname
-#         self._certification = certification
+    def get_lastname(self):
+        return self._lastname
 
-#     def set_name(self, name):
-#         self._name = name
+    def set_certification(self, certification):
+        self._certification = certification
 
-#     def get_name(self):
-#         return self._name
+    def get_certification(self):
+        return self._certification
 
-#     def set_lastname(self, lastname):
-#         self._lastname = lastname
+    def __str__(self):
+        return f"id: {self._id}, username: {self._username}, password: {self._password}, email: {self._email}, photo: {self._photo}, is_checked: {self._is_checked}, name: {self._name}, lastname: {self._lastname}, certification: {self._certification}"
 
-#     def get_lastname(self):
-#         return self._lastname
-
-#     def set_certification(self, certification):
-#         self._certification = certification
-
-#     def get_certification(self):
-#         return self._certification
-
-#     def __str__(self):
-#         return f"id: {self._id}, username: {self._username}, password: {self._password}, email: {self._email}, photo: {self._photo}, is_checked: {self._is_checked}, name: {self._name}, lastname: {self._lastname}, certification: {self._certification}"
-
-
-# Estructura de un comentario de una publicación
 class Comment:
-
     def __init__(self, id: int, likes: int, views: int, content: str, img: str, userclient_id: int, container_id: int):
         self._id = id
         self._likes = likes
@@ -249,9 +241,9 @@ class Comment:
 
     def set_containerid(self, container_id):
         self._container_id = container_id
+    
     def get_containerid(self):
         return self._container_id
-
 
     def __str__(self) -> str:
         return f"id: {self._id}, likes: {self._likes}, views: {self._views}, content: {self._content}, img: {self._img}, userclient_id: {self._userclient_id}"
@@ -337,7 +329,6 @@ class Note:
     def __eq__(self, other):
         return self._id == other.get_id()
 
-# Estructura de una Noticia
 class News:
     def __init__(self, id: int, owner: str, title: str, image: str, url: str, content: str,  journalist: int, date: str, category: str, likes: int, views: int, container_id: int):
         self._id = id
@@ -352,8 +343,6 @@ class News:
         self._likes = likes
         self._views = views
         self._container_id = container_id
-
-    # Getters y Setters
 
     def get_likes(self) -> int:
         return self._likes
@@ -435,7 +424,8 @@ class News:
 
     def __hash__(self):
         return hash(self._id)
-    
+
+#Dios proveerá...
 class Container:
         def __init__(self, id: int, likes: str):
             self._id = id

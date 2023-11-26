@@ -1,7 +1,7 @@
 # Importar los módulos necesarios
 
 from flask import Flask, render_template, request, flash, redirect, url_for, send_file, session
-from modules import web_scrapping as ws, users, filter as f, classes as cl, graphs as gr, usermappers 
+from modules import web_scrapping as ws, users, filter as f, classes as cl, graphs as gr, usermappers, entitymappers
 from database import DBManager as manager
 from flask_sqlalchemy import SQLAlchemy
 from typing import List, Dict
@@ -55,7 +55,7 @@ def start():
         # ESTA ES LA DE LAS BBDD QUE SON LAS QUE MAS RAPIDO TIENEN QUE IR
         init_news.start()
         # ESTAS SON LAS QUE SON NUEVAS QUE SE VAN A IR AÑADIENDO A LO LARGO DE LA EJECUCION
-        if not manager.is_update(datetime.now().strftime(f'%Y-%m-%d')):
+        if not entitymappers.is_update(datetime.now().strftime(f'%Y-%m-%d')):
             print("SE ACTUALIZAN LAS NOTICIAS")
             threading.Thread(target=_add_news_background).start()        
     return render_template('login.html')
@@ -66,8 +66,8 @@ def _add_news_background():
     new_news = ws.get_news()
     news.extend(new_news)
     containers = ws.get_containers(news, app)
-    manager.add_container(app, new_news)
-    manager.save_news(app, new_news)
+    entitymappers.Container.add_container(app, new_news)
+    entitymappers.New.save_news(app, new_news)
 
 
 @app.route('/login_users', methods=['POST'])
@@ -99,15 +99,14 @@ def login_users():
 @app.route('/ver_contenedor/<int:id>')
 def expand_container(id):
     container = containers.get(id)
-    manager.increment_views(id) # Se incrementan los likes a uno de la noticia
+    entitymappers.Comment.increment_views(id) # Se incrementan los likes a uno de la noticia
 
-    comments = manager.load_comments(id)
+    comments = entitymappers.Comment.load_comments(id)
     data = {'content': [comment.get_content() for comment in comments],
             'id': [comment.get_id() for comment in comments],
             'likes': [comment.get_likes() for comment in comments],
             'views': [comment.get_views() for comment in comments],
-            'img': [manager.load_image_comment(comment.get_id()) for comment in comments],
-            # 'img': [manager.load_image_comment(14)],
+            'img': [entitymappers.Comment.load_image_comment(comment.get_id()) for comment in comments],
             'userclient_id': [comment.get_userclient_id() for comment in comments],
             'container_id': [comment.get_containerid() for comment in comments]
             }
@@ -124,9 +123,9 @@ def like_news():
     global news
     news_id = request.form.get('news_id')
     print(f"Se ha dado like a la noticia con ID {news_id}")
-    new = manager.get_new_by_id(news_id)
+    new = entitymappers.New.get_new_by_id(news_id)
     if new is not None:
-        manager.increment_likes(int(news_id))
+        entitymappers.New.increment_likes(int(news_id))
         print("Se ha incrementado el número de likes de la noticia")
     else:
         print("No se ha podido dar like a la noticia con ID {news_id}")
@@ -143,9 +142,9 @@ def like_comment():
     global comments
     comment_id = request.form.get('comment_id')
     print(f"Se ha dado like al comentario con ID {comment_id}")
-    comment = manager.get_comment_by_id(comment_id)
+    comment = entitymappers.Comment.get_comment_by_id(comment_id)
     if comment is not None:
-        manager.comment_likes(int(comment_id))
+        entitymappers.Comment.comment_likes(int(comment_id))
         print("Se ha incrementado el número de likes del comentario")
     else:
         print("No se ha podido dar like al comentario con ID {comment_id}")
@@ -165,7 +164,7 @@ def publish_comment():
         image_bytes = file.read()
     else:
         image_bytes = None
-    comment_id = manager.insert_comment(user_id, container_id, content, image_bytes)
+    comment_id = entitymappers.Comment.insert_comment(user_id, container_id, content, image_bytes)
     print(f"Se ha insertado el comentario con ID {comment_id}")
 
     return redirect(url_for('expand_container', id=container_id))
@@ -300,13 +299,13 @@ def index_admin():
     # Habrñia que cargar las noticias porque si no entras en index no se cargan
     # opción 1: cargarlas aquí
     # opción 2: Index >> botón: Usuario Admin >> indexAdmin
-    unchecked_users = manager.loadUncheckedUsers()
+    unchecked_users = usermappers.Userclient.loadUncheckedUsers()
     return render_template('userAdmin/indexAdmin.html', unchecked_users=unchecked_users)
 
 
 @app.route('/verifyUsers')
 def verify_users():
-    unchecked_users = manager.loadUncheckedUsers()
+    unchecked_users = usermappers.Userclient.loadUncheckedUsers()
     # Si el user_id de algun unchecked_user está en la tabla journalistusers, se devuelve True
     '''
     for user in unchecked_users:
@@ -326,7 +325,7 @@ def process_verification():
     action = request.form.get('action')  # 'accept' or 'deny'
     if action == 'accept':
         print("===================ACCEPT USER===================")
-        manager.updateUserChecked(user_id)
+        usermappers.Userclient.updateUserChecked(user_id)
     return redirect('/verifyUsers')
 
 
