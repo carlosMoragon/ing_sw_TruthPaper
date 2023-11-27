@@ -27,8 +27,8 @@ def index():
     print("llega")
     init_news.join()
     semaphore.release()
-    for new in news:
-        print(f"{new.get_container_id()}\n")
+    # for new in news:
+    #     print(f"{new.get_container_id()}\n")
     data = {
         'imgs': [new.get_image() for new in news],
         'titles': [str(new.get_title()) for new in news],
