@@ -27,7 +27,6 @@ def get_news_db(app, news, container):
         print("entra")
         news.extend(manager.load_news())
         container.update(split_by_container(news))
-        #container.update(ws.split_by_container(ws.add_new_container(news)))
 
 def _build_news(titles: List[str], urls: List[str], imgs: List[str], owner: str, date: str, category: str) -> List[cl.News]:
     news = []
@@ -88,7 +87,7 @@ def split_by_container(news: List[cl.News]) -> Dict[int, List[cl.News]]:
             containers[new.get_container_id()] = [new]
     return containers
 
-
+# CREAR CLASE BUILDNEWS
 # --- MAKE'S ---
 def _make_antena3news(structure: BeautifulSoup, category: str, date: str) -> List[cl.News]:
 
@@ -277,20 +276,3 @@ def add_content(news: List[cl.News]):
         content = list(executor.map(get_content, [new.get_url() for new in news]))
         for i in range(len(news)):
             news[i].set_content(re.sub(r'[^\x00-\x7F]+', '', str(content[i])))
-
-
-"""
-def save_html(urls: List[str]) -> None:
-    day = datetime.now().strftime(f'%Y-%m-%d')
-    route = ".\\almacenTemporalHTML\\"
-    pattern = r'.(\w+).com'
-    newspapers_names = [re.search(pattern, url).group(1) for url in urls]
-    names = [f"{route}{newspaper_name}_{day}.html" for newspaper_name in newspapers_names]
-
-    for index in range(len(urls)):
-        if not os.path.exists(urls[index]):
-            content_html = requests.get(urls[index]).text
-            with open(names[index], "w", encoding="utf-8") as archivo:
-                archivo.write(html.unescape(content_html))
-
-"""
