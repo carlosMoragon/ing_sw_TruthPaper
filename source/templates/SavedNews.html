@@ -24,7 +24,7 @@
                         <h4 class="m-0 text-uppercase font-weight-bold">Noticias Guardadas</h4>
                     </div>
                     <!-- NOTICIAS GUARDADAS -->
-                    {% for news_item in container %}
+                    {% for news_item in news %}
                     <div class="bg-white border border-top-0 p-3">
                         <div class="position-relative overflow-hidden" style="height: 300px;">
                             <img class="img-fluid" src="{{news_item.get_image()}}" href="{{news_item.get_url()}}" style="width: 100%;" />
