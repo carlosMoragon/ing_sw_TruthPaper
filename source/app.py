@@ -238,6 +238,11 @@ def go_to_categories():
 def go_to_admin():
     return render_template('loginAdmin.html')
 
+@app.route('/savedNews')
+def go_to_savedNews():
+    return render_template('SavedNews.html')
+
+
 
 @app.route('/save_keyword', methods=['post'])
 def save_keyword():
@@ -298,9 +303,6 @@ def register_user_journalist():
 # Métodos para el ADMINISTRADOR
 @app.route('/indexAdmin')
 def index_admin():
-    # Habrñia que cargar las noticias porque si no entras en index no se cargan
-    # opción 1: cargarlas aquí
-    # opción 2: Index >> botón: Usuario Admin >> indexAdmin
     unchecked_users = usermappers.Userclient.loadUncheckedUsers()
     return render_template('userAdmin/indexAdmin.html', unchecked_users=unchecked_users)
 
