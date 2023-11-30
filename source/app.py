@@ -1,7 +1,7 @@
 # Importar los módulos necesarios
 
 from flask import Flask, render_template, request, flash, redirect, url_for, send_file, session
-from modules import web_scrapping as ws, filter as f, classes as cl, graphs as gr, usermappers, entitymappers
+from modules import web_scrapping as ws, filter as f, classes as cl, graphs as gr, usermappers, entitymappers, session_data as ses
 from database import DBManager as manager
 from flask_sqlalchemy import SQLAlchemy
 from typing import List, Dict
@@ -45,6 +45,7 @@ def index():
     categories_list = gr.get_general_categories(categories)
     categories_list_unique = list(set(categories_list))
     print(categories_list_unique)
+    #print(ses.get_id())
     return render_template('indexFunc.html', data=data, containers=containers, categories_list_unique=categories_list_unique)
 
 
@@ -76,12 +77,8 @@ def login_users():
     try:
         if type(respuesta_login) == bool and respuesta_login == True:
 
-            mapped_user = usermappers.User.getAllUserData(request.form['username']) 
-            USUARIO_EN_SESION = cl.UserInApp(mapped_user.id, mapped_user.username, mapped_user.password, mapped_user.email) #No interesa mucho mapear la contraseña
-            usuarios_en_sesion.add_user(USUARIO_EN_SESION)    
-            global USER_ID_SESION #Cutre... ya lo se 
-            USER_ID_SESION = USUARIO_EN_SESION.get_id()
-
+            mapped_user = usermappers.User.getAllUserData(request.form['username'])
+            ses.s_login(mapped_user.id) #No interesa mucho mapear la contraseña    
             return index()
         elif type(respuesta_login) != bool and respuesta_login == 'admin':
             # Se tiene que meter en index para que se carguen las noticias
@@ -175,7 +172,7 @@ def publish_comment():
 def expand_category(general_category):
     global news
     global containers
-    print("categoría: " + general_category)
+    #print("categoría: " + general_category)
     # category --> categoria general
     categories_list = gr.get_specific_categories(general_category)
     print(categories_list)
@@ -194,7 +191,7 @@ def expand_category(general_category):
         'likes': [new.get_likes() for new in filtered_news],
         'views': [new.get_views() for new in filtered_news]
     }
-    print(data['categories'])
+    #print(data['categories'])
 
     return render_template('categoriesFunc.html', data=data, news=filtered_news, containers=containers,
                            category=general_category)
