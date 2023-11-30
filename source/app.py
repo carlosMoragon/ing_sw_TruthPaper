@@ -14,7 +14,9 @@ import os
 usuarios_en_sesion = cl.UsersInSession()
 #anaMencionoUnIdDeSesion
 global USER_ID_SESION #Se inicializa en login_users
-    
+
+USER_ID_SESION = 11 #Se inicializa en login_users
+
 db = manager.db
 app = Flask(__name__)
 
@@ -79,7 +81,7 @@ def login_users():
             mapped_user = usermappers.User.getAllUserData(request.form['username']) 
             USUARIO_EN_SESION = cl.UserInApp(mapped_user.id, mapped_user.username, mapped_user.password, mapped_user.email) #No interesa mucho mapear la contraseña
             usuarios_en_sesion.add_user(USUARIO_EN_SESION)    
-            global USER_ID_SESION #Cutre... ya lo se 
+            global USER_ID_SESION #Cutre... ya lo se
             USER_ID_SESION = USUARIO_EN_SESION.get_id()
 
             return index()

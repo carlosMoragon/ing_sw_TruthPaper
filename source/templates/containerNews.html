@@ -145,19 +145,13 @@
 
                                             <form method="post" action="{{ url_for('like_news', news_id=news_item.get_id()) }}" class="like-form">
                                                 <div style= "display: flex;">
-                                                    <button type="button" class="btn btn-outline-secondary" style="color: white;" onclick="like_news({{ news_item.id }})">
+                                                    <button type="submit" class="btn btn-outline-primary like-btn" style="margin-top: 1%" data-news-id="{{ news_item.get_id() }}">
                                                         <i class="fa fa-thumbs-up"></i> {{ news_item.get_likes() }}
                                                     </button>
                                                     <input type="hidden" name="news_id" value="{{ news_item.get_id() }}">
-
-                                                </div>
-                                            </form>
-                                            <form method="post" action="{{ url_for('save_news', news_id=news_item.get_id()) }}" class="save-form">
-                                                <div style= "display: flex;">
-                                                    <button type="submit" class= "btn btn-outline-primary save-btn" style="color: white;" onclick="save_news({{ news_item.id }})">
+                                                    <button type="button" class="btn btn-primary">
                                                         <i class="fas fa-save"></i>
                                                     </button>
-                                                    <input type="hidden" name="news_id" value="{{ news_item.get_id() }}">
                                                 </div>
                                             </form>
 
@@ -219,23 +213,6 @@
                     </div>
                 </div>
                     <script>
-                         $(document).ready(function() {
-                             $('.like-form').submit(function(e) {
-                                 // Obtener el botón de like
-                                 var likeButton = $(this).find('.like-btn');
-
-                                 // Deshabilitar el botón para evitar clics adicionales
-                                 likeButton.prop('disabled', true);
-
-                                 // Cambiar el estilo del botón a uno sin borde
-                                 likeButton.removeClass('btn-outline-primary');
-                                 likeButton.addClass('btn-primary');
-
-                                 // Cambiar el contenido del botón a solo el ícono
-                                 likeButton.html('<i class="fa fa-thumbs-up"></i>');
-                             });
-                         });
-
                         $(document).ready(function() {
                              $('.save-form').submit(function(e) {
                                  // Obtener el botón de like
@@ -255,10 +232,28 @@
 
 
                     </script>
+                    <script>
+                        $(document).ready(function() {
+                             $('.like-form').submit(function(e) {
+                                 // Obtener el botón de like
+                                 var likeButton = $(this).find('.like-btn');
 
-                <!-- Tranding News End -->
+                                 // Deshabilitar el botón para evitar clics adicionales
+                                 likeButton.prop('disabled', true);
+
+                                 // Cambiar el estilo del botón a uno sin borde
+                                 likeButton.removeClass('btn-outline-primary');
+                                 likeButton.addClass('btn-primary');
+
+                                 // Cambiar el contenido del botón a solo el ícono
+                                 likeButton.html('<i class="fa fa-thumbs-up"></i>');
+                             });
+                         });
+                    </script>
             </div>
+                <!-- Tranding News End -->
         </div>
     </div>
+
     <!-- News With Sidebar End -->
 </body>

@@ -228,13 +228,11 @@ class Comment(db.Model):
             return None
         
     
-class UserSavedNews(db.Model):    
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    iduser = db.Column(db.Integer, nullable=True, default=0)
-    idnews= db.Column(db.Integer, nullable=True, default=0)
+class UserSavedNews(db.Model):
+    iduser = db.Column(db.Integer, primary_key=True, nullable=True, default=0)
+    idnews= db.Column(db.Integer, primary_key=True, nullable=True, default=0)
     
-    def __init__(self,id, iduser, idnews):
-        self.id = id
+    def __init__(self, iduser, idnews):
         self.iduser = iduser
         self.idnews = idnews
     
