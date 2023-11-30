@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, flash, redirect, url_for, sen
 from modules import web_scrapping as ws, filter as f, classes as cl, graphs as gr, usermappers, entitymappers
 from database import DBManager as manager
 from flask_sqlalchemy import SQLAlchemy
+from flask_mail import Mail, Message
 from typing import List, Dict
 import threading
 from datetime import datetime
@@ -14,10 +15,25 @@ import os
 usuarios_en_sesion = cl.UsersInSession()
 #anaMencionoUnIdDeSesion
 global USER_ID_SESION #Se inicializa en login_users
-    
+
+
 db = manager.db
 app = Flask(__name__)
 
+
+app.config[
+    'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://administrador_truthpaper:Periodico55deVerdad@truthpaper-server.mysql.database.azure.com:3306/truthpaper_ddbb?charset=utf8mb4&ssl_ca=source/DigiCertGlobalRootCA.crt.pem'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+app.config['SECRET_KEY'] = "ireallywanttostayatyourhouse"
+app.config['MAIL_SERVER'] = "smtp.googlemail.com"
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = "noreply.truthpaper@gmail.com"
+app.config['MAIL_PASSWORD'] = "bjkr glyc cquj icib"
+
+
+mail = Mail(app)
 news: List[cl.News] = []
 containers: Dict[int, List[cl.News]] = {}
 init_news = threading.Thread(target=ws.get_news_db, args=(app, news, containers))
@@ -378,6 +394,28 @@ def profile_admin():
     return render_template('userAdmin/profileAdmin.html')
 
 
+@app.route("/send_email/<email>",methods=["GET"])
+def send_email(email):
+    msg_title = "This is a test email"
+    sender = "noreply@app.com"
+    msg = Message(msg_title,sender=sender,recipients=[email])
+    msg_body = "This is the email body"
+    msg.body = ""
+    data = {
+		'app_name': "REBWAR AI",
+		'title': msg_title,
+		'body': msg_body,
+	}
+
+    msg.html = render_template("email.html",data=data)
+
+    try:
+        mail.send(msg)
+        return "Email sent..."
+    except Exception as e:
+        print(e)
+        return f"the email was not sent {e}"
+
 
 # MySQL Connection
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://administrador_truthpaper:Periodico55deVerdad@truthpaper-server.mysql.database.azure.com:3306/truthpaper_ddbb?charset=utf8mb4&ssl_ca=DigiCertGlobalRootCA.crt.pem'
@@ -390,12 +428,8 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-app.config[
-    'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://administrador_truthpaper:Periodico55deVerdad@truthpaper-server.mysql.database.azure.com:3306/truthpaper_ddbb?charset=utf8mb4&ssl_ca=source/DigiCertGlobalRootCA.crt.pem'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-
 db.init_app(app)
+
 
 if __name__ == '__main__':
     # ws.save_html()
