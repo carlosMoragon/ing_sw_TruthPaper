@@ -227,7 +227,25 @@ class Comment(db.Model):
         else:
             return None
         
-        
+    
+class UserSavedNews(db.Model):    
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    iduser = db.Column(db.Integer, nullable=True, default=0)
+    idnews= db.Column(db.Integer, nullable=True, default=0)
+    
+    def __init__(self, id, iduser, idnews):
+        self.id = id
+        self.iduser = iduser
+        self.idnews = idnews
+    
+    def load_ids_news_saved_by_user(id_user):
+        id_news_saved_by_user = db.session.query(UserSavedNews.idnews).filter_by(iduser=id_user).all()
+        return id_news_saved_by_user   #Esto solo devuelves los ids de las noticias guardadas por el usuario (hay que ligarlo con los metodos de cargar noticias)
+    
+    def user_saves_new(id_user, id_new):
+        new_user_saved = UserSavedNews(iduser=id_user, idnews=id_new)
+        db.session.add(new_user_saved)
+        db.session.commit()
         
 def is_update(fecha_actual: str) -> bool:
     print("entra en is_update")
