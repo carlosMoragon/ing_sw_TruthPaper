@@ -13,9 +13,9 @@ import os
 
 usuarios_en_sesion = cl.UsersInSession()
 #anaMencionoUnIdDeSesion
-global USER_ID_SESION #Se inicializa en login_users
+global USER_ID_SESION
 
-USER_ID_SESION = 11 #Se inicializa en login_users
+USER_ID_SESION = 11 # Paloma: lo he puesto para pruebas pero borradlo!
 
 db = manager.db
 app = Flask(__name__)
@@ -110,7 +110,9 @@ def expand_container(id):
             'views': [comment.get_views() for comment in comments],
             'img': [entitymappers.Comment.load_image_comment(comment.get_id()) for comment in comments],
             'userclient_id': [comment.get_userclient_id() for comment in comments],
-            'container_id': [comment.get_containerid() for comment in comments]
+            'container_id': [comment.get_containerid() for comment in comments],
+            'username': [usermappers.User.get_username(comment.get_userclient_id()) for comment in comments],
+            'userimage': [usermappers.Userclient.load_image(comment.get_userclient_id()) for comment in comments],
             }
 
     if comments is None:
@@ -156,7 +158,7 @@ def like_comment():
 
 @app.route('/publish_comment', methods=['POST'])
 def publish_comment():
-    user_id = 11  # CAMBIAR POR EL ID DEL USUARIO QUE ESTÉ LOGUEADO
+    user_id = USER_ID_SESION  # CAMBIAR POR EL ID DEL USUARIO QUE ESTÉ LOGUEADO
     container_id = request.form.get('container_id')
     content = request.form.get('content')
 
@@ -217,7 +219,7 @@ def mostrar_perfil_usuarios(user_id, user_name):
     return render_template('perfil.html', user_id=user_id, user_name=user_name, user_image=user_image, user_email = user_email)
 
 
-@app.route('/perfil')
+@app.route('/perfil') # ESTE METODO YA NO FUNCIONA POR LAS COOKIES, REVISAR!
 def go_to_profile():
     #print("User id: " + str(USER_ID_SESION))
     usuario_actual = usuarios_en_sesion.get_user_by_id(USER_ID_SESION)
