@@ -229,26 +229,27 @@ class Comment(db.Model):
         
     
 class UserSavedNews(db.Model):
-    iduser = db.Column(db.Integer, primary_key=True, nullable=True, default=0)
-    idnews= db.Column(db.Integer, primary_key=True, nullable=True, default=0)
-    
-    def __init__(self, iduser, idnews):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    iduser = db.Column(db.Integer, nullable=True, default=0)
+    idnews= db.Column(db.Integer, nullable=True, default=0)
+
+    def __init__(self, id, iduser, idnews):
+        self.id = id
         self.iduser = iduser
         self.idnews = idnews
-    
+
     def load_ids_news_saved_by_user(id_user):
         id_news_saved_by_user = db.session.query(UserSavedNews.idnews).filter_by(iduser=id_user).all()
-        return id_news_saved_by_user   #Esto solo devuelves los ids de las noticias guardadas por el usuario (hay que ligarlo con los metodos de cargar noticias)
-    
-    def user_saves_new(id_user, id_new):
-        new_user_saved = UserSavedNews(iduser=id_user, idnews=id_new)
-        db.session.add(new_user_saved)
-        db.session.commit()
+        return id_news_saved_by_user
+
+def user_saves_new(id_user, id_new):
+    print("se ha ejecutado el metodo user_saves_new")
+    new_user_saved = UserSavedNews(iduser=id_user, idnews=id_new)
+    db.session.add(new_user_saved)
+    db.session.commit()
         
 def is_update(fecha_actual: str) -> bool:
-    print("entra en is_update")
     fecha_db = db.session.query(New.date).order_by(desc(New.date)).first()[0].strftime("%Y-%m-%d")
-    print(f"{fecha_db == fecha_actual}")
     return fecha_actual == str(fecha_db)
 
 def last_id() -> int:

@@ -389,16 +389,16 @@ def profile_admin():
 def upload_saved_news():
     user_id = USER_ID_SESION
     id_saved_news = entitymappers.UserSavedNews.load_saved_news(user_id) # Carga los ids de las noticias guardadas
-    news = entitymappers.New.load_news_by_id(id_saved_news) # Carga las noticias con los ids anteriores
-    return render_template('SavedNews.html', news = news)
+    news_saved = entitymappers.New.load_news_by_id(id_saved_news) # Carga las noticias con los ids anteriores
+    return render_template('SavedNews.html', news = news_saved)
 
 # Se guarda una noticia, se envía su id y se registra en la base de datos
 @app.route('/save_news', methods=['POST'])
 def save_news():
-    print("se ha guardado la noticia")
-    user_id = USER_ID_SESION
+    print("se ha activado el método de guardar noticias")
+    user_id = 11
     news_id = request.form.get('news_id')
-    entitymappers.UserSavedNews.user_saves_new(user_id, news_id)
+    entitymappers.user_saves_new(id_user=11, id_new=1)
     print(f" =====> Se ha guardado la noticia con ID {news_id}")
     return redirect(url_for('expand_container'))
 
