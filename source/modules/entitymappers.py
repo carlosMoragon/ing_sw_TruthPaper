@@ -85,7 +85,29 @@ class New(db.Model):
             news_objects.append(news_obj)
 
         return news_objects
-    
+
+    def get_news_by_container_id(container_id: int) -> List[cl.News]:
+        all_news = db.session.query(New).filter_by(container_id=container_id).all()
+        news_objects = []
+        for news in all_news:
+            news_obj = cl.News(
+                id=news.id,
+                owner=news.owner,
+                title=news.title,
+                image=news.image,
+                url=news.url,
+                content=news.content,
+                container_id=news.container_id,
+                journalist=news.journalistuser_id,
+                date=news.date.strftime('%Y-%m-%d'),
+                category=news.category,
+                likes=news.likes,
+                views=news.views
+            )
+            news_objects.append(news_obj)
+
+        return news_objects
+
     def get_new_by_id(new_id):
         new=New.query.filter_by(id=new_id).first()
         return new

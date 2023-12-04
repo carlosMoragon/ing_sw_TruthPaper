@@ -124,7 +124,6 @@ def expand_container(id):
 
 @app.route('/like_news', methods=['POST'])
 def like_news():
-    global news
     new_id = request.form.get('news_id')
     print(f"Se ha dado like a la noticia con ID {new_id}")
     liked_new = entitymappers.New.get_new_by_id(new_id)
@@ -134,19 +133,7 @@ def like_news():
     else:
         print("No se ha podido dar like a la noticia con ID {news_id}")
     id_container = liked_new.container_id
-
-    '''
-    for new in news:
-        if  new.get_container_id() == id_container:
-            if new.get_id() == new_id:
-                new.set_likes(new.get_likes() + 1)
-    '''
-    for new in news:
-        if new.get_container_id() == id_container:
-
-            new.set_likes(new.get_likes() + 1)
-            break
-
+    init_news.start()
     return redirect(url_for('expand_container', id=id_container))
 
 

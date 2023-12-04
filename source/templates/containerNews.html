@@ -132,7 +132,7 @@
                                      <ul>
                                         {% for news_item in container %}
                                             <li class="position-relative overflow-hidden" style="height: 300px;">
-                                                <div style=" height: 100%;" !important  >
+                                                <div style=" height: 100%; !important" >
                                                     <img class="img-fluid" src="{{news_item.get_image()}}" href="{{news_item.get_url()}}" style="width: 100%;" />
                                                     <p> </p>
                                                 </div>
@@ -144,10 +144,9 @@
                                                         <a class="text-white" href=""><small>{{news_item.get_date()}}</small></a>
                                                     </div>
                                                     <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="{{news_item.get_url()}}">{{news_item.get_title()}}</a>
-
                                                      <div style= "display: flex;">
                                                          <form method="post" action="{{ url_for('like_news', news_id=news_item.get_id()) }}" class="like-form">
-                                                            <button type="submit" class="btn btn-outline-primary like-btn" style="margin-top: 1%" data-news-id="{{ news_item.get_id() }}">
+                                                            <button type="submit" class="btn btn-outline-primary like-btn"  data-news-id="{{ news_item.get_id() }}">
                                                                  <i class="fa fa-thumbs-up"></i> {{ news_item.get_likes() }}
                                                             </button>
                                                             <input type="hidden" name="news_id" value="{{ news_item.get_id() }}">
@@ -178,11 +177,14 @@
                                                 <div class="card mb-4">
                                                       <div class="card-body">
                                                           <p class="card-text" style="color: black;">{{ data['content'][i] }}</p>
+                                                            {% if data['img'][i] %}
+                                                                <img class="img-fluid" src="data:image/jpeg;base64,{{ data['img'][i] }}" style="object-fit: cover; margin-bottom: 5%;" alt="avatar" width="50%" height="50%">
+                                                            {% endif %}
 
                                                           <div class="d-flex justify-content-between">
                                                                 <div class="d-flex flex-row align-items-center">
                                                                     {% if data['userimage'][i] %}
-                                                                        <img class="img-fluid" src="data:image/jpeg;base64,{{ userimage }}"
+                                                                        <img class="img-fluid" src="data:image/jpeg;base64,{{ data['userimage'][i] }}"
                                                                              style="object-fit: cover; margin-bottom: 10%;" alt="avatar" width="25" height="25" >
                                                                     {% endif %}
                                                                     <p class="small mb-0 ms-2">{{ data['username'][i] }}</p>
@@ -190,9 +192,13 @@
 
                                                               <div class="d-flex flex-row align-items-center">
                                                                     <div class="small text-muted mb-0">
-                                                                        <button type="button" class="btn btn-outline-primary" style="color: #0d0d0f; margin-bottom: 5%">
-                                                                            <i class="fa fa-thumbs-up"></i> {{data['likes'][i] }}
-                                                                        </button>
+                                                                        <form method="post" action="{{ url_for('like_comment', comment_id=data['id'][i] ) }}" class="like-form-comment">
+                                                                            <button type="submit" class="btn btn-outline-primary like-btn-comment" style=" color: #0d0d0f; margin-bottom: 5%" data-comment-id="{{ data['id'][i] }}">
+                                                                                 <i class="fa fa-thumbs-up"></i> {{data['likes'][i] }}
+                                                                            </button>
+                                                                            <input type="hidden" name="comment_id" value="{{ data['id'][i] }}">
+                                                                         </form>
+
                                                                     </div>
                                                                     <div class="small text-muted mb-0">
                                                                         <button type="button" class="btn btn-primary btn-link" style="color: #0d0d0f; height: 50%">
@@ -207,8 +213,6 @@
                                         </div>
                                     {% endif %}
                                 {% endblock %}
-
-                                <!-- Segundo intento comentarios -->
 
                                 </div>
                             </div>
@@ -247,6 +251,21 @@
                                  likeButton.html('<i class="fa fa-thumbs-up"></i>');
                              });
                          });
+
+                        $(document).ready(function() {
+                             $('.like-form-comment').submit(function(e) {
+                                 var likeButton = $(this).find('.like-btn-comment');
+
+                                 likeButton.prop('disabled', true);
+
+                                 likeButton.removeClass('btn-outline-primary');
+                                 likeButton.addClass('btn-primary');
+
+                                 likeButton.html('<i class="fa fa-thumbs-up"></i>');
+                             });
+                         });
+
+
                     </script>
                     <script>
                         $(document).ready(function() {
