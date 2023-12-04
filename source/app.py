@@ -393,16 +393,19 @@ def edit_users():
 def profile_admin():
     return render_template('userAdmin/profileAdmin.html')
 
+@app.route('/verification')
+def verify_email():
+    return render_template('verify.html')
 
 @app.route("/send_email/<email>",methods=["GET"])
 def send_email(email):
-    msg_title = "This is a test email"
+    msg_title = "BIENVENID@ a TRUTHPAPER"
     sender = "noreply@app.com"
     msg = Message(msg_title,sender=sender,recipients=[email])
-    msg_body = "This is the email body"
+    msg_body = "Toque el botón a continuación para confirmar su dirección de correo electrónico. Si no creó una cuenta con TruthPaper, puede eliminar este correo electrónico de forma segura."
     msg.body = ""
     data = {
-		'app_name': "REBWAR AI",
+		'app_name': "TRUTHPAPER",
 		'title': msg_title,
 		'body': msg_body,
 	}
