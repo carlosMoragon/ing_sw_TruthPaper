@@ -233,8 +233,8 @@ class UserSavedNews(db.Model):
     iduser = db.Column(db.Integer, nullable=True, default=0)
     idnews= db.Column(db.Integer, nullable=True, default=0)
     
-    def __init__(self, id, iduser, idnews):
-        self.id = id
+    def __init__(self, iduser, idnews):
+        # self.id = id
         self.iduser = iduser
         self.idnews = idnews
     
@@ -246,6 +246,8 @@ class UserSavedNews(db.Model):
         new_user_saved = UserSavedNews(iduser=id_user, idnews=id_new)
         db.session.add(new_user_saved)
         db.session.commit()
+        
+    
         
 def is_update(fecha_actual: str) -> bool:
     print("entra en is_update")

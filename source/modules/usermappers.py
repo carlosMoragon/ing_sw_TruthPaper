@@ -13,6 +13,7 @@ class User(db.Model):
     username = db.Column(db.String(30), nullable=False)
     password = db.Column(db.String(30), nullable=False)
     email = db.Column(db.Text, nullable=True)
+    #email_checked = db.Column(db.Enum('N', 'Y'), nullable=False, default='N')
 
     def __init__(self, username, password, email):
         self.username = username
