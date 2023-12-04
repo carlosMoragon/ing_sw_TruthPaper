@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>TruthPaper</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <!-- Icon -->
+    <link href="../static/img/logos/high_res/logo_color_tbg_hd.png" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="../static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Stylesheet -->
+    <link href="../static/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <!-- Topbar Start -->
+    <div class="container-fluid d-none d-lg-block">
+        <div class="row align-items-center bg-dark px-lg-5">
+            <div class="col-lg-9">
+                <nav class="navbar navbar-expand-sm bg-dark p-0">
+                    <ul class="navbar-nav ml-n2">
+                        <li class="nav-item border-right border-secondary">
+                            <a class="nav-link text-body small"> <span id="currentDate"></span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-body small" href="{{ url_for('go_to_login') }}"> Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-body small" href="{{ url_for('go_to_admin') }}"> | Administrador </a>
+                        </li>
+
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-3 text-right d-none d-md-block">
+                <!-- We can put something in the upper right part of the black bar at the top of the screen -->
+            </div>
+        </div>
+
+        <div class="row align-items-center bg-white py-3 px-lg-5">
+            <div class="col-lg-4">
+                <img src="../static/img/truthpaper_name.png" alt="" class="img-fluid" width="200" href="index.html">
+            </div>
+
+        <div class="col-lg-8 text-center text-lg-right">
+            <a href="https://htmlcodex.com"><img class="img-fluid" src="../static/img/ads-728x90.png" alt=""></a>
+        </div>
+
+
+        </div>
+    </div>
+
+    <!-- Login -->
+    <div class="row align-items-center h-100">
+        <div class="col">
+            <br>
+            <h2>Verificar email</h2>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <script>
+                            Swal.fire({
+                                icon: '{{ category }}',
+                                text: '{{ message }}',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        </script>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <form action="/verify_email" method="post">
+
+                <div class="form-group">
+                    <label for="password">Código de verificación:</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="password" name="password" required>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-outline-secondary" id="showPassword">
+                                <i class="fas fa-eye" style="font-size: 14px;"></i>
+                            </button>
+                        </div>
+                        <div class="invalid-feedback">Este campo es obligatorio.</div>
+                    </div>
+                </div>
+
+                <input type="submit" value="Enviar">
+            </form>
+            </br>
+            <p><a href="register.html">Volver a enviar el correo electrónico</a></p>
+            <p><a href="{{ url_for('start') }}">Salir</a></p>
+        </div>
+    </div>
+    <script>
+        document.getElementById('showPassword').addEventListener('click', function() {
+            var passwordInput = document.getElementById('password');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+            } else {
+                passwordInput.type = 'password';
+            }
+        });
+    </script>
+    <!-- Date and Main Scripts-->
+    <script src="../static/js/date.js"></script>
+
+</html>

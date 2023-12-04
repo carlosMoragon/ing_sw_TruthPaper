@@ -13,15 +13,20 @@ class User(db.Model):
     username = db.Column(db.String(30), nullable=False)
     password = db.Column(db.String(30), nullable=False)
     email = db.Column(db.Text, nullable=True)
+    verified = db.Column(db.Enum, nullable=False)
 
-    def __init__(self, username, password, email):
+    def __init__(self, username, password, email, verified):
         self.username = username
         self.password = password
         self.email = email
+        self.verified = verified
     
     def get_user_email(id):
         return User.query.filter_by(id=id).first().email
-    
+
+    def get_user_verified(id):
+        return User.query.filter_by(id=id).first().verified
+
     def getAllUserData(username): #maybe debería ser id 
         return User.query.filter_by(username=username).first()
 
@@ -44,12 +49,14 @@ class User(db.Model):
       
         encoded_password = password.encode('utf-8')
         if bcrypt.check_password_hash(user_db.password, encoded_password):
+            if user_db.verified == 'Y':
+                admin_id = AdministratorUser.adminUsersIds()
+                if (user_db.id in admin_id):
+                    return 'admin'
             
-            admin_id = AdministratorUser.adminUsersIds()
-            if (user_db.id in admin_id):
-                return 'admin'
-            
-            return True
+                return True
+            else:
+                return False
         else:
             return False
 
@@ -60,7 +67,8 @@ class User(db.Model):
                     newUser =  User(
                         username=request.form['username'],
                         password=bcrypt.generate_password_hash(request.form['password']).decode('utf-8'),
-                        email=request.form['email'])
+                        email=request.form['email'],
+                        verified='N')
 
                     db.session.add(newUser)
                     db.session.commit()

@@ -62,6 +62,9 @@
                                         <p
                                             style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; box-sizing: border-box; color: #3d4852; font-size: 16px; line-height: 1.5em; margin-top: 0; text-align: left;">
                                             {{data.body}}</p>
+                                        <p
+                                            style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; box-sizing: border-box; color: #3d4852; font-size: 16px; line-height: 1.5em; margin-top: 0; text-align: left;">
+                                            {{data.code}}</p>
                                         <table class="action" align="center" width="100%" cellpadding="0"
                                             cellspacing="0" role="presentation"
                                             style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; box-sizing: border-box; margin: 30px auto; padding: 0; text-align: center; width: 100%; -premailer-cellpadding: 0; -premailer-cellspacing: 0; -premailer-width: 100%;">
@@ -80,10 +83,7 @@
                                                                     <tr>
                                                                         <td
                                                                             style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; box-sizing: border-box;">
-                                                                            <a href="{{ url_for('go_to_login') }}"
-                                                                                class="button button-primary"
-                                                                                target="_blank"
-                                                                                style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; box-sizing: border-box; border-radius: 3px; box-shadow: 0 2px 3px rgba(0, 0, 0, 0.16); color: #fff; display: inline-block; text-decoration: none; -webkit-text-size-adjust: none; background-color: #FFCC00; border-top: 10px solid #ffcc00; border-right: 18px solid #ffcc00; border-bottom: 10px solid #ffcc00; border-left: 18px solid #ffcc00;">Confirma Correo</a>
+                                                                            {{data.code}}
                                                                         </td>
                                                                     </tr>
                                                                 </table>
@@ -108,13 +108,12 @@
                                                     style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; box-sizing: border-box;">
                                                     <p
                                                         style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; box-sizing: border-box; color: #3d4852; line-height: 1.5em; margin-top: 0; text-align: left; font-size: 12px;">
-                                                        Si tiene problemas para hacer clic en el botón,
+                                                        Si tiene problemas para acceder a la página,
                                                          copia y pega la URL a continuación
                                                          en su navegador web: <a
-                                                            href="{{ url_for('verify_email') }}"
+                                                            href="http://127.0.0.1:4000/validation"
                                                             style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; box-sizing: border-box; color: #3869d4;">TruthPaper</a>
                                                     </p>
-
                                                 </td>
                                             </tr>
                                         </table>
@@ -136,7 +135,6 @@
                                         <p
                                             style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; box-sizing: border-box; line-height: 1.5em; margin-top: 0; color: #aeaeae; font-size: 12px; text-align: center;">
                                             {{data.app_name}}. All rights reserved.</p>
-
                                     </td>
                                 </tr>
                             </table>

@@ -1,5 +1,4 @@
 # Importar los módulos necesarios
-
 from flask import Flask, render_template, request, flash, redirect, url_for, send_file, session
 from modules import web_scrapping as ws, filter as f, classes as cl, graphs as gr, usermappers, entitymappers
 from database import DBManager as manager
@@ -8,6 +7,7 @@ from flask_mail import Mail, Message
 from typing import List, Dict
 import threading
 from datetime import datetime
+from random import *
 from werkzeug.utils import secure_filename
 import os
 
@@ -282,13 +282,13 @@ def handle_user_registration(user_type):
     else:
         if user_type == 'common':
             if usermappers.Commonuser.save_commonuser(result):
-                return index()
+                return send_email(request.form['email'])
         elif user_type == 'company':
             if usermappers.Companyuser.save_companyuser(result):
-                return index()
+                return send_email(request.form['email'])
         elif user_type == 'journalist':
             if usermappers.Journalistuser.save_journalistuser(result):
-                return index()
+                return send_email(request.form['email'])
         else:
             # Manejar un tipo de usuario no válido, si es necesario
             pass
@@ -393,31 +393,43 @@ def edit_users():
 def profile_admin():
     return render_template('userAdmin/profileAdmin.html')
 
-@app.route('/verification')
-def verify_email():
-    return render_template('verify.html')
+def generate_code():
+    code = randint(000000, 000000)
+    return code
 
-@app.route("/send_email/<email>",methods=["GET"])
+@app.route('/verify_email', methods=['POST'])
+def verify_email(code):
+    user_code = request.form['password']
+    if user_code == code:
+        return index()
+
+@app.route('/validation')
+def validation(code):
+    return render_template('validation.html')
+
+@app.route('/send_email')
 def send_email(email):
+    code = generate_code()
     msg_title = "BIENVENID@ a TRUTHPAPER"
     sender = "noreply@app.com"
     msg = Message(msg_title,sender=sender,recipients=[email])
-    msg_body = "Toque el botón a continuación para confirmar su dirección de correo electrónico. Si no creó una cuenta con TruthPaper, puede eliminar este correo electrónico de forma segura."
+    msg_body = "Introduzca el código a continuación para confirmar su dirección de correo electrónico. Si no creó una cuenta con TruthPaper, puede eliminar este correo electrónico de forma segura."
     msg.body = ""
     data = {
-		'app_name': "TRUTHPAPER",
-		'title': msg_title,
-		'body': msg_body,
-	}
+        'app_name': "TRUTHPAPER",
+        'title': msg_title,
+        'body': msg_body,
+        'code': code
+    }
 
     msg.html = render_template("email.html",data=data)
 
     try:
         mail.send(msg)
-        return "Email sent..."
+        return validation(code)
     except Exception as e:
         print(e)
-        return f"the email was not sent {e}"
+        return render_template('register.html')
 
 
 # MySQL Connection
