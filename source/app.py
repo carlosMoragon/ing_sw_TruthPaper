@@ -408,9 +408,9 @@ def upload_saved_news():
 @app.route('/save_news', methods=['POST'])
 def save_news():
     print("se ha activado el método de guardar noticias")
-    user_id = 11
     news_id = request.form.get('news_id')
-    entitymappers.user_saves_new(id_user=11, id_new=1)
+    # AQUI FALLA ORIANNA!!!!
+    entitymappers.UserSavedNews.user_saves_a_new(id_user=USER_ID_SESION, id_new=news_id)
     print(f" =====> Se ha guardado la noticia con ID {news_id}")
     return redirect(url_for('expand_container'))
 

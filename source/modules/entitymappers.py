@@ -264,11 +264,11 @@ class UserSavedNews(db.Model):
         id_news_saved_by_user = db.session.query(UserSavedNews.idnews).filter_by(iduser=id_user).all()
         return id_news_saved_by_user
 
-def user_saves_new(id_user, id_new):
-    print("se ha ejecutado el metodo user_saves_new")
-    new_user_saved = UserSavedNews(iduser=id_user, idnews=id_new)
-    db.session.add(new_user_saved)
-    db.session.commit()
+    def user_saves_a_new(id_user, id_new):
+        print("se ha ejecutado el metodo user_saves_new")
+        new_user_saved = UserSavedNews(iduser=id_user, idnews=id_new)
+        db.session.add(new_user_saved)
+        db.session.commit()
         
 def is_update(fecha_actual: str) -> bool:
     fecha_db = db.session.query(New.date).order_by(desc(New.date)).first()[0].strftime("%Y-%m-%d")
