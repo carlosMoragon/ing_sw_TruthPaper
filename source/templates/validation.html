@@ -28,93 +28,68 @@
 
 <body>
     <!-- Topbar Start -->
-    <div class="container-fluid d-none d-lg-block">
-        <div class="row align-items-center bg-dark px-lg-5">
-            <div class="col-lg-9">
-                <nav class="navbar navbar-expand-sm bg-dark p-0">
-                    <ul class="navbar-nav ml-n2">
-                        <li class="nav-item border-right border-secondary">
-                            <a class="nav-link text-body small"> <span id="currentDate"></span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-body small" href="{{ url_for('go_to_login') }}"> Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-body small" href="{{ url_for('go_to_admin') }}"> | Administrador </a>
-                        </li>
 
-                    </ul>
-                </nav>
-            </div>
-            <div class="col-lg-3 text-right d-none d-md-block">
-                <!-- We can put something in the upper right part of the black bar at the top of the screen -->
-            </div>
+        <div class="row align-items-center justify-content-center bg-white">
+                <img src="../static/img/truthpaper_name.png" alt="" class="img-fluid center-block" width="200" href="index.html">
         </div>
 
-        <div class="row align-items-center bg-white py-3 px-lg-5">
-            <div class="col-lg-4">
-                <img src="../static/img/truthpaper_name.png" alt="" class="img-fluid" width="200" href="index.html">
+    <div class="container-fluid mt-5 pt-3">
+        <div class="container">
+            <div class="row justify-content-md-center">
+                <div class="col-lg-8">
+                    <div class="section-title mb-0">
+                        <h4 class="m-0 text-uppercase font-weight-bold"> Verifica tu correo</h4>
+                    </div>
+                    <div class="bg-white border border-top-0 p-4 mb-3">
+                        <div class="mb-4">
+                            <div class="container-fluid justify-content-md-center">
+                                <div class="row align-items-center h-100">
+                                    <div class="col">
+                                        {% with messages = get_flashed_messages(with_categories=true) %}
+                                            {% if messages %}
+                                                {% for category, message in messages %}
+                                                    <script>
+                                                        Swal.fire({
+                                                            icon: '{{ category }}',
+                                                            text: '{{ message }}',
+                                                            showConfirmButton: false,
+                                                            timer: 1500
+                                                        });
+                                                    </script>
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% endwith %}
+
+                                            <div class="container-fluid justify-content-md-center">
+                                                <img src="../static/img/send_email.png" alt="" class="img-fluid h-min center-block">
+                                            </div>
+                                        <form action="/verify_email" method="post">
+                            
+                                            <div class="form-group">
+                                                <label for="password">Código de verificación:</label>
+                                                <div class="input-group">
+                                                    <input type="password" class="form-control" id="password" name="password" required>
+                                                    <div class="invalid-feedback">Este campo es obligatorio.</div>
+                                                </div>
+                                            </div>
+                            
+                                            <input type="submit" value="Enviar">
+                                        </form>
+                                        </br>
+                                        <p><a href="register.html">Volver a enviar el correo electrónico</a></p>
+                                        <p><a href="{{ url_for('start') }}">Salir</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-        <div class="col-lg-8 text-center text-lg-right">
-            <a href="https://htmlcodex.com"><img class="img-fluid" src="../static/img/ads-728x90.png" alt=""></a>
-        </div>
-
-
         </div>
     </div>
 
     <!-- Login -->
-    <div class="row align-items-center h-100">
-        <div class="col">
-            <br>
-            <h2>Verificar email</h2>
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <script>
-                            Swal.fire({
-                                icon: '{{ category }}',
-                                text: '{{ message }}',
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
-                        </script>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-            <form action="/verify_email" method="post">
-
-                <div class="form-group">
-                    <label for="password">Código de verificación:</label>
-                    <div class="input-group">
-                        <input type="password" class="form-control" id="password" name="password" required>
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-outline-secondary" id="showPassword">
-                                <i class="fas fa-eye" style="font-size: 14px;"></i>
-                            </button>
-                        </div>
-                        <div class="invalid-feedback">Este campo es obligatorio.</div>
-                    </div>
-                </div>
-
-                <input type="submit" value="Enviar">
-            </form>
-            </br>
-            <p><a href="register.html">Volver a enviar el correo electrónico</a></p>
-            <p><a href="{{ url_for('start') }}">Salir</a></p>
-        </div>
-    </div>
-    <script>
-        document.getElementById('showPassword').addEventListener('click', function() {
-            var passwordInput = document.getElementById('password');
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-            } else {
-                passwordInput.type = 'password';
-            }
-        });
-    </script>
+    
     <!-- Date and Main Scripts-->
     <script src="../static/js/date.js"></script>
 

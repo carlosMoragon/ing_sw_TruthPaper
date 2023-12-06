@@ -394,21 +394,24 @@ def profile_admin():
     return render_template('userAdmin/profileAdmin.html')
 
 def generate_code():
-    code = randint(000000, 000000)
+    code = randint(000000, 999999)
     return code
 
 @app.route('/verify_email', methods=['POST'])
-def verify_email(code):
+def verify_email():
     user_code = request.form['password']
-    if user_code == code:
-        return index()
+    print(user_code)
+    if user_code == user_code:
+        return render_template('verifyEmail.html')
 
 @app.route('/validation')
 def validation(code):
+    #print(code)
     return render_template('validation.html')
 
-@app.route('/send_email')
+#@app.route('/send_email')
 def send_email(email):
+    #global code 
     code = generate_code()
     msg_title = "BIENVENID@ a TRUTHPAPER"
     sender = "noreply@app.com"
@@ -426,6 +429,7 @@ def send_email(email):
 
     try:
         mail.send(msg)
+        #print(code)
         return validation(code)
     except Exception as e:
         print(e)
