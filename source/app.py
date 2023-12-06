@@ -399,7 +399,7 @@ def generate_code():
 
 @app.route('/verify_email', methods=['POST'])
 def verify_email():
-    user_code = request.form['password']
+    user_code = request.form['password'] 
     print(user_code)
     if user_code == user_code:
         return render_template('verifyEmail.html')
@@ -412,7 +412,7 @@ def validation(code):
 #@app.route('/send_email')
 def send_email(email):
     #global code 
-    code = generate_code()
+    code = generate_code() # Mandar por ruta
     msg_title = "BIENVENID@ a TRUTHPAPER"
     sender = "noreply@app.com"
     msg = Message(msg_title,sender=sender,recipients=[email])
