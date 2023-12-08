@@ -255,8 +255,8 @@ class UserSavedNews(db.Model):
     iduser = db.Column(db.Integer, nullable=True, default=0)
     idnews= db.Column(db.Integer, nullable=True, default=0)
 
-    def __init__(self, id, iduser, idnews):
-        self.id = id
+    def __init__(self, iduser, idnews):
+        #self.id = id
         self.iduser = iduser
         self.idnews = idnews
 
