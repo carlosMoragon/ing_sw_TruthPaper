@@ -1,5 +1,5 @@
 import unittest
-from ..modules import classes as cl, web_scrapping as ws
+from ..modules import classes as cl, web_scrapping as ws, DBManager as manager
 
 
 class TestWebScrapping(unittest.TestCase):
@@ -41,3 +41,26 @@ class TestVerificationAlgorithms(unittest.TestCase):
         self.assertEqual(cl.validate_email("@dominio.com"), False)
         self.assertEqual(cl.validate_email("email@dominio.c"), False)
         self.assertEqual(cl.validate_email(""), False)
+
+
+# class TestUserLogIn(unittest.TestCase):
+#     def test_login(self):
+#         #1. Se toman los datos del form en el html
+#         respuesta_login = manager.login('AgentMobius', 'Jetskis1111*') 
+#         #2. Con esos datos se lanza una consulta a la base de datos
+#         #3. Se comprueba que el usuario existe
+#         self.assertEqual(respuesta_login, True) 
+    
+# class TestUserCreation(unittest.TestCase):
+#     #1. Se hace un log in
+#         # 1.1 Si el log in, tiene exito, se llama a un mapper que trae los datos de un usuario 
+#         # 1.2 El objeto usuario se crea con esos datos
+#     def testCreaacionUsuario(self):
+#         respuesta_login = True
+#         nombre_usuario = 'AgentMobius' #Lo sacará del form
+#         user_data = usermapper.getAllUserData(nombre_usuario) 
+#         nuevo_usuario = User(user_data)
+        
+    # Un usuario se loggea con exito
+    #2. Partiendo de sus datos en la bbdd, se crea un usuario en la app (ESTO LO HACE EL MAPPER)
+    

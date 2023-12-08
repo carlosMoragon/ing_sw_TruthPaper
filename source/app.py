@@ -1,7 +1,7 @@
 # Importar los módulos necesarios
 
-from flask import Flask, render_template, request, flash, redirect, url_for, send_file
-from modules import web_scrapping as ws, users, filter as f, classes as cl, graphs as gr
+from flask import Flask, render_template, request, flash, redirect, url_for, send_file, session
+from modules import web_scrapping as ws, filter as f, classes as cl, graphs as gr, usermappers, entitymappers
 from database import DBManager as manager
 from flask_sqlalchemy import SQLAlchemy
 from typing import List, Dict
@@ -10,6 +10,11 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 import os
 
+
+usuarios_en_sesion = cl.UsersInSession()
+#anaMencionoUnIdDeSesion
+global USER_ID_SESION #Se inicializa en login_users
+    
 db = manager.db
 app = Flask(__name__)
 
@@ -27,6 +32,7 @@ def index():
     print("llega")
     init_news.join()
     semaphore.release()
+
     # for new in news:
     #     print(f"{new.get_container_id()}\n")
     data = {
@@ -56,9 +62,9 @@ def start():
         # ESTA ES LA DE LAS BBDD QUE SON LAS QUE MAS RAPIDO TIENEN QUE IR
         init_news.start()
         # ESTAS SON LAS QUE SON NUEVAS QUE SE VAN A IR AÑADIENDO A LO LARGO DE LA EJECUCION
-        if not manager.is_update(datetime.now().strftime(f'%Y-%m-%d')):
+        if not entitymappers.is_update(datetime.now().strftime(f'%Y-%m-%d')):
             print("SE ACTUALIZAN LAS NOTICIAS")
-            threading.Thread(target=_add_news_background).start()
+            threading.Thread(target=_add_news_background).start()        
     return render_template('login.html')
 
 
@@ -67,38 +73,25 @@ def _add_news_background():
     new_news = ws.get_news()
     news.extend(new_news)
     containers = ws.get_containers(news, app)
-    manager.add_container(app, new_news)
-    manager.save_news(app, new_news)
+    entitymappers.Container.add_container(app, new_news)
+    entitymappers.New.save_news(app, new_news)
 
 
 @app.route('/login_users', methods=['POST'])
 def login_users():
-    respuesta_login = manager.login(request.form['username'], request.form['password'])
+    respuesta_login = usermappers.User.login(request.form['username'], request.form['password'])
     try:
-        if (type(respuesta_login) == bool and respuesta_login == True):
-            user = manager.User.query.filter_by(username=request.form['username']).first()
-            return index()
-        elif (type(respuesta_login) != bool):
-            # Se tiene que meter en index para que se carguen las noticias
-            return render_template('index.html')
-        else:
-            flash("Datos introducidos incorrectos", "error")
-            print("Datos introducidos incorrectos en el login")
-            return redirect(url_for('start'))
-    except Exception as e:
-        print(f"Ocurrió un error durante el inicio de sesión: {str(e)}")
-        flash("Ocurrió un error durante el inicio de sesión. Por favor, inténtalo de nuevo más tarde.", "error")
-        return redirect(url_for('start'))
+        if type(respuesta_login) == bool and respuesta_login == True:
 
-@app.route('/login_admin', methods=['POST'])
-def login_admin():
-    # ADMINISTRADOR --> falta lógica login de administradores
-    respuesta_login = manager.login(request.form['username'], request.form['password'])
-    try:
-        if (type(respuesta_login) == bool and respuesta_login == True):
-            user = manager.User.query.filter_by(username=request.form['username']).first()
+            mapped_user = usermappers.User.getAllUserData(request.form['username']) 
+            USUARIO_EN_SESION = cl.UserInApp(mapped_user.id, mapped_user.username, mapped_user.password, mapped_user.email) #No interesa mucho mapear la contraseña
+            usuarios_en_sesion.add_user(USUARIO_EN_SESION)    
+            global USER_ID_SESION #Cutre... ya lo se 
+            USER_ID_SESION = USUARIO_EN_SESION.get_id()
+
             return index()
-        elif (type(respuesta_login) != bool):
+        elif type(respuesta_login) != bool and respuesta_login == 'admin':
+            # Se tiene que meter en index para que se carguen las noticias
             return render_template('userAdmin/profileAdmin.html')
         else:
             flash("Datos introducidos incorrectos", "error")
@@ -110,19 +103,17 @@ def login_admin():
         return redirect(url_for('start'))
 
 
-
 @app.route('/ver_contenedor/<int:id>')
 def expand_container(id):
     container = containers.get(id)
-    manager.increment_views(id) # Se incrementan los likes a uno de la noticia
+    entitymappers.Comment.increment_views(id) # Se incrementan los likes a uno de la noticia
 
-    comments = manager.load_comments(id)
+    comments = entitymappers.Comment.load_comments(id)
     data = {'content': [comment.get_content() for comment in comments],
             'id': [comment.get_id() for comment in comments],
             'likes': [comment.get_likes() for comment in comments],
             'views': [comment.get_views() for comment in comments],
-            'img': [manager.load_image_comment(comment.get_id()) for comment in comments],
-            # 'img': [manager.load_image_comment(14)],
+            'img': [entitymappers.Comment.load_image_comment(comment.get_id()) for comment in comments],
             'userclient_id': [comment.get_userclient_id() for comment in comments],
             'container_id': [comment.get_containerid() for comment in comments]
             }
@@ -139,9 +130,9 @@ def like_news():
     global news
     news_id = request.form.get('news_id')
     print(f"Se ha dado like a la noticia con ID {news_id}")
-    new = manager.get_new_by_id(news_id)
+    new = entitymappers.New.get_new_by_id(news_id)
     if new is not None:
-        manager.increment_likes(int(news_id))
+        entitymappers.New.increment_likes(int(news_id))
         print("Se ha incrementado el número de likes de la noticia")
     else:
         print("No se ha podido dar like a la noticia con ID {news_id}")
@@ -158,9 +149,9 @@ def like_comment():
     global comments
     comment_id = request.form.get('comment_id')
     print(f"Se ha dado like al comentario con ID {comment_id}")
-    comment = manager.get_comment_by_id(comment_id)
+    comment = entitymappers.Comment.get_comment_by_id(comment_id)
     if comment is not None:
-        manager.comment_likes(int(comment_id))
+        entitymappers.Comment.comment_likes(int(comment_id))
         print("Se ha incrementado el número de likes del comentario")
     else:
         print("No se ha podido dar like al comentario con ID {comment_id}")
@@ -180,7 +171,7 @@ def publish_comment():
         image_bytes = file.read()
     else:
         image_bytes = None
-    comment_id = manager.insert_comment(user_id, container_id, content, image_bytes)
+    comment_id = entitymappers.Comment.insert_comment(user_id, container_id, content, image_bytes)
     print(f"Se ha insertado el comentario con ID {comment_id}")
 
     return redirect(url_for('expand_container', id=container_id))
@@ -225,17 +216,18 @@ def register_funct():
 def go_to_login():
     return render_template('login.html')
 
-
 def mostrar_perfil_usuarios(user_id, user_name):
-    user_image = manager.load_image(user_id)
-    return render_template('perfil.html', user_id=user_id, user_name=user_name, user_image=user_image)
+    user_image = usermappers.Userclient.load_image(user_id)
+    user_email = usermappers.User.get_user_email(user_id)
+    return render_template('perfil.html', user_id=user_id, user_name=user_name, user_image=user_image, user_email = user_email)
 
 
 @app.route('/perfil')
 def go_to_profile():
-    user_id = 12
-    user_name = 'Mobius'
-    return mostrar_perfil_usuarios(user_id, user_name)
+    #print("User id: " + str(USER_ID_SESION))
+    usuario_actual = usuarios_en_sesion.get_user_by_id(USER_ID_SESION)
+    user_name = usuario_actual.get_username()
+    return mostrar_perfil_usuarios(USER_ID_SESION, user_name)
 
 
 @app.route('/termsandConditions')
@@ -270,32 +262,23 @@ def save_keyword():
     return render_template('categoriesFunc.html', data=data)
 
 
-# @app.route('/pruebaArticulos')
-# def prueba_articulos():
-#     global news
-#     # news = ws.get_news()
-#     data = {
-#         'imgs' : [new.get_image() for new in news],
-#         'titles' : [new.get_title() for new in news],
-#         'urls' : [new.get_url() for new in news]
-#     }   
-#     return render_template('pruebaArticulos.html', data=data)
-
 def handle_user_registration(user_type):
-    result = manager.save_user()
+    result = usermappers.User.save_user()
     if result == -1:
         return render_template('register.html', registration_error="Contraseña débil", form=request.form)
     elif result == -2:
         return render_template('register.html', registration_error="Email inválido", form=request.form)
+    elif result == -3:
+        return render_template('register.html', registration_error="Nombre de usuario/email ya existente", form=request.form)
     else:
         if user_type == 'common':
-            if manager.save_commonuser(result):
+            if usermappers.Commonuser.save_commonuser(result):
                 return index()
         elif user_type == 'company':
-            if manager.save_companyuser(result):
+            if usermappers.Companyuser.save_companyuser(result):
                 return index()
         elif user_type == 'journalist':
-            if manager.save_journalistuser(result):
+            if usermappers.Journalistuser.save_journalistuser(result):
                 return index()
         else:
             # Manejar un tipo de usuario no válido, si es necesario
@@ -323,13 +306,13 @@ def index_admin():
     # Habrñia que cargar las noticias porque si no entras en index no se cargan
     # opción 1: cargarlas aquí
     # opción 2: Index >> botón: Usuario Admin >> indexAdmin
-    unchecked_users = manager.loadUncheckedUsers()
+    unchecked_users = usermappers.Userclient.loadUncheckedUsers()
     return render_template('userAdmin/indexAdmin.html', unchecked_users=unchecked_users)
 
 
 @app.route('/verifyUsers')
 def verify_users():
-    unchecked_users = manager.loadUncheckedUsers()
+    unchecked_users = usermappers.Userclient.loadUncheckedUsers()
     # Si el user_id de algun unchecked_user está en la tabla journalistusers, se devuelve True
     '''
     for user in unchecked_users:
@@ -349,14 +332,14 @@ def process_verification():
     action = request.form.get('action')  # 'accept' or 'deny'
     if action == 'accept':
         print("===================ACCEPT USER===================")
-        manager.updateUserChecked(user_id)
+        usermappers.Userclient.updateUserChecked(user_id)
     return redirect('/verifyUsers')
 
 
 @app.route('/pdfReader/<int:user_id>') # id del usuario
 def pdf_reader(user_id):
     # Enviar pdf según el id del usuario
-    pdf = manager.load_pdf_certificate(user_id) # certification_base64
+    pdf = usermappers.Journalistuser.load_pdf_certificate(user_id) 
     return render_template('userAdmin/pdfReader.html', pdf=pdf)
 
 @app.route('/charts')

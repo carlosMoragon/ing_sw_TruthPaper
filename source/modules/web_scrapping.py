@@ -1,7 +1,7 @@
 '''
 import requests
 from bs4 import BeautifulSoup
-from modules import classes as cl
+from modules import classes as cl, entitymappers, usermappers
 from typing import List, Dict
 from datetime import datetime
 import re
@@ -26,7 +26,7 @@ if not isInstaled():
 def get_news_db(app, news, container):
     with app.app_context():
         print("entra")
-        news.extend(manager.load_news())
+        news.extend(entitymappers.New.load_news())
         container.update(split_by_container(news))
 
 def _build_news(titles: List[str], urls: List[str], imgs: List[str], owner: str, date: str, category: str) -> List[cl.News]:
@@ -56,7 +56,7 @@ def add_new_container(news: List[cl.News], app) -> List[cl.News]:
     threshold = 0.7
 
     # Encontrar noticias relacionadas y asignarles un contenedor
-    n_cont = (manager.get_last_container_id(app)) + 1
+    n_cont = (entitymappers.Container.get_last_container_id(app)) + 1
     for i in range(len(news)):
         for j in range(i + 1, len(news)):
             if cosine_similarities[i][j] >= threshold:

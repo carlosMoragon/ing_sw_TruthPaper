@@ -137,6 +137,10 @@
                 <div class="alert alert-danger">
                     La contraseña es demasiado débil.
                 </div>
+            {% elif registration_error == "Nombre de usuario/email ya existente" %}
+                <div class="alert alert-danger">
+                    Nombre de usuario/email ya existente. Por favor, elija otro.
+                </div>
             {% endif %}
         </div>
         <div class="diff_users" style="margin: 10%;">

@@ -1,104 +1,16 @@
-import re
 from typing import List
-# from modules import web_scrapping as ws
-# Declaración de clases
+import re
 
-
-def validate_date(date: str) -> bool:
-    # yyyy-mm-dd
-    return bool(re.match(r'^\d{4}-\d{2}-\d{2}$', date))
-
-
-def validate_password(password: str) -> bool:
-    # Busca que tenga al menos 4 numeros, 1 mayuscula, 1 caracter especial y 8 digitos
-    return bool(re.match(r'^(?=.*\d{4,})(?=.*[A-Z])(?=.*[\W_]).{8,}$', password))
-
-
-def validate_email(email: str) -> bool:
-    # Busca una expresión del tipo (string1)@(string2).(2+characters)
-    return bool(re.match(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+', email))
-
-
-# Estructura de un comentario de una publicación
-class Comment:
-
-    def __init__(self, id: int, likes: int, views: int, content: str, img: str, userclient_id: int, container_id: int):
-        self._id = id
-        self._likes = likes
-        self._views = views
-        self._content = content
-        self._img = img
-        self._userclient_id = userclient_id
-        self._container_id = container_id
-
-    def get_id(self) -> int:
-        return self._id
-
-    def set_id(self, id):
-        self._id = id
-
-    def get_likes(self) -> int:
-        return self._likes
-
-    def set_likes(self, likes):
-        self._likes = likes
-
-    def get_views(self) -> int:
-        return self._views
-
-    def set_views(self, views):
-        self._views = views
-
-    def get_content(self) -> str:
-        return self._content
-
-    def set_content(self, content):
-        self._content = content
-
-    def get_img(self) -> str:
-        return self._img
-
-    def set_img(self, img):
-        self._img = img
-
-    def get_userclient_id(self) -> int:
-        return self._userclient_id
-
-    def set_userclient_id(self, userclient_id):
-        self._userclient_id = userclient_id
-
-    def set_containerid(self, container_id):
-        self._container_id = container_id
-    def get_containerid(self):
-        return self._container_id
-
-
-    def __str__(self) -> str:
-        return f"id: {self._id}, likes: {self._likes}, views: {self._views}, content: {self._content}, img: {self._img}, userclient_id: {self._userclient_id}"
-
-class container:
-    def __init__(self, id: int, likes: int):
-        self._id = id
-        self._likes = likes
-    def set_id(self, id):
-        self._id = id
-    def get_id(self):
-        return self._id
-    def set_likes(self, likes):
-        self._likes = likes
-
-    def get_likes(self):
-        return self._likes
-
-
-# Users declarations
-class User:
+class UserInApp:
     def __init__(self, id: int, username: str, password: str, email: str):
         self._id = id
         self._username = username
         self._password = password
         self._email = email
 
+    def get_id(self):
+        return self._id
+    
     def set_username(self, username: str):
         self._username = username
 
@@ -123,9 +35,41 @@ class User:
     def __eq__(self, other):
         return self._id == other.get_id()
 
+class UsersInSession:
+    def __init__(self):
+        self._users = []
 
-class UserClient(User):
+    def add_user(self, user: UserInApp):
+        self._users.append(user)
 
+    def remove_user(self, user: UserInApp):
+        self._users.remove(user)
+
+    def get_users(self) -> List[UserInApp]:
+        return self._users
+
+    def get_user_by_id(self, id: int) -> UserInApp:
+        for user in self._users:
+            if user.get_id() == id:
+                return user
+        return None
+
+    def get_user_by_username(self, username: str) -> UserInApp:
+        for user in self._users:
+            if user.get_username() == username:
+                return user
+        return None
+
+    def get_user_by_email(self, email: str) -> UserInApp:
+        for user in self._users:
+            if user.get_email() == email:
+                return user
+        return None
+
+    def __str__(self) -> str:
+        return f"users: {self._users}"
+
+class UserClient(UserInApp):
     def __init__(self, id: int, username: str, password: str, email: str, photo, is_checked: bool):
         super().__init__(id, username, password, email)
         self._photo = photo
@@ -146,8 +90,7 @@ class UserClient(User):
     def __str__(self):
         return f"id: {self._id}, username: {self._username}, password: {self._password}, email: {self._email}, photo: {self._photo}, is_checked: {self._is_checked}"
 
-
-class AdministratorUser(User):
+class AdministratorUser(UserInApp):
     def __init__(self, username: str, password: str, email: str, can_create: bool, can_delete: bool, can_edit: bool):
         super().__init__(username, password, email)
         self._can_create = can_create
@@ -165,7 +108,6 @@ class AdministratorUser(User):
 
     def __str__(self):
         return f"username: {self._username}, password: {self._password}, email: {self._email}, can_create: {self._can_create}, can_delete: {self._can_delete}, can_edit: {self._can_edit}"
-
 
 class CommonUser(UserClient):
     def __init__(self, id: int, username: str, password: str, email: str, photo, is_checked: bool, name: str, lastname: str, banckaccount: str):
@@ -194,7 +136,6 @@ class CommonUser(UserClient):
 
     def __str__(self):
         return f"id: {self._id}, username: {self._username}, password: {self._password}, email: {self._email}, photo: {self._photo}, is_checked: {self._is_checked}, name: {self._name}, lastname: {self._lastname}, banckaccount: {self._banckaccount}"
-
 
 class CompanyUser(UserClient):
     def __init__(self, id: int, username: str, password: str, email: str, photo, is_checked: bool, company_name: str, NIF: str, certification: bool):
@@ -252,6 +193,60 @@ class Journalist(UserClient):
     def __str__(self):
         return f"id: {self._id}, username: {self._username}, password: {self._password}, email: {self._email}, photo: {self._photo}, is_checked: {self._is_checked}, name: {self._name}, lastname: {self._lastname}, certification: {self._certification}"
 
+class Comment:
+    def __init__(self, id: int, likes: int, views: int, content: str, img: str, userclient_id: int, container_id: int):
+        self._id = id
+        self._likes = likes
+        self._views = views
+        self._content = content
+        self._img = img
+        self._userclient_id = userclient_id
+        self._container_id = container_id
+
+    def get_id(self) -> int:
+        return self._id
+
+    def set_id(self, id):
+        self._id = id
+
+    def get_likes(self) -> int:
+        return self._likes
+
+    def set_likes(self, likes):
+        self._likes = likes
+
+    def get_views(self) -> int:
+        return self._views
+
+    def set_views(self, views):
+        self._views = views
+
+    def get_content(self) -> str:
+        return self._content
+
+    def set_content(self, content):
+        self._content = content
+
+    def get_img(self) -> str:
+        return self._img
+
+    def set_img(self, img):
+        self._img = img
+
+    def get_userclient_id(self) -> int:
+        return self._userclient_id
+
+    def set_userclient_id(self, userclient_id):
+        self._userclient_id = userclient_id
+
+    def set_containerid(self, container_id):
+        self._container_id = container_id
+    
+    def get_containerid(self):
+        return self._container_id
+
+    def __str__(self) -> str:
+        return f"id: {self._id}, likes: {self._likes}, views: {self._views}, content: {self._content}, img: {self._img}, userclient_id: {self._userclient_id}"
 
 class advertisement:
     def __init__(self, id: int, image, content: str, url: str, views: int, companyuser_id: int):
@@ -304,7 +299,6 @@ class advertisement:
     def __eq__(self, other):
         return self._id == other.get_id()
 
-
 class Note:
     def __init__(self, id: int, content: str, userclient_id: int):
         self._id = id
@@ -335,8 +329,6 @@ class Note:
     def __eq__(self, other):
         return self._id == other.get_id()
 
-
-# Estructura de una Noticia
 class News:
     def __init__(self, id: int, owner: str, title: str, image: str, url: str, content: str,  journalist: int, date: str, category: str, likes: int, views: int, container_id: int):
         self._id = id
@@ -351,8 +343,6 @@ class News:
         self._likes = likes
         self._views = views
         self._container_id = container_id
-
-    # Getters y Setters
 
     def get_likes(self) -> int:
         return self._likes
@@ -434,7 +424,8 @@ class News:
 
     def __hash__(self):
         return hash(self._id)
-    
+
+#Dios proveerá...
 class Container:
         def __init__(self, id: int, likes: str):
             self._id = id
@@ -451,3 +442,21 @@ class Container:
 
         def set_likes(self, likes):
             self._likes = likes
+class container:
+    def __init__(self, id: int, likes: int):
+        self._id = id
+        self._likes = likes
+    def set_id(self, id):
+        self._id = id
+    def get_id(self):
+        return self._id
+    def set_likes(self, likes):
+        self._likes = likes
+
+    def get_likes(self):
+        return self._likes
+
+
+def validate_date(date: str) -> bool:
+    # yyyy-mm-dd
+    return bool(re.match(r'^\d{4}-\d{2}-\d{2}$', date))
