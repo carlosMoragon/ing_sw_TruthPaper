@@ -133,8 +133,21 @@ def like_news():
     else:
         print("No se ha podido dar like a la noticia con ID {news_id}")
     id_container = liked_new.container_id
-    init_news.start()
-    return redirect(url_for('expand_container', id=id_container))
+    news = entitymappers.New.get_news_by_container_id(id_container)
+
+    comments = entitymappers.Comment.load_comments(id_container)
+    data = {'content': [comment.get_content() for comment in comments],
+            'id': [comment.get_id() for comment in comments],
+            'likes': [comment.get_likes() for comment in comments],
+            'views': [comment.get_views() for comment in comments],
+            'img': [entitymappers.Comment.load_image_comment(comment.get_id()) for comment in comments],
+            'userclient_id': [comment.get_userclient_id() for comment in comments],
+            'container_id': [comment.get_containerid() for comment in comments],
+            'username': [usermappers.User.get_username(comment.get_userclient_id()) for comment in comments],
+            'userimage': [usermappers.Userclient.load_image(comment.get_userclient_id()) for comment in comments],
+            }
+
+    return render_template('containerNews.html', container=news, id_contenedor=id_container, data=data)
 
 
 '''
@@ -407,10 +420,6 @@ def save_news():
     # print("se ha activado el método de guardar noticias")
     news_id = request.form.get('news_id')
     entitymappers.UserSavedNews.user_saves_a_new(id_user=USER_ID_SESION, id_new=news_id)
-    # print(f" =====> Se ha guardado la noticia con ID {news_id}")
-    #Problema por mirar
-    #return redirect(url_for('expand_container'))
-    #Alternativa
     return go_to_savedNews()
 
 
