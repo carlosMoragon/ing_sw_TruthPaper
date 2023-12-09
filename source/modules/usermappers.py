@@ -88,6 +88,8 @@ class User(db.Model):
             print("CONTRASEÑA DÉBIL")
             return -1
 
+    def get_username(id):
+        return  User.query.filter_by(id=id).first().username
 
 class AdministratorUser(db.Model):
     __tablename__ = 'administratoruser'

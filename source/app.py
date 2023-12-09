@@ -73,7 +73,7 @@ def login_users():
         if type(respuesta_login) == bool and respuesta_login == True:
 
             mapped_user = usermappers.User.find_user_by_username_or_email(request.form['username'])
-            ses.s_login(mapped_user.id) #No interesa mucho mapear la contraseña    
+            ses.s_login(mapped_user.id)   
             return index()
         elif type(respuesta_login) != bool and respuesta_login == 'admin':
             # Se tiene que meter en index para que se carguen las noticias
@@ -91,7 +91,7 @@ def login_users():
 @app.route('/ver_contenedor/<int:id>')
 def expand_container(id):
     container = containers.get(id)
-    entitymappers.Comment.increment_views(id) # Se incrementan los likes a uno de la noticia
+    entitymappers.Comment.increment_views(id) # Se incrementan los views a uno de la noticia
 
     comments = entitymappers.Comment.load_comments(id)
     data = {'content': [comment.get_content() for comment in comments],
@@ -100,7 +100,9 @@ def expand_container(id):
             'views': [comment.get_views() for comment in comments],
             'img': [entitymappers.Comment.load_image_comment(comment.get_id()) for comment in comments],
             'userclient_id': [comment.get_userclient_id() for comment in comments],
-            'container_id': [comment.get_containerid() for comment in comments]
+            'container_id': [comment.get_containerid() for comment in comments],
+            'username': [usermappers.User.get_username(comment.get_userclient_id()) for comment in comments],
+            'userimage': [usermappers.Userclient.load_image(comment.get_userclient_id()) for comment in comments],
             }
 
     if comments is None:
@@ -112,21 +114,46 @@ def expand_container(id):
 
 @app.route('/like_news', methods=['POST'])
 def like_news():
-    global news
-    news_id = request.form.get('news_id')
-    print(f"Se ha dado like a la noticia con ID {news_id}")
-    new = entitymappers.New.get_new_by_id(news_id)
-    if new is not None:
-        entitymappers.New.increment_likes(int(news_id))
+    new_id = request.form.get('news_id')
+    print(f"Se ha dado like a la noticia con ID {new_id}")
+    liked_new = entitymappers.New.get_new_by_id(new_id)
+    if liked_new:
+        entitymappers.New.increment_likes(int(new_id))
         print("Se ha incrementado el número de likes de la noticia")
     else:
         print("No se ha podido dar like a la noticia con ID {news_id}")
-    id_container = new.container_id
+    id_container = liked_new.container_id
+    news = entitymappers.New.get_news_by_container_id(id_container)
+
+    comments = entitymappers.Comment.load_comments(id_container)
+    data = {'content': [comment.get_content() for comment in comments],
+            'id': [comment.get_id() for comment in comments],
+            'likes': [comment.get_likes() for comment in comments],
+            'views': [comment.get_views() for comment in comments],
+            'img': [entitymappers.Comment.load_image_comment(comment.get_id()) for comment in comments],
+            'userclient_id': [comment.get_userclient_id() for comment in comments],
+            'container_id': [comment.get_containerid() for comment in comments],
+            'username': [usermappers.User.get_username(comment.get_userclient_id()) for comment in comments],
+            'userimage': [usermappers.Userclient.load_image(comment.get_userclient_id()) for comment in comments],
+            }
+
+    return render_template('containerNews.html', container=news, id_contenedor=id_container, data=data)
+
+
+'''
+    for new in news:
+        if new.get_id()== new_id:
+            new.set_likes(new.get_likes() + 1)
+            # break
+            
     for new in news:
         if new.get_container_id() == id_container:
             new.set_likes(new.get_likes() + 1)
             break
     return redirect(url_for('expand_container', id=id_container))
+'''
+
+
 
 
 @app.route('/like_comment', methods=['POST'])
@@ -146,7 +173,7 @@ def like_comment():
 
 @app.route('/publish_comment', methods=['POST'])
 def publish_comment():
-    user_id = 11  # CAMBIAR POR EL ID DEL USUARIO QUE ESTÉ LOGUEADO
+    user_id = ses.get_user_id()
     container_id = request.form.get('container_id')
     content = request.form.get('content')
 
@@ -209,7 +236,6 @@ def mostrar_perfil_usuarios(user_id, user_name):
 
 @app.route('/perfil')
 def go_to_profile():
-    #print("User id: " + str(USER_ID_SESION))
     user_id = ses.get_user_id()
     user_name = usermappers.User.get_user_name(user_id)
     return mostrar_perfil_usuarios(user_id, user_name)
@@ -227,6 +253,9 @@ def go_to_categories():
 @app.route('/login_admin')
 def go_to_admin():
     return render_template('loginAdmin.html')
+
+
+
 
 
 @app.route('/save_keyword', methods=['post'])
@@ -288,9 +317,6 @@ def register_user_journalist():
 # Métodos para el ADMINISTRADOR
 @app.route('/indexAdmin')
 def index_admin():
-    # Habrñia que cargar las noticias porque si no entras en index no se cargan
-    # opción 1: cargarlas aquí
-    # opción 2: Index >> botón: Usuario Admin >> indexAdmin
     unchecked_users = usermappers.Userclient.loadUncheckedUsers()
     return render_template('userAdmin/indexAdmin.html', unchecked_users=unchecked_users)
 
@@ -364,12 +390,36 @@ def comments():
 def edit_users():
     return render_template('userAdmin/editUsers.html')
 
-
 @app.route('/profileAdmin')
 def profile_admin():
     return render_template('userAdmin/profileAdmin.html')
 
+# NOTICIAS GUARDADAS
 
+
+@app.route('/savedNews')
+def go_to_savedNews():
+    # Carga los Id's de las noticias guardadas por el usuario en sesion
+    id_saved_news = entitymappers.UserSavedNews.load_ids_news_saved_by_user(USER_ID_SESION) 
+    news_saved = entitymappers.New.load_news_by_id(id_saved_news)
+    return render_template('SavedNews.html', news = news_saved)
+
+@app.route('/save_news', methods=['POST'])
+def save_news():
+    # print("se ha activado el método de guardar noticias")
+    news_id = request.form.get('news_id')
+    entitymappers.UserSavedNews.user_saves_a_new(id_user=USER_ID_SESION, id_new=news_id)
+    return go_to_savedNews()
+
+
+# Se ven las noticias que en la base de datos aparecen como guardadas
+#@app.route('/savedNews')
+# def upload_saved_news():
+#     user_id = USER_ID_SESION
+#     id_saved_news = entitymappers.UserSavedNews.load_saved_news(user_id) # Carga los ids de las noticias guardadas
+#     news_saved = entitymappers.New.load_news_by_id(id_saved_news) # Carga las noticias con los ids anteriores
+#  #   return news_saved
+#     return render_template('SavedNews.html', news = news_saved)
 
 # MySQL Connection
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://administrador_truthpaper:Periodico55deVerdad@truthpaper-server.mysql.database.azure.com:3306/truthpaper_ddbb?charset=utf8mb4&ssl_ca=DigiCertGlobalRootCA.crt.pem'

@@ -62,7 +62,6 @@ class New(db.Model):
             db.session.commit()
             return True
 
-    #¿DONDE SE ESTÁ USANDO ESTO?
     def load_news() -> List[cl.News]:
         all_news = db.session.query(New).all()
         # all_news =  New.query.all()
@@ -85,7 +84,29 @@ class New(db.Model):
             news_objects.append(news_obj)
 
         return news_objects
-    
+
+    def get_news_by_container_id(container_id: int) -> List[cl.News]:
+        all_news = db.session.query(New).filter_by(container_id=container_id).all()
+        news_objects = []
+        for news in all_news:
+            news_obj = cl.News(
+                id=news.id,
+                owner=news.owner,
+                title=news.title,
+                image=news.image,
+                url=news.url,
+                content=news.content,
+                container_id=news.container_id,
+                journalist=news.journalistuser_id,
+                date=news.date.strftime('%Y-%m-%d'),
+                category=news.category,
+                likes=news.likes,
+                views=news.views
+            )
+            news_objects.append(news_obj)
+
+        return news_objects
+
     def get_new_by_id(new_id):
         new=New.query.filter_by(id=new_id).first()
         return new
@@ -96,6 +117,39 @@ class New(db.Model):
         #print("Like a la noticia con id: " + str(noticia.id))
         db.session.commit()
 
+    # def load_news_by_id(ids: List[int]):
+    #     noticias = []
+    #     for i in ids:
+    #         new = New.query.filter_by(id=i).first()
+    #         noticias.append(new)
+    #     return noticias
+    
+    def load_news_by_id(ids: List[int]) -> List[cl.News]:
+        noticias = []
+        for i in ids:
+            new = New.query.filter_by(id=i).first()
+            noticias.append(new)
+            
+        news_objects = []
+        for news in noticias:
+            news_obj = cl.News(
+                id=news.id,
+                owner=news.owner,
+                title=news.title,
+                image=news.image,
+                url=news.url,
+                content=news.content,
+                container_id=news.container_id,
+                journalist=news.journalistuser_id,
+                date=news.date.strftime('%Y-%m-%d'),
+                category=news.category,
+                likes=news.likes,
+                views=news.views
+            )
+            news_objects.append(news_obj)
+
+        return news_objects
+        #return noticias
 
 class Container(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -228,29 +282,33 @@ class Comment(db.Model):
             return None
         
     
-class UserSavedNews(db.Model):    
+class UserSavedNews(db.Model):
+    __tablename__ = 'usersavednews'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     iduser = db.Column(db.Integer, nullable=True, default=0)
     idnews= db.Column(db.Integer, nullable=True, default=0)
-    
-    def __init__(self, id, iduser, idnews):
-        self.id = id
+
+    def __init__(self, iduser, idnews):
+        #self.id = id
         self.iduser = iduser
         self.idnews = idnews
-    
+
     def load_ids_news_saved_by_user(id_user):
-        id_news_saved_by_user = db.session.query(UserSavedNews.idnews).filter_by(iduser=id_user).all()
-        return id_news_saved_by_user   #Esto solo devuelves los ids de las noticias guardadas por el usuario (hay que ligarlo con los metodos de cargar noticias)
-    
-    def user_saves_new(id_user, id_new):
+        #Devuelve una lista con los id de las noticias guardadas por el usuario
+        id_news_saved_by_user = [result[0] for result in UserSavedNews.query.filter_by(iduser=id_user).with_entities(UserSavedNews.idnews).all()]
+        return id_news_saved_by_user
+
+    def user_saves_a_new(id_user, id_new):
+        print("se ha ejecutado el metodo user_saves_new")
         new_user_saved = UserSavedNews(iduser=id_user, idnews=id_new)
         db.session.add(new_user_saved)
         db.session.commit()
         
+        
+        
+        
 def is_update(fecha_actual: str) -> bool:
-    print("entra en is_update")
     fecha_db = db.session.query(New.date).order_by(desc(New.date)).first()[0].strftime("%Y-%m-%d")
-    print(f"{fecha_db == fecha_actual}")
     return fecha_actual == str(fecha_db)
 
 def last_id() -> int:

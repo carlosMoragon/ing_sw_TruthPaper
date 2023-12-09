@@ -8,50 +8,209 @@
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
 
-    <!-- Add your other head elements here -->
+    <!-- Icon -->
+    <link href="../static/img/logos/high_res/logo_color_tbg_hd.png" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="../static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Stylesheet -->
+    <link href="../static/css/style.css" rel="stylesheet">
+
+    <!--Other Bootstrap Libraries for the dropdown menu-->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Date and Main Scripts-->
+    <script src="../static/js/date.js"></script>
+    <script src="../static/js/main.js"></script>
 
 </head>
 
 <body>
-    <!-- Topbar and Navbar code here -->
+    <!-- Topbar Start -->
+   <div class="container-fluid d-none d-lg-block">
+        <div class="row align-items-center bg-dark px-lg-5">
+            <div class="col-lg-9">
+                <nav class="navbar navbar-expand-sm bg-dark p-0">
+                    <ul class="navbar-nav ml-n2">
+                        <li class="nav-item border-right border-secondary">
+                            <a class="nav-link text-body small"> <span id="currentDate"></span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-body small" href="{{ url_for('go_to_login') }}"> Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-body small" href="{{ url_for('go_to_admin') }}"> | Administrador </a>
+                        </li>
 
-    <!-- News Display Start -->
-    <div class="container-fluid" style="width: 100%; height: 100%;">
-        <div class="row justify-content-md-center">
-            <div class="col-md-11">
-                <div>
-                    <div class="section-title mb-0">
-                        <h4 class="m-0 text-uppercase font-weight-bold">Noticias Guardadas</h4>
-                    </div>
-                    <!-- NOTICIAS GUARDADAS -->
-                    {% for news_item in container %}
-                    <div class="bg-white border border-top-0 p-3">
-                        <div class="position-relative overflow-hidden" style="height: 300px;">
-                            <img class="img-fluid" src="{{news_item.get_image()}}" href="{{news_item.get_url()}}" style="width: 100%;" />
-                            <p> </p>
-                        </div>
-
-                        <div class="overlay">
-                            <div class="mb-2">
-                                <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="">{{ news_item.get_category() }}</a>
-                                <a class="text-white" href=""><small>{{news_item.get_date()}}</small></a>
-                            </div>
-                            <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="{{news_item.get_url()}}">{{news_item.get_title()}}</a>
-
-                            <form method="post" action="{{ url_for('like_news', news_id=news_item.get_id()) }}" class="like-form">
-                                <button type="submit" class="btn btn-outline-primary like-btn" style="margin-top: 1%" data-news-id="{{ news_item.get_id() }}">
-                                    <i class="fa fa-thumbs-up"></i> {{ news_item.get_likes() }}
-                                </button>
-                                <input type="hidden" name="news_id" value="{{ news_item.get_id() }}">
-                            </form>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-3 text-right d-none d-md-block">
+                <!-- We can put something in the upper right part of the black bar at the top of the screen -->
             </div>
         </div>
-    </div>
-    <!-- News Display End -->
-</body>
 
-</html>
+        <div class="row align-items-center bg-white py-3 px-lg-5">
+            <div class="col-lg-4">
+                <img src="../static/img/truthpaper_name.png" alt="" class="img-fluid" width="200" href="index.html">
+            </div>
+
+        <div class="col-lg-8 text-center text-lg-right">
+            <a href="https://htmlcodex.com"><img class="img-fluid" src="../static/img/ads-728x90.png" alt=""></a>
+        </div>
+
+
+        </div>
+    </div>
+    <!-- Topbar End -->
+
+    <!-- Navbar Start -->
+    <div class="container-fluid p-0">
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-2 py-lg-0 px-lg-5">
+            <a href="index.html" class="navbar-brand d-block d-lg-none">
+                <h1 class="m-0 display-4 text-uppercase text-primary">Truth<span
+                        class="text-white font-weight-normal">paper</span></h1>
+            </a>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between px-0 px-lg-3" id="navbarCollapse">
+                <div class="navbar-nav mr-auto py-0">
+                    <a href="{{ url_for('index')}}" class="nav-item nav-link ">Inicio</a>
+                    <a href="{{url_for('go_to_savedNews')}}" class="nav-item nav-link" > Noticias Guardadas</a>
+                    <a href="{{url_for('go_to_categories')}}" class="nav-item nav-link" > Categorías</a>
+
+                </div>
+
+
+                <!-- search by keywords -->
+                <form action="/save_keyword" method="post">
+                    <div class="input-group ml-auto d-none d-lg-flex" style="max-width: 300px;">
+                        <input type="text" class="form-control border-0" name="search" placeholder="Buscar">
+                        <div class="input-group-append">
+                            <button class="input-group-text bg-primary text-dark border-0 px-3">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Icon to enter in login-->
+                <div class="login-icon">
+                    <a href="{{ url_for('go_to_profile') }}" class="nav-item nav-link">
+                        <i class="fas fa-user"></i>
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!-- Navbar End -->
+
+
+    <br>
+
+    <!-- News With Sidebar Start -->
+    <div class="container-fluid" style="width: 100%; height: 100%;">
+        <div >
+            <div class="row justify-content-md-center">
+                <!-- Tranding News Start -->
+                <div class="col-md-11">
+                    <div>
+                        <div class="section-title mb-0">
+                            <h4 class="m-0 text-uppercase font-weight-bold">Noticias</h4>
+                        </div>
+                        <div class="bg-white border border-top-0 p-3">
+                             <ul>
+                                {% for news_item in news %}
+                                    <li class="position-relative overflow-hidden" style="height: 300px;">
+                                        <div style=" height: 100%;" !important>
+                                            <img class="img-fluid" src="{{news_item.get_image()}}" href="{{news_item.get_url()}}" style="width: 100%;" />
+                                            <p> </p>
+                                        </div>
+
+                                        <div class="overlay">
+                                            <div class="mb-2">
+                                                <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
+                                                    href="">{{ news_item.get_category() }}</a>
+                                                <a class="text-white" href=""><small>{{news_item.get_date()}}</small></a>
+                                            </div>
+                                            <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="{{news_item.get_url()}}">{{news_item.get_title()}}</a>
+
+                                            <form method="post" action="{{ url_for('like_news', news_id=news_item.get_id()) }}" class="like-form">
+                                                <div style= "display: flex;">
+                                                    <button type="submit" class="btn btn-outline-primary like-btn" style="margin-top: 1%" data-news-id="{{ news_item.get_id() }}">
+                                                        <i class="fa fa-thumbs-up"></i> {{ news_item.get_likes() }}
+                                                    </button>
+                                                    <input type="hidden" name="news_id" value="{{ news_item.get_id() }}">
+                                                    <button type="button" class="btn btn-primary">
+                                                        <i class="fas fa-save"></i>
+                                                    </button>
+                                                </div>
+                                            </form>
+
+
+                                        </div>
+                                    </li>
+                                {% endfor %}<!-- Noticias guardadas -->
+                            </ul>
+
+
+
+                        </div>
+                    </div>
+                </div>
+                    <script>
+                        $(document).ready(function() {
+                             $('.save-form').submit(function(e) {
+                                 // Obtener el botón de like
+                                 var likeButton = $(this).find('.save-btn');
+
+                                 // Deshabilitar el botón para evitar clics adicionales
+                                 likeButton.prop('disabled', true);
+
+                                 // Cambiar el estilo del botón a uno sin borde
+                                 likeButton.removeClass('btn-outline-primary');
+                                 likeButton.addClass('btn-primary');
+
+                                 // Cambiar el contenido del botón a solo el ícono
+                                 likeButton.html('<i class="fa fa-save"></i>');
+                             });
+                         });
+
+
+                    </script>
+                    <script>
+                        $(document).ready(function() {
+                             $('.like-form').submit(function(e) {
+                                 // Obtener el botón de like
+                                 var likeButton = $(this).find('.like-btn');
+
+                                 // Deshabilitar el botón para evitar clics adicionales
+                                 likeButton.prop('disabled', true);
+
+                                 // Cambiar el estilo del botón a uno sin borde
+                                 likeButton.removeClass('btn-outline-primary');
+                                 likeButton.addClass('btn-primary');
+
+                                 // Cambiar el contenido del botón a solo el ícono
+                                 likeButton.html('<i class="fa fa-thumbs-up"></i>');
+                             });
+                         });
+                    </script>
+            </div>
+                <!-- Tranding News End -->
+        </div>
+    </div>
+
+    <!-- News With Sidebar End -->
+</body>
