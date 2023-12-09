@@ -417,7 +417,7 @@ class News:
         self._date = date
 
     def __str__(self) -> str:
-        return f"id: {self._id}, owner: {self._owner}, title: {self._title}, image: {self._image}, url: {self._url}, content: {self._content}, container: {self._container}, journalist: {self._journalist}, date: {self._date}"
+        return f"id: {self._id}\n\n, owner: {self._owner}\n\n, title: {self._title}\n\n, image: {self._image}\n\n, url: {self._url}\n\n, content: {self._content}\n\n, container: {self._container}\n\n, journalist: {self._journalist}\n\n, date: {self._date}\n\n"
 
     def __eq__(self, other):
         return self._id == other.get_id() and self._owner == other.get_owner() and self._title == other.get_title() and self._image == other.get_image() and self._url == other.get_url() and self._content == other.get_content() and self._container == other.get_container_id() and self._journalist == other.get_journalist() and self._date == other.get_date()

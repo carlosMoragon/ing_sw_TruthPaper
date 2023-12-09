@@ -15,7 +15,7 @@ class New(db.Model):
     url = db.Column(db.String(255), nullable=False)
     content = db.Column(db.Text, nullable=False)
     container_id = db.Column(db.Integer, db.ForeignKey('container.id'))
-    journalistuser_id = db.Column(db.Integer)
+    journalistuser_id = db.Column(db.Integer, db.ForeignKey('journalistuser.journalistuser_id'))#db.Column(db.Integer)
     date = db.Column(db.Date, nullable=False)
     category = db.Column(db.String(30), nullable=False)
     likes = db.Column(db.Integer, nullable=False, default=0)
@@ -38,9 +38,10 @@ class New(db.Model):
 
     def save_news(app, news: List[cl.News]) -> bool:
         with app.app_context():
-            # print("A AÑADIR NOTICIAS")
+            print("A AÑADIR NOTICIAS")
             i = last_id()
             for new in news:
+                # container_id = new.get_container_id()
                 i += 1
                 new_db =  New(
                     id=i,
@@ -57,12 +58,13 @@ class New(db.Model):
                     views=new.get_views()
 
                 )
+                
                 db.session.add(new_db)
 
             db.session.commit()
             return True
 
-    #¿DONDE SE ESTÁ USANDO ESTO?
+    
     def load_news() -> List[cl.News]:
         all_news = db.session.query(New).all()
         # all_news =  New.query.all()

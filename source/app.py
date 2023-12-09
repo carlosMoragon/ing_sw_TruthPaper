@@ -71,8 +71,12 @@ def start():
 def _add_news_background():
     global news, containers
     new_news = ws.get_news()
-    news.extend(new_news)
-    containers = ws.get_containers(news, app)
+    print("pasa")
+    news += new_news #.extend(new_news)
+    # containers += ws.get_containers(new_news, app)
+    # containers += dict(ws.get_containers(new_news, app))
+    containers.update(ws.get_containers(new_news, app))
+
     entitymappers.Container.add_container(app, new_news)
     entitymappers.New.save_news(app, new_news)
 
