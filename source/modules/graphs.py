@@ -1,10 +1,11 @@
-#Clase que genera gráficos, al principio solo de pruebas para la entrega
+import matplotlib
 import matplotlib.pyplot as plt #pip install matplotlib
 from typing import List
 from modules import classes as cl
 from nltk.corpus import stopwords
 from wordcloud import WordCloud, STOPWORDS
 import nltk
+import unidecode
 nltk.download('stopwords')
 
 #Número de noticias por fuente
@@ -66,61 +67,18 @@ def graph_news_per_category(news: List[cl.News]):
     plt.title("Número de noticias por categoría")
     plt.xlabel("Categoría")
     plt.ylabel("Número de noticias")
+    plt.xticks(rotation=90) # Rotar las etiquetas del eje x 90 grados
     plt.show()
 
-''' Misma función pero colorea si es de distinto owner
-    for new in news:
-        try:
-            category = new.get_category()
-            owner = new.get_owner()
-
-            if category in categories:
-                categories[category] += 1
-            else:
-                categories[category] = 1
-
-            if owner not in owners:
-                owners[owner] = len(owners)  # Asignar un número único a cada owner
-
-        except Exception as e:
-            print(f"Error al obtener la categoría o el propietario de la noticia: {e}")
-
-    # Obtener categorías y cantidades
-    categories = dict(sorted(categories.items(), key=lambda item: item[1], reverse=True))
-    categories_names = list(categories.keys())
-    counts = list(categories.values())
-
-    # Obtener owners y sus números asociados
-    owners_colors = {owner: f'C{num}' for owner, num in owners.items()}
-
-    # Generar gráfico
-    fig, ax = plt.subplots()
-    for category, count in zip(categories_names, counts):
-        owner = owners_colors[news[0].get_owner()]  # Tomar el owner del primer elemento
-        ax.bar(category, count, color=owner, label=f'{category} ({count})')
-
-    # Personalizar el gráfico
-    plt.title("Número de noticias por categoría")
-    plt.xlabel("Categoría")
-    plt.ylabel("Número de noticias")
-    plt.xticks(rotation=45)
-    plt.legend(title="Propietario")
-    plt.tight_layout()
-
-    # Mostrar el gráfico
-    plt.show()
-'''
 
 stop_words_es = set(stopwords.words('spanish'))
+def filter_words(text):
+    return ' '.join(unidecode.unidecode(word) for word in text.split() if word.lower() not in stop_words_es)
+
 #Nube de palabras por categoría
 def wordcloud_per_category(news: List[cl.News], requested_category):
-    # Obtener lista de "stop words"
-    stop_words = set(STOPWORDS)
-
-    # Crear un diccionario para almacenar el contenido por categoría
     content_by_category = {}
 
-    # Agrupar el contenido por categoría
     for new in news:
         try:
             category = new.get_category()
@@ -134,16 +92,22 @@ def wordcloud_per_category(news: List[cl.News], requested_category):
         except Exception as e:
             print(f"Error al obtener la categoría o el contenido de la noticia: {e}")
 
-    # Generar nubes de palabras por categoría
     for category, content in content_by_category.items():
         if category == requested_category:
-            # Eliminar stop words en español del contenido
             filtered_content = ' '.join(word for word in content.split() if word.lower() not in stop_words_es)
 
             # Generar la nube de palabras
-            wordcloud = WordCloud(width=800, height=400, background_color='white').generate(filtered_content)
+            wordcloud = WordCloud(
+                width=800,
+                height=400,
+                background_color='white',
+                collocations=False,
+                # regexp=r"\w[\w'áéíóúüñ]*",
+                contour_width=0,
+                contour_color='black',
+                max_words=200,
+           ).generate(filter_words(filtered_content))
 
-            # Mostrar la nube de palabras
             plt.figure(figsize=(10, 5))
             plt.imshow(wordcloud, interpolation='bilinear')
             plt.title(f"Nube de Palabras para la Categoría: {category}")

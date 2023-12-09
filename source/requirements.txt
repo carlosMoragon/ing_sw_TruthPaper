@@ -61,3 +61,4 @@ nltk
 wordcloud
 pdf2image
 flask_bcrypt
+unidecode
