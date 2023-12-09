@@ -402,15 +402,16 @@ def go_to_savedNews():
     news_saved = entitymappers.New.load_news_by_id(id_saved_news)
     return render_template('SavedNews.html', news = news_saved)
 
-# Se guarda una noticia, se envía su id y se registra en la base de datos
 @app.route('/save_news', methods=['POST'])
 def save_news():
-    print("se ha activado el método de guardar noticias")
+    # print("se ha activado el método de guardar noticias")
     news_id = request.form.get('news_id')
-    # AQUI FALLA ORIANNA!!!!
     entitymappers.UserSavedNews.user_saves_a_new(id_user=USER_ID_SESION, id_new=news_id)
-    print(f" =====> Se ha guardado la noticia con ID {news_id}")
-    return redirect(url_for('expand_container'))
+    # print(f" =====> Se ha guardado la noticia con ID {news_id}")
+    #Problema por mirar
+    #return redirect(url_for('expand_container'))
+    #Alternativa
+    return go_to_savedNews()
 
 
 # Se ven las noticias que en la base de datos aparecen como guardadas
