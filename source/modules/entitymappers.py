@@ -62,7 +62,6 @@ class New(db.Model):
             db.session.commit()
             return True
 
-    #¿DONDE SE ESTÁ USANDO ESTO?
     def load_news() -> List[cl.News]:
         all_news = db.session.query(New).all()
         # all_news =  New.query.all()
@@ -118,6 +117,39 @@ class New(db.Model):
         #print("Like a la noticia con id: " + str(noticia.id))
         db.session.commit()
 
+    # def load_news_by_id(ids: List[int]):
+    #     noticias = []
+    #     for i in ids:
+    #         new = New.query.filter_by(id=i).first()
+    #         noticias.append(new)
+    #     return noticias
+    
+    def load_news_by_id(ids: List[int]) -> List[cl.News]:
+        noticias = []
+        for i in ids:
+            new = New.query.filter_by(id=i).first()
+            noticias.append(new)
+            
+        news_objects = []
+        for news in noticias:
+            news_obj = cl.News(
+                id=news.id,
+                owner=news.owner,
+                title=news.title,
+                image=news.image,
+                url=news.url,
+                content=news.content,
+                container_id=news.container_id,
+                journalist=news.journalistuser_id,
+                date=news.date.strftime('%Y-%m-%d'),
+                category=news.category,
+                likes=news.likes,
+                views=news.views
+            )
+            news_objects.append(news_obj)
+
+        return news_objects
+        #return noticias
 
 class Container(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -251,6 +283,7 @@ class Comment(db.Model):
         
     
 class UserSavedNews(db.Model):
+    __tablename__ = 'usersavednews'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     iduser = db.Column(db.Integer, nullable=True, default=0)
     idnews= db.Column(db.Integer, nullable=True, default=0)
@@ -261,7 +294,8 @@ class UserSavedNews(db.Model):
         self.idnews = idnews
 
     def load_ids_news_saved_by_user(id_user):
-        id_news_saved_by_user = db.session.query(UserSavedNews.idnews).filter_by(iduser=id_user).all()
+        #Devuelve una lista con los id de las noticias guardadas por el usuario
+        id_news_saved_by_user = [result[0] for result in UserSavedNews.query.filter_by(iduser=id_user).with_entities(UserSavedNews.idnews).all()]
         return id_news_saved_by_user
 
     def user_saves_a_new(id_user, id_new):
@@ -269,6 +303,9 @@ class UserSavedNews(db.Model):
         new_user_saved = UserSavedNews(iduser=id_user, idnews=id_new)
         db.session.add(new_user_saved)
         db.session.commit()
+        
+        
+        
         
 def is_update(fecha_actual: str) -> bool:
     fecha_db = db.session.query(New.date).order_by(desc(New.date)).first()[0].strftime("%Y-%m-%d")

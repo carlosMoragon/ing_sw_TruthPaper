@@ -15,7 +15,7 @@ usuarios_en_sesion = cl.UsersInSession()
 #anaMencionoUnIdDeSesion
 global USER_ID_SESION
 
-USER_ID_SESION = 11 # Paloma: lo he puesto para pruebas pero borradlo!
+#USER_ID_SESION = 11 # Paloma: lo he puesto para pruebas pero borradlo!
 
 db = manager.db
 app = Flask(__name__)
@@ -252,9 +252,7 @@ def go_to_categories():
 def go_to_admin():
     return render_template('loginAdmin.html')
 
-@app.route('/savedNews')
-def go_to_savedNews():
-    return render_template('SavedNews.html')
+
 
 
 
@@ -396,12 +394,12 @@ def profile_admin():
 
 # NOTICIAS GUARDADAS
 
-# Se ven las noticias que en la base de datos aparecen como guardadas
+
 @app.route('/savedNews')
-def upload_saved_news():
-    user_id = USER_ID_SESION
-    id_saved_news = entitymappers.UserSavedNews.load_saved_news(user_id) # Carga los ids de las noticias guardadas
-    news_saved = entitymappers.New.load_news_by_id(id_saved_news) # Carga las noticias con los ids anteriores
+def go_to_savedNews():
+    # Carga los Id's de las noticias guardadas por el usuario en sesion
+    id_saved_news = entitymappers.UserSavedNews.load_ids_news_saved_by_user(USER_ID_SESION) 
+    news_saved = entitymappers.New.load_news_by_id(id_saved_news)
     return render_template('SavedNews.html', news = news_saved)
 
 # Se guarda una noticia, se envía su id y se registra en la base de datos
@@ -413,6 +411,16 @@ def save_news():
     entitymappers.UserSavedNews.user_saves_a_new(id_user=USER_ID_SESION, id_new=news_id)
     print(f" =====> Se ha guardado la noticia con ID {news_id}")
     return redirect(url_for('expand_container'))
+
+
+# Se ven las noticias que en la base de datos aparecen como guardadas
+#@app.route('/savedNews')
+# def upload_saved_news():
+#     user_id = USER_ID_SESION
+#     id_saved_news = entitymappers.UserSavedNews.load_saved_news(user_id) # Carga los ids de las noticias guardadas
+#     news_saved = entitymappers.New.load_news_by_id(id_saved_news) # Carga las noticias con los ids anteriores
+#  #   return news_saved
+#     return render_template('SavedNews.html', news = news_saved)
 
 # MySQL Connection
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://administrador_truthpaper:Periodico55deVerdad@truthpaper-server.mysql.database.azure.com:3306/truthpaper_ddbb?charset=utf8mb4&ssl_ca=DigiCertGlobalRootCA.crt.pem'
