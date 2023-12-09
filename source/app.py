@@ -400,7 +400,7 @@ def profile_admin():
 @app.route('/savedNews')
 def go_to_savedNews():
     # Carga los Id's de las noticias guardadas por el usuario en sesion
-    id_saved_news = entitymappers.UserSavedNews.load_ids_news_saved_by_user(USER_ID_SESION) 
+    id_saved_news = entitymappers.UserSavedNews.load_ids_news_saved_by_user(ses.get_user_id()) 
     news_saved = entitymappers.New.load_news_by_id(id_saved_news)
     return render_template('SavedNews.html', news = news_saved)
 
@@ -408,7 +408,7 @@ def go_to_savedNews():
 def save_news():
     # print("se ha activado el método de guardar noticias")
     news_id = request.form.get('news_id')
-    entitymappers.UserSavedNews.user_saves_a_new(id_user=USER_ID_SESION, id_new=news_id)
+    entitymappers.UserSavedNews.user_saves_a_new(id_user=ses.get_user_id(), id_new=news_id)
     return go_to_savedNews()
 
 
