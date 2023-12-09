@@ -11,8 +11,8 @@ def s_login(user_id):
 def logout(session_id):
     session.pop(session_id, None)
 
-def get_id():
+def get_user_id():
     return session['user_id']
 
-#def get_session_id():
-#    return session['id']
+def get_session_id():
+    return session['session_id']

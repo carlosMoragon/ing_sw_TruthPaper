@@ -10,10 +10,6 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 import os
 
-
-usuarios_en_sesion = cl.UsersInSession()
-#anaMencionoUnIdDeSesion
-global USER_ID_SESION #Se inicializa en login_users
     
 db = manager.db
 app = Flask(__name__)
@@ -45,7 +41,6 @@ def index():
     categories_list = gr.get_general_categories(categories)
     categories_list_unique = list(set(categories_list))
     print(categories_list_unique)
-    #print(ses.get_id())
     return render_template('indexFunc.html', data=data, containers=containers, categories_list_unique=categories_list_unique)
 
 
@@ -77,7 +72,7 @@ def login_users():
     try:
         if type(respuesta_login) == bool and respuesta_login == True:
 
-            mapped_user = usermappers.User.getAllUserData(request.form['username'])
+            mapped_user = usermappers.User.find_user_by_username_or_email(request.form['username'])
             ses.s_login(mapped_user.id) #No interesa mucho mapear la contraseña    
             return index()
         elif type(respuesta_login) != bool and respuesta_login == 'admin':
@@ -215,9 +210,9 @@ def mostrar_perfil_usuarios(user_id, user_name):
 @app.route('/perfil')
 def go_to_profile():
     #print("User id: " + str(USER_ID_SESION))
-    usuario_actual = usuarios_en_sesion.get_user_by_id(USER_ID_SESION)
-    user_name = usuario_actual.get_username()
-    return mostrar_perfil_usuarios(USER_ID_SESION, user_name)
+    user_id = ses.get_user_id()
+    user_name = usermappers.User.get_user_name(user_id)
+    return mostrar_perfil_usuarios(user_id, user_name)
 
 
 @app.route('/termsandConditions')
