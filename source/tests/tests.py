@@ -1,5 +1,6 @@
 import unittest
-from ..modules import classes as cl, web_scrapping as ws, DBManager as manager
+from ..modules import classes as cl
+from ..modules import web_scrapping as ws
 
 
 class TestWebScrapping(unittest.TestCase):

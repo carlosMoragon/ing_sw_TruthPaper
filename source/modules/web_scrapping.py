@@ -1,6 +1,8 @@
+import os
 import requests
 from bs4 import BeautifulSoup
 from modules import classes as cl
+#from ..modules import classes as cl, entitymappers
 from typing import List, Dict
 from datetime import datetime
 import re
@@ -34,7 +36,7 @@ def get_news_db(app, news, container):
         container.update(split_by_container(news))
 
 
-def add_new_container(news: List[cl.News], app) -> List[cl.News]:
+def add_new_container(news: List[cl.News]) -> List[cl.News]:
     # Lista de noticias
     news_content = [new.get_content() for new in news]
 
@@ -52,7 +54,7 @@ def add_new_container(news: List[cl.News], app) -> List[cl.News]:
 
     # Encontrar noticias relacionadas y asignarles un contenedor
     # 
-    n_cont = (entitymappers.Container.get_last_container_id(app)) + 1
+    n_cont = (entitymappers.Container.get_last_container_id()) + 1
     print(f"asldkfjalsdjkfla: {n_cont}")
     for i in range(len(news)):
         for j in range(i + 1, len(news)):
@@ -75,6 +77,48 @@ def add_new_container(news: List[cl.News], app) -> List[cl.News]:
 
     return news
 
+'''
+def add_new_container(news: List[cl.News], app) -> List[cl.News]:
+    # Lista de noticias
+    news_content = [new.get_content() for new in news]
+
+    # Crear un vectorizador TF-IDF
+    tfidf_vectorizer = TfidfVectorizer()
+
+    # Aplicar TF-IDF a las noticias
+    tfidf_matrix = tfidf_vectorizer.fit_transform(news_content)
+
+    # Calcular la similitud coseno entre las noticias
+    cosine_similarities = cosine_similarity(tfidf_matrix, tfidf_matrix)
+
+    # Establecer un umbral de similitud (ajusta según tus necesidades)
+    threshold = 0.7
+
+    # Encontrar noticias relacionadas y asignarles un contenedor
+    n_cont = (entitymappers.Container.get_last_container_id(app)) + 1
+    print(f"asldkfjalsdjkfla: {n_cont}")
+
+    for i in range(len(news)):
+        for j in range(i + 1, len(news)):
+            if cosine_similarities[i][j] >= threshold:
+                if news[i].get_container_id() != -1:
+                    news[j].set_container_id(news[i].get_container_id())
+                elif news[j].get_container_id() != -1:
+                    news[i].set_container_id(news[j].get_container_id())
+                else:
+                    news[i].set_container_id(n_cont)
+                    news[j].set_container_id(n_cont)
+                    n_cont += 1
+            else:
+                if news[i].get_container_id() == -1:
+                    news[i].set_container_id(n_cont)
+                    n_cont += 1
+                if news[j].get_container_id() == -1:
+                    news[j].set_container_id(n_cont)
+                    n_cont += 1
+
+    return news
+'''
 
 def split_by_container(news: List[cl.News]) -> Dict[int, List[cl.News]]:
     containers: Dict[int, List[str]] = defaultdict(list)
@@ -100,9 +144,11 @@ def get_news() -> List[cl.News]:
     print("sale de get_news")
     return news
 
+def get_containers(news: List[cl.News]) -> Dict[int, List[cl.News]]:
+    return split_by_container(add_new_container(news))
 
-def get_containers(news: List[cl.News], app) -> Dict[int, List[cl.News]]:
-    return split_by_container(add_new_container(news, app))
+# def get_containers(news: List[cl.News], app) -> Dict[int, List[cl.News]]:
+    # return split_by_container(add_new_container(news, app))
 
 def get_content(url: str) -> str:
     try:
@@ -111,17 +157,48 @@ def get_content(url: str) -> str:
         response.raise_for_status()  # Verifica si la solicitud fue exitosa (código de estado 200)
         all_p = web_structure.find_all('p')
         text = []
+        n = len(all_p)
+        i = 0
         for p in all_p:
+            print(f"{i}-{n}")
+            i += 1
             text.append(p.text)
+
+
+        # os.system('cls')
         return ''.join(text)
     except requests.exceptions.RequestException as e:
         print(f"Error al obtener {url}: {e}")
+        return ""
+    except Exception as i:
+        print(f"{i}")
         return ""
 
 
 # --- ADD'S ---
 # PARA IR AÑADIENDO EL CONTENIDO DE CADA NOTICIA ( ES MUY COSTOSO EN TIEMPO POR TODOS LOS REQUESTS) POR ESO THREADS
 def add_content(news: List[cl.News]):
+    #with ThreadPoolExecutor(max_workers=5) as executor:
+    print("entra en add_content")
+#   content = list(executor.map(get_content, [new.get_url() for new in news]))
+    content = []
+    i = 0
+    n = len(news)
+    try:
+        for url in [new.get_url() if hasattr(new, 'get_url') else None for new in news]:
+            print(f"{i}/{n}")
+            i += 1
+            content.append(get_content(url))
+            os.system("cls")
+        print("aaaaaaaaaaaaa")
+    except Exception as e:
+        print(f"{e}")
+    for i in range(len(news)):
+            
+        news[i].set_content(re.sub(r'[^\x00-\x7F]+', '', str(content[i])))
+    
+    print("terminado")
+    """
     with ThreadPoolExecutor(max_workers=5) as executor:
         print("entra en add_content")
 #        content = list(executor.map(get_content, [new.get_url() for new in news]))
@@ -132,6 +209,7 @@ def add_content(news: List[cl.News]):
             news[i].set_content(re.sub(r'[^\x00-\x7F]+', '', str(content[i])))
     
         print("terminado")
+    """
 
 
 # Encapsula la optención de noticias por WebScrapping
@@ -196,7 +274,7 @@ class NewsBuilder:
         
         return urls
 
-
+    '''
     def _get_titles(self, articles) -> List[str]:
         titles = []
         for article in articles:
@@ -206,7 +284,19 @@ class NewsBuilder:
                 titles.append(texts)
         
         return titles
-    
+    '''
+        
+    def _get_titles(self, articles) -> List[str]:
+        titles = []
+        for article in articles:
+            title_tags = article.find_all(self.tag_title)
+            for title_tag in title_tags:
+                title = title_tag.text.strip()
+                if title:
+                    titles.append(title)
+
+        return titles
+
 
     def _get_images(self, articles) -> List[str]:
         url_imgs = []
@@ -241,16 +331,17 @@ class NewsBuilder:
     def _build_news(self, titles: List[str], urls: List[str], imgs: List[str], category: str) -> None:
         news = []
 
+        # print(f"titles: {len(titles)}\n urls: {len(urls)}")
+        if len(titles) == len(urls):
+            for i in range(len(urls)):
 
-        for i in range(len(titles)):
-
-            # id = -1, debido a que se asignará al subirse a la BBDD
-            # content = "", debido a que se asignará luego
-            # journalist = -1, debido a que se han sacado de un periódico y no de un escritor autonomo/periodista
-            # likes y views = 0, debido a que la noticia es nueva
-            # container_id = -1, debido a que se inicializará luego
-            # self, id: int, owner: str, title: str, image: str, url: str, content: str,  journalist: int, date: str, category: str, likes: int, views: int, container_id: int
-            news.append(cl.News(id=-1, owner=self.owner, title=titles[i], image=imgs[i],url=urls[i],content="",journalist=-1,date=self.date,category=category,likes=0,views=0, container_id=-1))
+                # id = -1, debido a que se asignará al subirse a la BBDD
+                # content = "", debido a que se asignará luego
+                # journalist = -1, debido a que se han sacado de un periódico y no de un escritor autonomo/periodista
+                # likes y views = 0, debido a que la noticia es nueva
+                # container_id = -1, debido a que se inicializará luego
+                # self, id: int, owner: str, title: str, image: str, url: str, content: str,  journalist: int, date: str, category: str, likes: int, views: int, container_id: int
+                news.append(cl.News(id=-1, owner=self.owner, title=titles[i], image=imgs[i],url=urls[i],content="",journalist=-1,date=self.date,category=category,likes=0,views=0, container_id=-1))
 
         self.news = news
 

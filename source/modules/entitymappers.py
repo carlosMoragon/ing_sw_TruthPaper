@@ -1,5 +1,7 @@
 from database.DBManager import db
 from modules import classes as cl
+# from ..database.DBManager import db
+# from ..modules import classes as cl
 from typing import List, Dict
 from sqlalchemy import desc
 from io import BytesIO
@@ -36,6 +38,7 @@ class New(db.Model):
         self.views = views
         self.container_id = container_id
 
+    '''
     def save_news(app, news: List[cl.News]) -> bool:
         with app.app_context():
             print("A AÑADIR NOTICIAS")
@@ -64,7 +67,32 @@ class New(db.Model):
             db.session.commit()
             return True
 
+    '''
+
+    def save_news(news: List[cl.News]):
+        print("A AÑADIR NOTICIAS")
+        i = last_id()
+        for new in news:
+            # container_id = new.get_container_id()
+            i += 1
+            new_db =  New(
+                id=i,
+                owner=new.get_owner(),
+                title=new.get_title(),
+                image=new.get_image(),
+                url=new.get_url(),
+                content=new.get_content(),
+                container_id=new.get_container_id(),# Se supone que guarda el id de contenedor en la columna correcta
+                journalistuser_id=31,
+                date=new.get_date(),
+                category=new.get_category(),
+                likes=new.get_likes(),
+                views=new.get_views()
+            )
+            db.session.add(new_db)
+        db.session.commit()
     
+
     def load_news() -> List[cl.News]:
         all_news = db.session.query(New).all()
         # all_news =  New.query.all()
@@ -107,13 +135,20 @@ class Container(db.Model):
         self.id = id
         self.likes = likes
     
-    def get_last_container_id(app) -> int:
-        with app.app_context():
-            last_container = db.session.query(Container).order_by(desc(Container.id)).first()
-            if last_container:
-                return last_container.id
-            else:
-                return 0  # or any default value if no containers exist
+
+    def get_last_container_id() -> int:
+        last_container = db.session.query(Container).order_by(desc(Container.id)).first()
+        if last_container:
+            return last_container.id
+        else:
+            return 0  # or any default value if no containers exist
+    # def get_last_container_id(app) -> int:
+        #with app.app_context():
+            # last_container = db.session.query(Container).order_by(desc(Container.id)).first()
+            # if last_container:
+                # return last_container.id
+            # else:
+                # return 0  # or any default value if no containers exist
             
     def load_container():
         container = cl.Container.query.all()
@@ -125,7 +160,7 @@ class Container(db.Model):
             )
             container_objects.append(container_obj)
         return container_objects
-
+    '''
     def add_container(app, news: List[cl.News]):
         ids = set()
         with app.app_context():
@@ -139,6 +174,19 @@ class Container(db.Model):
                     )
                     db.session.add(new_container)
             db.session.commit()
+    '''   
+    def add_container(news: List[cl.News]):
+        ids = set()
+        for new in news:
+            idx = new.get_container_id()
+            if idx not in ids:
+                ids.add(idx)
+                new_container =  Container(
+                    id=idx,
+                    likes=0
+                )
+            db.session.add(new_container)
+        db.session.commit()
         
 
 class Comment(db.Model):
