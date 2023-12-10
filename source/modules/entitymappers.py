@@ -299,10 +299,17 @@ class UserSavedNews(db.Model):
         return id_news_saved_by_user
 
     def user_saves_a_new(id_user, id_new):
-        print("se ha ejecutado el metodo user_saves_new")
+        print("Se ha guardado la noticia con id: " + str(id_new))
         new_user_saved = UserSavedNews(iduser=id_user, idnews=id_new)
         db.session.add(new_user_saved)
         db.session.commit()
+
+    def user_deletes_a_new(id_user, id_new):
+        print("Se ha borrado la noticia con id: " + str(id_new))
+        UserSavedNews.query.filter_by(iduser=id_user, idnews=id_new).delete()
+        db.session.commit()
+
+
         
         
         

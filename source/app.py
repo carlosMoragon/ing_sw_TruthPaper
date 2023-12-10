@@ -411,8 +411,14 @@ def save_news():
     entitymappers.UserSavedNews.user_saves_a_new(id_user=ses.get_user_id(), id_new=news_id)
     return go_to_savedNews()
 
+@app.route('/delete_news', methods=['POST'])
+def delete_news():
+    news_id = request.form.get('news_id')
+    entitymappers.UserSavedNews.user_deletes_a_new(id_user=ses.get_user_id(), id_new=news_id)
+    return go_to_savedNews()
 
-# Se ven las noticias que en la base de datos aparecen como guardadas
+
+
 #@app.route('/savedNews')
 # def upload_saved_news():
 #     user_id = USER_ID_SESION

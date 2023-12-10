@@ -146,19 +146,20 @@
                                             </div>
                                             <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="{{news_item.get_url()}}">{{news_item.get_title()}}</a>
 
-                                            <form method="post" action="{{ url_for('like_news', news_id=news_item.get_id()) }}" class="like-form">
-                                                <div style= "display: flex;">
-                                                    <button type="submit" class="btn btn-outline-primary like-btn" style="margin-top: 1%" data-news-id="{{ news_item.get_id() }}">
-                                                        <i class="fa fa-thumbs-up"></i> {{ news_item.get_likes() }}
+                                            <div style= "display: flex;">
+                                                <button type="button" class="btn btn-outline-primary" disabled>
+                                                    <i class="fa fa-thumbs-up"></i> {{ news_item.get_likes() }}
+                                                </button>
+                                                <button type="button" class="btn btn-primary" disabled>
+                                                    <i class="fas fa-save"></i>
+                                                </button>
+                                                <form method="post" action="{{ url_for('delete_news', news_id=news_item.get_id()) }}" class="delete-form">
+                                                    <button type="submit" class="btn btn-primary btn-danger delete-btn">
+                                                        <i class="fas fa-trash"></i>
                                                     </button>
                                                     <input type="hidden" name="news_id" value="{{ news_item.get_id() }}">
-                                                    <button type="button" class="btn btn-primary">
-                                                        <i class="fas fa-save"></i>
-                                                    </button>
-                                                </div>
-                                            </form>
-
-
+                                                </form>
+                                            </div>
                                         </div>
                                     </li>
                                 {% endfor %}<!-- Noticias guardadas -->
@@ -171,41 +172,16 @@
                 </div>
                     <script>
                         $(document).ready(function() {
-                             $('.save-form').submit(function(e) {
-                                 // Obtener el botón de like
-                                 var likeButton = $(this).find('.save-btn');
+                            $('.delete-form').submit(function(e) {
+                                var savedButton = $(this).find('.delete-btn');
+                                savedButton.prop('disabled', true);
 
-                                 // Deshabilitar el botón para evitar clics adicionales
-                                 likeButton.prop('disabled', true);
+                                savedButton.removeClass('btn-outline-primary');
+                                savedButton.addClass('btn-primary');
 
-                                 // Cambiar el estilo del botón a uno sin borde
-                                 likeButton.removeClass('btn-outline-primary');
-                                 likeButton.addClass('btn-primary');
-
-                                 // Cambiar el contenido del botón a solo el ícono
-                                 likeButton.html('<i class="fa fa-save"></i>');
-                             });
-                         });
-
-
-                    </script>
-                    <script>
-                        $(document).ready(function() {
-                             $('.like-form').submit(function(e) {
-                                 // Obtener el botón de like
-                                 var likeButton = $(this).find('.like-btn');
-
-                                 // Deshabilitar el botón para evitar clics adicionales
-                                 likeButton.prop('disabled', true);
-
-                                 // Cambiar el estilo del botón a uno sin borde
-                                 likeButton.removeClass('btn-outline-primary');
-                                 likeButton.addClass('btn-primary');
-
-                                 // Cambiar el contenido del botón a solo el ícono
-                                 likeButton.html('<i class="fa fa-thumbs-up"></i>');
-                             });
-                         });
+                                savedButton.html('<i class="fa fa-trash"></i>');
+                            });
+                        });
                     </script>
             </div>
                 <!-- Tranding News End -->
