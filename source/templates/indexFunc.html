@@ -1,34 +1,37 @@
 {% extends 'index.html' %}
 
+
+
+
 {% block primera_noticia %}
 <div class="carousel-item active" style="height: 500px;">
-    <a href="{{ data.urls[0] }}">
-        <img class="img-fluid w-100" src="{{ data.imgs[0] }}" style="object-fit: cover;">
+    <a href="{{ data[0].get_url() }}">
+        <img class="img-fluid w-100" src="{{ data[0].get_image() }}" style="object-fit: cover;">
     </a> 
     <div class="overlay">
         <div class="mb-2">
             <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                href="">{{ data.categories[0] }}</a>
-            <a class="text-white" href="">{{data.dates[0]}}</a>
+                href="">{{ data[0].get_category() }}</a>
+            <a class="text-white" href="">{{data[0].get_date()}}</a>
         </div>
-        <a class="h2 m-0 text-white text-uppercase font-weight-bold" href="{{ data.urls[0] }}">{{ data.titles[0] }}</a>
+        <a class="h2 m-0 text-white text-uppercase font-weight-bold" href="{{ data[0].get_url() }}">{{ data[0].get_title() }}</a>
     </div>
 </div>
 {% endblock %}
 
 {% block segunda_noticia %}
 <div class="carousel-item" style="height: 500px;">
-    <a href="{{ data.urls[1] }}">
-        <img class="img-fluid w-100" src="{{ data.imgs[1] }}" style="object-fit: cover;">
+    <a href="{{ data[1].get_url() }}">
+        <img class="img-fluid w-100" src="{{ data[1].get_image() }}" style="object-fit: cover;">
     </a>
     
     <div class="overlay">
         <div class="mb-2">
             <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                href="">{{ data.categories[1] }}</a>
-            <a class="text-white" href="">{{ data.dates[1] }}</a>
+                href="">{{ data[1].get_category() }}</a>
+            <a class="text-white" href="">{{ data[1].get_date() }}</a>
         </div>
-        <a class="h2 m-0 text-white text-uppercase font-weight-bold" href="{{ data.urls[1] }}">{{ data.titles[1] }}</a>
+        <a class="h2 m-0 text-white text-uppercase font-weight-bold" href="{{ data[1].get_url() }}">{{ data[1].get_title() }}</a>
     </div>
 </div>
 
@@ -38,14 +41,14 @@
 {% for i in range(2, 6) %}
 <div class="col-md-6 px-0">
     <div class="position-relative overflow-hidden" style="height: 250px;">
-        <img class="img-fluid w-100 h-100" src="{{data.imgs[i]}}" style="object-fit: cover;" href="{{data.urls[i]}}">
+        <img class="img-fluid w-100 h-100" src="{{data[i].get_image()}}" style="object-fit: cover;" href="{{data[i].get_url()}}">
         <div class="overlay">
             <div class="mb-2">
                 <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                    href="">{{ data.categories[i] }}</a>
-                <a class="text-white" href=""><small>{{data.dates[i]}}</small></a>
+                    href="">{{ data[i].get_category() }}</a>
+                <a class="text-white" href=""><small>{{data[i].get_date()}}</small></a>
             </div>
-            <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="{{data.urls[i]}}"> {{data.titles[i]}}</a>
+            <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="{{data[i].get_url()}}"> {{data[i].get_title()}}</a>
         </div>
     </div>
 </div>
@@ -140,6 +143,9 @@
     {% endfor %}
 </div>
 {% endblock %}
+
+
+
 
 
 

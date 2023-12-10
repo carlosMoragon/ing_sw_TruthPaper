@@ -29,22 +29,11 @@ def index():
     init_news.join()
     semaphore.release()
 
-    # for new in news:
-    #     print(f"{new.get_container_id()}\n")
-    data = {
-        'imgs': [new.get_image() for new in news],
-        'titles': [str(new.get_title()) for new in news],
-        'urls': [new.get_url() for new in news],
-        'dates': [new.get_date() for new in news],
-        'categories': [new.get_category() for new in news],
-        'likes': [new.get_likes() for new in news],
-        'views': [new.get_views() for new in news]
-    }
     categories = gr.get_categories(news)  # una lista
     categories_list = gr.get_general_categories(categories)
     categories_list_unique = list(set(categories_list))
     print(categories_list_unique)
-    return render_template('indexFunc.html', data=data, containers=containers, categories_list_unique=categories_list_unique)
+    return render_template('indexFunc.html', data=news, containers=containers, categories_list_unique=categories_list_unique)
 
 
 @app.route('/')
@@ -155,21 +144,6 @@ def like_news():
     return render_template('containerNews.html', container=news, id_contenedor=id_container, data=data)
 
 
-'''
-    for new in news:
-        if new.get_id()== new_id:
-            new.set_likes(new.get_likes() + 1)
-            # break
-            
-    for new in news:
-        if new.get_container_id() == id_container:
-            new.set_likes(new.get_likes() + 1)
-            break
-    return redirect(url_for('expand_container', id=id_container))
-'''
-
-
-
 
 @app.route('/like_comment', methods=['POST'])
 def like_comment():
@@ -219,18 +193,7 @@ def expand_category(general_category):
     else:
         print("Hay noticias de esa categoría")
 
-    data = {
-        'imgs': [new.get_image() for new in filtered_news],
-        'titles': [str(new.get_title()) for new in filtered_news],
-        'urls': [new.get_url() for new in filtered_news],
-        'dates': [new.get_date() for new in filtered_news],
-        'categories': [new.get_category() for new in filtered_news],
-        'likes': [new.get_likes() for new in filtered_news],
-        'views': [new.get_views() for new in filtered_news]
-    }
-    #print(data['categories'])
-
-    return render_template('categoriesFunc.html', data=data, news=filtered_news, containers=containers,
+    return render_template('categoriesFunc.html', news=filtered_news, containers=containers,
                            category=general_category)
 
 
@@ -278,6 +241,7 @@ def save_keyword():
     keyword = request.form['search']
     global news
     filted_news = f.filter_by_words(keyword, news)
+    
     data = {
         'imgs': [new.get_image() for new in filted_news],
         'titles': [new.get_title() for new in filted_news],
@@ -288,7 +252,9 @@ def save_keyword():
         'likes': [new.get_likes() for new in filted_news],
         'views': [new.get_views() for new in filted_news]
     }
+    
     return render_template('categoriesFunc.html', data=data)
+    # return render_template('categoriesFunc.html')
 
 
 def handle_user_registration(user_type):
