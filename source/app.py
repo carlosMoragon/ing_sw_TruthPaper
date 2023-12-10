@@ -1,19 +1,32 @@
 # Importar los módulos necesarios
-
 from flask import Flask, render_template, request, flash, redirect, url_for, send_file, session
 from modules import web_scrapping as ws, filter as f, classes as cl, graphs as gr, usermappers, entitymappers, session_data as ses
 from database import DBManager as manager
 from flask_sqlalchemy import SQLAlchemy
+from flask_mail import Mail, Message
 from typing import List, Dict
 import threading
 from datetime import datetime
+from random import *
 from werkzeug.utils import secure_filename
 import os
 
-    
+
 db = manager.db
 app = Flask(__name__)
 
+app.config[
+    'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://administrador_truthpaper:Periodico55deVerdad@truthpaper-server.mysql.database.azure.com:3306/truthpaper_ddbb?charset=utf8mb4&ssl_ca=source/DigiCertGlobalRootCA.crt.pem'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+app.config['SECRET_KEY'] = "ireallywanttostayatyourhouse"
+app.config['MAIL_SERVER'] = "smtp.googlemail.com"
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = "noreply.truthpaper@gmail.com"
+app.config['MAIL_PASSWORD'] = "bjkr glyc cquj icib"
+
+mail = Mail(app)
 news: List[cl.News] = []
 containers: Dict[int, List[cl.News]] = {}
 init_news = threading.Thread(target=ws.get_news_db, args=(app, news, containers))
@@ -49,7 +62,7 @@ def start():
         # ESTAS SON LAS QUE SON NUEVAS QUE SE VAN A IR AÑADIENDO A LO LARGO DE LA EJECUCION
         if not entitymappers.is_update(datetime.now().strftime(f'%Y-%m-%d')):
             print("SE ACTUALIZAN LAS NOTICIAS")
-            threading.Thread(target=_add_news_background).start()        
+            threading.Thread(target=_add_news_background).start()
     return render_template('login.html')
 
 
@@ -75,9 +88,8 @@ def login_users():
     respuesta_login = usermappers.User.login(request.form['username'], request.form['password'])
     try:
         if type(respuesta_login) == bool and respuesta_login == True:
-
             mapped_user = usermappers.User.find_user_by_username_or_email(request.form['username'])
-            ses.s_login(mapped_user.id)   
+            ses.s_login(mapped_user.id)
             return index()
         elif type(respuesta_login) != bool and respuesta_login == 'admin':
             # Se tiene que meter en index para que se carguen las noticias
@@ -206,10 +218,12 @@ def register_funct():
 def go_to_login():
     return render_template('login.html')
 
+
 def mostrar_perfil_usuarios(user_id, user_name):
     user_image = usermappers.Userclient.load_image(user_id)
     user_email = usermappers.User.get_user_email(user_id)
-    return render_template('perfil.html', user_id=user_id, user_name=user_name, user_image=user_image, user_email = user_email)
+    return render_template('perfil.html', user_id=user_id, user_name=user_name, user_image=user_image,
+                           user_email=user_email)
 
 
 @app.route('/perfil')
@@ -227,6 +241,7 @@ def termsConditions():
 @app.route('/categories')
 def go_to_categories():
     return render_template('categories.html')
+
 
 @app.route('/login_admin')
 def go_to_admin():
@@ -258,23 +273,26 @@ def save_keyword():
 
 
 def handle_user_registration(user_type):
+    global unverified_email
     result = usermappers.User.save_user()
     if result == -1:
         return render_template('register.html', registration_error="Contraseña débil", form=request.form)
     elif result == -2:
         return render_template('register.html', registration_error="Email inválido", form=request.form)
     elif result == -3:
-        return render_template('register.html', registration_error="Nombre de usuario/email ya existente", form=request.form)
+        return render_template('register.html', registration_error="Nombre de usuario/email ya existente",
+                               form=request.form)
     else:
+        unverified_email = request.form['email']
         if user_type == 'common':
             if usermappers.Commonuser.save_commonuser(result):
-                return index()
+                return send_email(unverified_email, False)
         elif user_type == 'company':
             if usermappers.Companyuser.save_companyuser(result):
-                return index()
+                return send_email(unverified_email, False)
         elif user_type == 'journalist':
             if usermappers.Journalistuser.save_journalistuser(result):
-                return index()
+                return send_email(unverified_email, False)
         else:
             # Manejar un tipo de usuario no válido, si es necesario
             pass
@@ -328,11 +346,12 @@ def process_verification():
     return redirect('/verifyUsers')
 
 
-@app.route('/pdfReader/<int:user_id>') # id del usuario
+@app.route('/pdfReader/<int:user_id>')  # id del usuario
 def pdf_reader(user_id):
     # Enviar pdf según el id del usuario
-    pdf = usermappers.Journalistuser.load_pdf_certificate(user_id) 
+    pdf = usermappers.Journalistuser.load_pdf_certificate(user_id)
     return render_template('userAdmin/pdfReader.html', pdf=pdf)
+
 
 @app.route('/charts')
 def charts():
@@ -377,6 +396,60 @@ def profile_admin():
 
 # NOTICIAS GUARDADAS
 
+def generate_code():
+    code = randint(000000, 999999)
+    return code
+
+
+def send_email(email, repeat):
+    global email_code
+    email_code = generate_code()
+    msg_title = "BIENVENID@ a TRUTHPAPER"
+    sender = "noreply@app.com"
+    msg = Message(msg_title, sender=sender, recipients=[email])
+    msg_body = "Introduzca el código a continuación para confirmar su dirección de correo electrónico. Si no creó una cuenta con TruthPaper, puede eliminar este correo electrónico de forma segura."
+    msg.body = ""
+    data = {
+        'app_name': "TRUTHPAPER",
+        'title': msg_title,
+        'body': msg_body,
+        'code': email_code
+    }
+
+    msg.html = render_template("email.html", data=data)
+
+    try:
+        mail.send(msg)
+        if repeat:
+            return render_template('validation.html', validation_error="Otro envío")
+        else:
+            return render_template('validation.html')
+    except Exception as e:
+        print(e)
+        return render_template('register.html', registration_error="Error verificación")
+
+
+@app.route('/validation')
+def validation():
+    return render_template('validation.html')
+
+
+@app.route('/send_email_again')
+def send_email_again():
+    return send_email(unverified_email, True)
+
+
+@app.route('/verify_email', methods=['POST'])
+def verify_email():
+    user_code = request.form['password']
+    print("USER -> ", user_code, type(user_code))
+    print("EMAIL -> ", email_code, type(email_code))
+    if int(user_code) == int(email_code):
+        usermappers.User.updateUserVerified(unverified_email)
+        return render_template('verifyEmail.html')
+    else:
+        return render_template('validation.html', validation_error="Código incorrecto")
+
 
 @app.route('/savedNews')
 def go_to_savedNews():
@@ -415,13 +488,10 @@ def delete_news():
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-app.config[
-    'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://administrador_truthpaper:Periodico55deVerdad@truthpaper-server.mysql.database.azure.com:3306/truthpaper_ddbb?charset=utf8mb4&ssl_ca=source/DigiCertGlobalRootCA.crt.pem'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
 db.init_app(app)

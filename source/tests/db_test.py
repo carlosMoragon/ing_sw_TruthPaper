@@ -1,13 +1,13 @@
 import unittest
 from ..database import DBManager as manager
-from ..modules import  usermappers
+from ..modules import usermappers
 
 class testUpdateUsers(unittest.TestCase):
     def setUp(self):
         self.db = manager.db
 
     def test_update_user_checked(self):
-        user =  usermappers.Userclient(client_id=1, is_checked='N')
+        user = usermappers.Userclient(client_id=1, is_checked='N')
         self.db.session.add(user)
         self.db.session.commit()
         usermappers.Userclient.updateUserChecked(1)

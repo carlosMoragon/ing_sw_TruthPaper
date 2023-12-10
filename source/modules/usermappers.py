@@ -13,14 +13,19 @@ class User(db.Model):
     username = db.Column(db.String(30), nullable=False)
     password = db.Column(db.String(30), nullable=False)
     email = db.Column(db.Text, nullable=True)
+    verified = db.Column(db.Enum('N', 'Y'), nullable=False, default='N')
 
-    def __init__(self, username, password, email):
+    def __init__(self, username, password, email, verified):
         self.username = username
         self.password = password
         self.email = email
+        self.verified = verified
     
     def get_user_email(id):
         return User.query.filter_by(id=id).first().email
+
+    def get_user_verified(id):
+        return User.query.filter_by(id=id).first().verified
 
     def get_user_name(id):
         return User.query.filter_by(id=id).first().username
@@ -40,20 +45,24 @@ class User(db.Model):
         users_email = [user.email for user in users]
         return users_username, users_email
     
-    def login(username, password): #-> bool:
+    def login(username, password):
         user_db =  User.find_user_by_username_or_email(username)
         if user_db == None:
             return False
       
         encoded_password = password.encode('utf-8')
-        if bcrypt.check_password_hash(user_db.password, encoded_password):
+        if user_db.verified == 'Y':
+            if bcrypt.check_password_hash(user_db.password, encoded_password):
+                admin_id = AdministratorUser.adminUsersIds()
+                if (user_db.id in admin_id):
+                    return 'admin'
             
-            admin_id = AdministratorUser.adminUsersIds()
-            if (user_db.id in admin_id):
-                return 'admin'
-            
-            return True
+                return True
+            else:
+                print("CONTRASEÑA INCORRECTA")
+                return False
         else:
+            print("EMAIL NO VERIFICADO")
             return False
 
     def save_user():
@@ -63,7 +72,8 @@ class User(db.Model):
                     newUser =  User(
                         username=request.form['username'],
                         password=bcrypt.generate_password_hash(request.form['password']).decode('utf-8'),
-                        email=request.form['email'])
+                        email=request.form['email'],
+                        verified='N')
 
                     db.session.add(newUser)
                     db.session.commit()
@@ -87,6 +97,11 @@ class User(db.Model):
         else:
             print("CONTRASEÑA DÉBIL")
             return -1
+
+    def updateUserVerified(mail):
+        user = User.find_user_by_username_or_email(mail)
+        user.verified = 'Y'
+        db.session.commit()
 
     def get_username(id):
         return  User.query.filter_by(id=id).first().username
@@ -150,11 +165,9 @@ class Userclient(db.Model):
         return uncheckedUserList
 
     def updateUserChecked(id):
-        user =  Userclient.query.filter_by(client_id=id).first()
+        user = Userclient.query.filter_by(client_id=id).first()
         user.is_checked = 'Y'
         db.session.commit()
-
-
 
 
 class Commonuser(db.Model):
@@ -233,7 +246,7 @@ class Journalistuser(db.Model):
         return True
     
     def load_pdf_certificate(user_id):
-        journalistuser =  Journalistuser.query.filter_by(journalistuser_id=user_id).first()
+        journalistuser = Journalistuser.query.filter_by(journalistuser_id=user_id).first()
         certificate_bytes = journalistuser.certificate 
         certificate_base64 = base64.b64encode(certificate_bytes).decode('utf-8')
         return certificate_base64

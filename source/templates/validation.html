@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% email %}
+{% code %}
+
+<head>
+    <meta charset="utf-8">
+    <title>TruthPaper</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <!-- Icon -->
+    <link href="../static/img/logos/high_res/logo_color_tbg_hd.png" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="../static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Stylesheet -->
+    <link href="../static/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="row align-items-center justify-content-center bg-white">
+        <img src="../static/img/truthpaper_name.png" alt="" class="img-fluid center-block" width="200" href="index.html">
+    </div>
+
+    <div class="container-fluid mt-5 pt-3">
+        <div class="container">
+            <div class="row justify-content-md-center">
+                <div class="errores">
+                    {% if validation_error == "Código incorrecto" %}
+                        <div class="alert alert-danger">
+                            El código proporcionado no coincide con el enviado.
+                        </div>
+                    {% elif validation_error == "Otro envío" %}
+                        <div class="alert alert-info">
+                            Se ha vuelto a enviar otro correo electrónico.
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-lg-8">
+                    <div class="section-title mb-0">
+                        <h4 class="m-0 text-uppercase font-weight-bold"> Verifica tu correo</h4>
+                    </div>
+                    <div class="bg-white border border-top-0 p-4 mb-3">
+                        <div class="mb-4">
+                            <div class="container-fluid justify-content-md-center">
+                                <div class="row align-items-center h-100">
+                                    <div class="col">
+                                        <div class="container-fluid justify-content-md-center">
+                                            <img src="../static/img/send_email.png" alt="" class="img-fluid h-min center-block">
+                                        </div>
+                                        <form action="/verify_email" method="post">
+                            
+                                            <div class="form-group">
+                                                <label for="password">Código de verificación:</label>
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" id="password" name="password" required>
+                                                    <div class="invalid-feedback">Este campo es obligatorio.</div>
+                                                </div>
+                                            </div>
+                            
+                                            <input type="submit" value="Enviar">
+                                        </form>
+                                        </br>
+                                        <p><a href="{{ url_for('send_email_again') }}">Volver a enviar el correo electrónico</a></p>
+                                        <p><a href="{{ url_for('start') }}">Salir</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Date and Main Scripts-->
+    <script src="../static/js/date.js"></script>
+
+</html>

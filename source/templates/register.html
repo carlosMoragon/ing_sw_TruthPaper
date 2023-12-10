@@ -141,6 +141,10 @@
                 <div class="alert alert-danger">
                     Nombre de usuario/email ya existente. Por favor, elija otro.
                 </div>
+            {% elif registration_error == "Error verificación" %}
+                <div class="alert alert-danger">
+                    Algo salió mal enviando el correo electrónico de verificación.
+                </div>
             {% endif %}
         </div>
         <div class="diff_users" style="margin: 10%;">
