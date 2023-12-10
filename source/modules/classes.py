@@ -442,6 +442,7 @@ class Container:
 
         def set_likes(self, likes):
             self._likes = likes
+''''
 class container:
     def __init__(self, id: int, likes: int):
         self._id = id
@@ -455,6 +456,7 @@ class container:
 
     def get_likes(self):
         return self._likes
+'''
 
 
 def validate_date(date: str) -> bool:

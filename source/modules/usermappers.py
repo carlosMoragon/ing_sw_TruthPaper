@@ -21,9 +21,12 @@ class User(db.Model):
     
     def get_user_email(id):
         return User.query.filter_by(id=id).first().email
+
+    def get_user_name(id):
+        return User.query.filter_by(id=id).first().username
     
-    def getAllUserData(username): #maybe debería ser id 
-        return User.query.filter_by(username=username).first()
+    def getAllUserData(id): #antes era username
+        return User.query.filter_by(id=id).first()
 
     def find_user_by_username_or_email(username_or_email):
         user_db = User.query.filter_by(username=username_or_email).first()
@@ -85,6 +88,8 @@ class User(db.Model):
             print("CONTRASEÑA DÉBIL")
             return -1
 
+    def get_username(id):
+        return  User.query.filter_by(id=id).first().username
 
 class AdministratorUser(db.Model):
     __tablename__ = 'administratoruser'
