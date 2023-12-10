@@ -42,22 +42,24 @@ class User(db.Model):
         users_email = [user.email for user in users]
         return users_username, users_email
     
-    def login(username, password): #-> bool:
+    def login(username, password):
         user_db =  User.find_user_by_username_or_email(username)
         if user_db == None:
             return False
       
         encoded_password = password.encode('utf-8')
-        if bcrypt.check_password_hash(user_db.password, encoded_password):
-            if user_db.verified == 'Y':
+        if user_db.verified == 'Y':
+            if bcrypt.check_password_hash(user_db.password, encoded_password):
                 admin_id = AdministratorUser.adminUsersIds()
                 if (user_db.id in admin_id):
                     return 'admin'
             
                 return True
             else:
+                print("CONTRASEÑA INCORRECTA")
                 return False
         else:
+            print("EMAIL NO VERIFICADO")
             return False
 
     def save_user():
@@ -93,6 +95,10 @@ class User(db.Model):
             print("CONTRASEÑA DÉBIL")
             return -1
 
+    def updateUserVerified(mail):
+        user = User.find_user_by_username_or_email(mail)
+        user.verified = 'Y'
+        db.session.commit()
 
 class AdministratorUser(db.Model):
     __tablename__ = 'administratoruser'
@@ -153,11 +159,9 @@ class Userclient(db.Model):
         return uncheckedUserList
 
     def updateUserChecked(id):
-        user =  Userclient.query.filter_by(client_id=id).first()
+        user = Userclient.query.filter_by(client_id=id).first()
         user.is_checked = 'Y'
         db.session.commit()
-
-
 
 
 class Commonuser(db.Model):
@@ -236,7 +240,7 @@ class Journalistuser(db.Model):
         return True
     
     def load_pdf_certificate(user_id):
-        journalistuser =  Journalistuser.query.filter_by(journalistuser_id=user_id).first()
+        journalistuser = Journalistuser.query.filter_by(journalistuser_id=user_id).first()
         certificate_bytes = journalistuser.certificate 
         certificate_base64 = base64.b64encode(certificate_bytes).decode('utf-8')
         return certificate_base64

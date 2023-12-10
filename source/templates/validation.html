@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
+{% email %}
+{% code %}
+
 <head>
     <meta charset="utf-8">
     <title>TruthPaper</title>
@@ -27,15 +30,25 @@
 </head>
 
 <body>
-    <!-- Topbar Start -->
 
-        <div class="row align-items-center justify-content-center bg-white">
-                <img src="../static/img/truthpaper_name.png" alt="" class="img-fluid center-block" width="200" href="index.html">
-        </div>
+    <div class="row align-items-center justify-content-center bg-white">
+        <img src="../static/img/truthpaper_name.png" alt="" class="img-fluid center-block" width="200" href="index.html">
+    </div>
 
     <div class="container-fluid mt-5 pt-3">
         <div class="container">
             <div class="row justify-content-md-center">
+                <div class="errores">
+                    {% if validation_error == "Código incorrecto" %}
+                        <div class="alert alert-danger">
+                            El código proporcionado no coincide con el enviado.
+                        </div>
+                    {% elif validation_error == "Otro envío" %}
+                        <div class="alert alert-info">
+                            Se ha vuelto a enviar otro correo electrónico.
+                        </div>
+                    {% endif %}
+                </div>
                 <div class="col-lg-8">
                     <div class="section-title mb-0">
                         <h4 class="m-0 text-uppercase font-weight-bold"> Verifica tu correo</h4>
@@ -45,30 +58,15 @@
                             <div class="container-fluid justify-content-md-center">
                                 <div class="row align-items-center h-100">
                                     <div class="col">
-                                        {% with messages = get_flashed_messages(with_categories=true) %}
-                                            {% if messages %}
-                                                {% for category, message in messages %}
-                                                    <script>
-                                                        Swal.fire({
-                                                            icon: '{{ category }}',
-                                                            text: '{{ message }}',
-                                                            showConfirmButton: false,
-                                                            timer: 1500
-                                                        });
-                                                    </script>
-                                                {% endfor %}
-                                            {% endif %}
-                                        {% endwith %}
-
-                                            <div class="container-fluid justify-content-md-center">
-                                                <img src="../static/img/send_email.png" alt="" class="img-fluid h-min center-block">
-                                            </div>
+                                        <div class="container-fluid justify-content-md-center">
+                                            <img src="../static/img/send_email.png" alt="" class="img-fluid h-min center-block">
+                                        </div>
                                         <form action="/verify_email" method="post">
                             
                                             <div class="form-group">
                                                 <label for="password">Código de verificación:</label>
                                                 <div class="input-group">
-                                                    <input type="password" class="form-control" id="password" name="password" required>
+                                                    <input type="number" class="form-control" id="password" name="password" required>
                                                     <div class="invalid-feedback">Este campo es obligatorio.</div>
                                                 </div>
                                             </div>
@@ -76,7 +74,7 @@
                                             <input type="submit" value="Enviar">
                                         </form>
                                         </br>
-                                        <p><a href="register.html">Volver a enviar el correo electrónico</a></p>
+                                        <p><a href="{{ url_for('send_email_again') }}">Volver a enviar el correo electrónico</a></p>
                                         <p><a href="{{ url_for('start') }}">Salir</a></p>
                                     </div>
                                 </div>
@@ -87,8 +85,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Login -->
     
     <!-- Date and Main Scripts-->
     <script src="../static/js/date.js"></script>
