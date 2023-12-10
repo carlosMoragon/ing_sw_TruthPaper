@@ -1,5 +1,7 @@
 from database.DBManager import db
 from modules import classes as cl
+# from ..database.DBManager import db
+# from ..modules import classes as cl
 from typing import List, Dict
 from sqlalchemy import desc
 from io import BytesIO
@@ -15,7 +17,7 @@ class New(db.Model):
     url = db.Column(db.String(255), nullable=False)
     content = db.Column(db.Text, nullable=False)
     container_id = db.Column(db.Integer, db.ForeignKey('container.id'))
-    journalistuser_id = db.Column(db.Integer)
+    journalistuser_id = db.Column(db.Integer, db.ForeignKey('journalistuser.journalistuser_id'))#db.Column(db.Integer)
     date = db.Column(db.Date, nullable=False)
     category = db.Column(db.String(30), nullable=False)
     likes = db.Column(db.Integer, nullable=False, default=0)
@@ -36,33 +38,30 @@ class New(db.Model):
         self.views = views
         self.container_id = container_id
 
-    def save_news(app, news: List[cl.News]) -> bool:
-        with app.app_context():
-            # print("A AÑADIR NOTICIAS")
-            i = last_id()
-            for new in news:
-                i += 1
-                new_db =  New(
-                    id=i,
-                    owner=new.get_owner(),
-                    title=new.get_title(),
-                    image=new.get_image(),
-                    url=new.get_url(),
-                    content=new.get_content(),
-                    container_id=new.get_container_id(),# Se supone que guarda el id de contenedor en la columna correcta
-                    journalistuser_id=31,
-                    date=new.get_date(),
-                    category=new.get_category(),
-                    likes=new.get_likes(),
-                    views=new.get_views()
 
-                )
-                db.session.add(new_db)
-
-            db.session.commit()
-            return True
-
-    #¿DONDE SE ESTÁ USANDO ESTO?
+    def save_news(news: List[cl.News]):
+        print("A AÑADIR NOTICIAS")
+        i = last_id()
+        for new in news:
+            # container_id = new.get_container_id()
+            i += 1
+            new_db =  New(
+                id=i,
+                owner=new.get_owner(),
+                title=new.get_title(),
+                image=new.get_image(),
+                url=new.get_url(),
+                content=new.get_content(),
+                container_id=new.get_container_id(),# Se supone que guarda el id de contenedor en la columna correcta
+                journalistuser_id=31,
+                date=new.get_date(),
+                category=new.get_category(),
+                likes=new.get_likes(),
+                views=new.get_views()
+            )
+            db.session.add(new_db)
+        db.session.commit()
+    
     def load_news() -> List[cl.News]:
         all_news = db.session.query(New).all()
         # all_news =  New.query.all()
@@ -85,7 +84,29 @@ class New(db.Model):
             news_objects.append(news_obj)
 
         return news_objects
-    
+
+    def get_news_by_container_id(container_id: int) -> List[cl.News]:
+        all_news = db.session.query(New).filter_by(container_id=container_id).all()
+        news_objects = []
+        for news in all_news:
+            news_obj = cl.News(
+                id=news.id,
+                owner=news.owner,
+                title=news.title,
+                image=news.image,
+                url=news.url,
+                content=news.content,
+                container_id=news.container_id,
+                journalist=news.journalistuser_id,
+                date=news.date.strftime('%Y-%m-%d'),
+                category=news.category,
+                likes=news.likes,
+                views=news.views
+            )
+            news_objects.append(news_obj)
+
+        return news_objects
+
     def get_new_by_id(new_id):
         new=New.query.filter_by(id=new_id).first()
         return new
@@ -96,6 +117,39 @@ class New(db.Model):
         #print("Like a la noticia con id: " + str(noticia.id))
         db.session.commit()
 
+    # def load_news_by_id(ids: List[int]):
+    #     noticias = []
+    #     for i in ids:
+    #         new = New.query.filter_by(id=i).first()
+    #         noticias.append(new)
+    #     return noticias
+    
+    def load_news_by_id(ids: List[int]) -> List[cl.News]:
+        noticias = []
+        for i in ids:
+            new = New.query.filter_by(id=i).first()
+            noticias.append(new)
+            
+        news_objects = []
+        for news in noticias:
+            news_obj = cl.News(
+                id=news.id,
+                owner=news.owner,
+                title=news.title,
+                image=news.image,
+                url=news.url,
+                content=news.content,
+                container_id=news.container_id,
+                journalist=news.journalistuser_id,
+                date=news.date.strftime('%Y-%m-%d'),
+                category=news.category,
+                likes=news.likes,
+                views=news.views
+            )
+            news_objects.append(news_obj)
+
+        return news_objects
+        #return noticias
 
 class Container(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -105,13 +159,20 @@ class Container(db.Model):
         self.id = id
         self.likes = likes
     
-    def get_last_container_id(app) -> int:
-        with app.app_context():
-            last_container = db.session.query(Container).order_by(desc(Container.id)).first()
-            if last_container:
-                return last_container.id
-            else:
-                return 0  # or any default value if no containers exist
+
+    def get_last_container_id() -> int:
+        last_container = db.session.query(Container).order_by(desc(Container.id)).first()
+        if last_container:
+            return last_container.id
+        else:
+            return 0  # or any default value if no containers exist
+    # def get_last_container_id(app) -> int:
+        #with app.app_context():
+            # last_container = db.session.query(Container).order_by(desc(Container.id)).first()
+            # if last_container:
+                # return last_container.id
+            # else:
+                # return 0  # or any default value if no containers exist
             
     def load_container():
         container = cl.Container.query.all()
@@ -123,20 +184,19 @@ class Container(db.Model):
             )
             container_objects.append(container_obj)
         return container_objects
-
-    def add_container(app, news: List[cl.News]):
+  
+    def add_container(news: List[cl.News]):
         ids = set()
-        with app.app_context():
-            for new in news:
-                idx = new.get_container_id()
-                if idx not in ids:
-                    ids.add(idx)
-                    new_container =  Container(
-                        id=idx,
-                        likes=0
-                    )
-                    db.session.add(new_container)
-            db.session.commit()
+        for new in news:
+            idx = new.get_container_id()
+            if idx not in ids:
+                ids.add(idx)
+                new_container =  Container(
+                    id=idx,
+                    likes=0
+                )
+            db.session.add(new_container)
+        db.session.commit()
         
 
 class Comment(db.Model):
@@ -228,29 +288,40 @@ class Comment(db.Model):
             return None
         
     
-class UserSavedNews(db.Model):    
+class UserSavedNews(db.Model):
+    __tablename__ = 'usersavednews'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     iduser = db.Column(db.Integer, nullable=True, default=0)
     idnews= db.Column(db.Integer, nullable=True, default=0)
-    
-    def __init__(self, id, iduser, idnews):
-        self.id = id
+
+    def __init__(self, iduser, idnews):
+        #self.id = id
         self.iduser = iduser
         self.idnews = idnews
-    
+
     def load_ids_news_saved_by_user(id_user):
-        id_news_saved_by_user = db.session.query(UserSavedNews.idnews).filter_by(iduser=id_user).all()
-        return id_news_saved_by_user   #Esto solo devuelves los ids de las noticias guardadas por el usuario (hay que ligarlo con los metodos de cargar noticias)
-    
-    def user_saves_new(id_user, id_new):
+        #Devuelve una lista con los id de las noticias guardadas por el usuario
+        id_news_saved_by_user = [result[0] for result in UserSavedNews.query.filter_by(iduser=id_user).with_entities(UserSavedNews.idnews).all()]
+        return id_news_saved_by_user
+
+    def user_saves_a_new(id_user, id_new):
+        print("Se ha guardado la noticia con id: " + str(id_new))
         new_user_saved = UserSavedNews(iduser=id_user, idnews=id_new)
         db.session.add(new_user_saved)
         db.session.commit()
+
+    def user_deletes_a_new(id_user, id_new):
+        print("Se ha borrado la noticia con id: " + str(id_new))
+        UserSavedNews.query.filter_by(iduser=id_user, idnews=id_new).delete()
+        db.session.commit()
+
+
+        
+        
+        
         
 def is_update(fecha_actual: str) -> bool:
-    print("entra en is_update")
     fecha_db = db.session.query(New.date).order_by(desc(New.date)).first()[0].strftime("%Y-%m-%d")
-    print(f"{fecha_db == fecha_actual}")
     return fecha_actual == str(fecha_db)
 
 def last_id() -> int:

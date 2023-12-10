@@ -5,7 +5,7 @@ from modules import classes as cl
 from nltk.corpus import stopwords
 from wordcloud import WordCloud, STOPWORDS
 import nltk
-import unidecode
+# import unidecode
 nltk.download('stopwords')
 
 #Número de noticias por fuente

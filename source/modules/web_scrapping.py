@@ -1,6 +1,8 @@
+import os
 import requests
 from bs4 import BeautifulSoup
-from modules import classes as cl, entitymappers, usermappers
+from modules import classes as cl
+#from ..modules import classes as cl, entitymappers
 from typing import List, Dict
 from datetime import datetime
 import re
@@ -10,8 +12,10 @@ import threading
 import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from database import DBManager as manager
+# from database import DBManager as manager
+from modules import entitymappers # import load_news, get_last_container_id
 
+# Para que no se esté descargando todo el rato si está instalado
 def isInstaled():
     try:
         nltk.data.find('tokenizers/punkt')
@@ -22,24 +26,17 @@ def isInstaled():
 if not isInstaled():
     nltk.download('punkt')
 
+# INICIO DE LA FUNCIONALIDAD
+
+
 def get_news_db(app, news, container):
     with app.app_context():
         print("entra")
         news.extend(entitymappers.New.load_news())
         container.update(split_by_container(news))
-        #container.update(ws.split_by_container(ws.add_new_container(news)))
 
-def _build_news(titles: List[str], urls: List[str], imgs: List[str], owner: str, date: str, category: str) -> List[cl.News]:
-    news = []
 
-    for i in range(len(urls)):
-
-        # self, id: int, owner: str, title: str, image: str, url: str, content: str,  journalist: int, date: str, category: str, likes: int, views: int, container_id: int
-        news.append(cl.News(-1, owner, titles[i], imgs[i], urls[i], "",-1, date, category, 0, 0, -1))
-
-    return news
-
-def add_new_container(news: List[cl.News], app) -> List[cl.News]:
+def add_new_container(news: List[cl.News]) -> List[cl.News]:
     # Lista de noticias
     news_content = [new.get_content() for new in news]
 
@@ -56,7 +53,9 @@ def add_new_container(news: List[cl.News], app) -> List[cl.News]:
     threshold = 0.7
 
     # Encontrar noticias relacionadas y asignarles un contenedor
-    n_cont = (entitymappers.Container.get_last_container_id(app)) + 1
+    # 
+    n_cont = (entitymappers.Container.get_last_container_id()) + 1
+    print(f"asldkfjalsdjkfla: {n_cont}")
     for i in range(len(news)):
         for j in range(i + 1, len(news)):
             if cosine_similarities[i][j] >= threshold:
@@ -78,6 +77,48 @@ def add_new_container(news: List[cl.News], app) -> List[cl.News]:
 
     return news
 
+'''
+def add_new_container(news: List[cl.News], app) -> List[cl.News]:
+    # Lista de noticias
+    news_content = [new.get_content() for new in news]
+
+    # Crear un vectorizador TF-IDF
+    tfidf_vectorizer = TfidfVectorizer()
+
+    # Aplicar TF-IDF a las noticias
+    tfidf_matrix = tfidf_vectorizer.fit_transform(news_content)
+
+    # Calcular la similitud coseno entre las noticias
+    cosine_similarities = cosine_similarity(tfidf_matrix, tfidf_matrix)
+
+    # Establecer un umbral de similitud (ajusta según tus necesidades)
+    threshold = 0.7
+
+    # Encontrar noticias relacionadas y asignarles un contenedor
+    n_cont = (entitymappers.Container.get_last_container_id(app)) + 1
+    print(f"asldkfjalsdjkfla: {n_cont}")
+
+    for i in range(len(news)):
+        for j in range(i + 1, len(news)):
+            if cosine_similarities[i][j] >= threshold:
+                if news[i].get_container_id() != -1:
+                    news[j].set_container_id(news[i].get_container_id())
+                elif news[j].get_container_id() != -1:
+                    news[i].set_container_id(news[j].get_container_id())
+                else:
+                    news[i].set_container_id(n_cont)
+                    news[j].set_container_id(n_cont)
+                    n_cont += 1
+            else:
+                if news[i].get_container_id() == -1:
+                    news[i].set_container_id(n_cont)
+                    n_cont += 1
+                if news[j].get_container_id() == -1:
+                    news[j].set_container_id(n_cont)
+                    n_cont += 1
+
+    return news
+'''
 
 def split_by_container(news: List[cl.News]) -> Dict[int, List[cl.News]]:
     containers: Dict[int, List[str]] = defaultdict(list)
@@ -89,171 +130,25 @@ def split_by_container(news: List[cl.News]) -> Dict[int, List[cl.News]]:
     return containers
 
 
-# --- MAKE'S ---
-def _make_antena3news(structure: BeautifulSoup, category: str, date: str) -> List[cl.News]:
-
-    articles = structure.find_all('article')
-
-    link_news = [article.find('a').get('href').strip() for article in articles]
-
-    titles = []
-    for article in articles:
-        a_tags = article.find_all('a')
-        a_texts = [a_tag.text.strip() for a_tag in a_tags[len(a_tags)-1]]
-        titles.append(a_texts[0])
-
-    url_imgs = []
-    for article in articles:
-        img_tag = article.find('img')
-        if img_tag is not None:
-            src = img_tag.get('src')
-            if src is not None:
-                url_imgs.append(src)
-        else:
-            url_imgs.append("static\\img\\no_image.jpg")
-
-    return _build_news(titles=titles, urls=link_news, imgs=url_imgs, owner='antena3noticias', date=date, category=category)
-
-
-def _make_lasexta_marca_news(structure: BeautifulSoup, category: str, date: str, owner: str) -> List[cl.News]:
-
-    articles = structure.find_all('article')
-    link_news = [article.find('a').get('href').strip() for article in articles]
-    url_imgs = []
-    for article in articles:
-        img_tag = article.find('img')
-        if img_tag is not None:
-            src = img_tag.get('src')
-            if src is not None:
-                url_imgs.append(src)
-        else:
-            url_imgs.append("static\\img\\no_image.jpg")
-    titles = []
-    for article in articles:
-        h2_tags = article.find_all('h2')
-        h2_texts = [h2_tag.text.strip() for h2_tag in h2_tags]
-        titles.extend(h2_texts)
-
-    return _build_news(titles=titles, urls=link_news, imgs=url_imgs, owner=owner, date=date, category=category)
-
-
-def _make_nytimesnews(structure: BeautifulSoup, category: str, date: str) -> List[cl.News]:
-
-    articles = structure.find_all('section', class_='story-wrapper')
-    link_news = []
-
-    for article in articles:
-        img_tag = article.find('a')
-        if img_tag is not None:
-            href = img_tag.get('href')
-            if href is not None:
-                link_news.append(href)
-
-    titles = []
-    for article in articles:
-        h3_tags = article.find_all('h3')
-        h3_texts = [h3_tag.text.strip() for h3_tag in h3_tags]
-        if h3_texts:
-            titles.append(h3_texts)
-    #  id: int, owner: str, title: str, image: str, url: str, content: str,  journalist: int, date: str, category: str, likes: int, views: int, container_id: int):
-    return [cl.News(-1,"The New York Times",titles[i][0], 'static\\img\\nytimes.png', link_news[i], "", -1, date, category, 0, 0, -1) for i in range(len(link_news))]
-    #return [cl.News(-1,"The New York Times", titles[i][0], 'static\\img\\nytimes.png',link_news[i], "",-1,-1, date,category) for i in range(len(link_news))]
-
-
-
-# --- CATEGORIES ---
-def _category_antena3(structure: BeautifulSoup) -> List[cl.News]:
-    categories = structure.find_all('li', 'menu-main__item menu-main__item--level2')
-    a_tags = [category.find('a') for category in categories]
-    urls = [a_tag.get('href').strip() for a_tag in a_tags]
-    names = [a_tag.text.strip() for a_tag in a_tags]
-
-    sol = []
-    date = datetime.now().strftime(f'%Y-%m-%d')
-
-    for i in range(len(urls)):
-        sol += _make_antena3news(BeautifulSoup(requests.get(urls[i]).text, 'lxml'), names[i], date)
-    return sol
-
-
-def _category_lasexta(structure: BeautifulSoup) -> List[cl.News]:
-    categories = structure.find('div', class_= "wrapper_links")
-    a_tags = categories.find_all('a')
-    urls = [a_tag.get('href').strip() for a_tag in a_tags]
-    names = [a_tag.text.strip() for a_tag in a_tags]
-
-    sol = []
-    date = datetime.now().strftime(f'%Y-%m-%d')
-    for i in range(len(urls)):
-        sol += _make_lasexta_marca_news(BeautifulSoup(requests.get(urls[i]).text, 'lxml'), names[i], date, "lasexta")
-    return sol
-
-
-def _category_marca(structure: BeautifulSoup) -> List[cl.News]:
-    lu = structure.find('lu', 'main-nav-tabs main-second-menu')
-    if lu is not None:
-        categories = lu.find_all('li')[:-2]
-    else:
-        return []
-
-    a_tags = [category.find('a') for category in categories]
-    urls = [a_tag.get('href').strip() for a_tag in a_tags]
-    names = [a_tag.text.strip() for a_tag in a_tags]
-
-    sol = []
-    date = datetime.now().strftime(f'%Y-%m-%d')
-
-    for i in range(len(urls)):
-        sol += _make_lasexta_marca_news(BeautifulSoup(requests.get(urls[i]).text, 'lxml'), names[i], date, "marca")
-    return sol
-
-
-def _category_nytimes(structure: BeautifulSoup) -> List[cl.News]:
-    categories = structure.find_all('lu', 'css-397oyn')
-    a_tags = [category.find('a') for category in categories]
-    urls = [a_tag.get('href').strip() for a_tag in a_tags]
-    names = [a_tag.text.strip() for a_tag in a_tags]
-
-    sol = []
-    date = datetime.now().strftime(f'%Y-%m-%d')
-
-    for i in range(len(urls)):
-        sol += _make_nytimesnews(BeautifulSoup(requests.get(urls[i]).text, 'lxml'), names[i], date)
-    return sol
-
-
-# --- GETS ---
-def get_nytimes(date) -> List[cl.News]:
-    structure = BeautifulSoup(requests.get("https://www.nytimes.com/international/").text, 'lxml')
-    return _category_nytimes(structure) + _make_nytimesnews(structure, "general", date)
-
-
-def get_antena3(date) -> List[cl.News]:
-    antena3_structure = BeautifulSoup(requests.get("https://www.antena3.com/noticias/").text, 'lxml')
-
-    return _category_antena3(antena3_structure) + _make_antena3news(antena3_structure, "general", date)
-
-
-def get_lasexta_marca(date) -> List[cl.News]:
-    lasexta_structure = BeautifulSoup(requests.get("https://www.lasexta.com/noticias/").text, 'lxml')
-    marca_structure = BeautifulSoup(requests.get("https://www.marca.com/").text, 'lxml')
-    return (_category_lasexta(lasexta_structure) +
-            _make_lasexta_marca_news(lasexta_structure, "general", date, "lasexta") +
-            _category_marca(marca_structure) +
-            _make_lasexta_marca_news(marca_structure, "general", date, "marca")
-            )
-
-
 def get_news() -> List[cl.News]:
-    date = datetime.now().strftime(f'%Y-%m-%d')
-    news = get_antena3(date) + get_lasexta_marca(date) + get_nytimes(date)
+
+    news = []
+    print("entra en get_news")
+    for owner in ["antena3", "marca", "lasexta"]:# , "nytimes"]:
+        news += NewsBuilder(owner).get_news()
+        print(len(news))
+    
+    
     # EMPEZAR A AÑADIR EL CONTENDIDO A LAS NOTICIAS
     threading.Thread(target=add_content(news)).start()
+    print("sale de get_news")
     return news
 
+def get_containers(news: List[cl.News]) -> Dict[int, List[cl.News]]:
+    return split_by_container(add_new_container(news))
 
-def get_containers(news: List[cl.News], app) -> Dict[int, List[cl.News]]:
-    return split_by_container(add_new_container(news, app))
+# def get_containers(news: List[cl.News], app) -> Dict[int, List[cl.News]]:
+    # return split_by_container(add_new_container(news, app))
 
 def get_content(url: str) -> str:
     try:
@@ -262,35 +157,206 @@ def get_content(url: str) -> str:
         response.raise_for_status()  # Verifica si la solicitud fue exitosa (código de estado 200)
         all_p = web_structure.find_all('p')
         text = []
+        n = len(all_p)
+        i = 0
         for p in all_p:
+            print(f"{i}-{n}")
+            i += 1
             text.append(p.text)
+
+
+        # os.system('cls')
         return ''.join(text)
     except requests.exceptions.RequestException as e:
         print(f"Error al obtener {url}: {e}")
+        return ""
+    except Exception as i:
+        print(f"{i}")
         return ""
 
 
 # --- ADD'S ---
 # PARA IR AÑADIENDO EL CONTENIDO DE CADA NOTICIA ( ES MUY COSTOSO EN TIEMPO POR TODOS LOS REQUESTS) POR ESO THREADS
 def add_content(news: List[cl.News]):
+    #with ThreadPoolExecutor(max_workers=5) as executor:
+    print("entra en add_content")
+#   content = list(executor.map(get_content, [new.get_url() for new in news]))
+    content = []
+    i = 0
+    n = len(news)
+    try:
+        for url in [new.get_url() if hasattr(new, 'get_url') else None for new in news]:
+            print(f"{i}/{n}")
+            i += 1
+            content.append(get_content(url))
+            os.system("cls")
+        print("aaaaaaaaaaaaa")
+    except Exception as e:
+        print(f"{e}")
+    for i in range(len(news)):
+            
+        news[i].set_content(re.sub(r'[^\x00-\x7F]+', '', str(content[i])))
+    
+    print("terminado")
+    """
     with ThreadPoolExecutor(max_workers=5) as executor:
-        content = list(executor.map(get_content, [new.get_url() for new in news]))
+        print("entra en add_content")
+#        content = list(executor.map(get_content, [new.get_url() for new in news]))
+        content = list(executor.map(get_content, [new.get_url() if hasattr(new, 'get_url') else None for new in news]))
+        print("aaaaaaaaaaaaa")
         for i in range(len(news)):
+            
             news[i].set_content(re.sub(r'[^\x00-\x7F]+', '', str(content[i])))
+    
+        print("terminado")
+    """
 
 
-"""
-def save_html(urls: List[str]) -> None:
-    day = datetime.now().strftime(f'%Y-%m-%d')
-    route = ".\\almacenTemporalHTML\\"
-    pattern = r'.(\w+).com'
-    newspapers_names = [re.search(pattern, url).group(1) for url in urls]
-    names = [f"{route}{newspaper_name}_{day}.html" for newspaper_name in newspapers_names]
+# Encapsula la optención de noticias por WebScrapping
+class NewsBuilder:
+    def __init__(self, owner: str):
 
-    for index in range(len(urls)):
-        if not os.path.exists(urls[index]):
-            content_html = requests.get(urls[index]).text
-            with open(names[index], "w", encoding="utf-8") as archivo:
-                archivo.write(html.unescape(content_html))
+        url_general_by_type = {
+            "antena3": "https://www.antena3.com/noticias/",
+            "marca": "https://www.marca.com/",
+            "lasexta": "https://www.lasexta.com/noticias/",
+            "nytimes": "https://www.nytimes.com/international/"
+        }
 
-"""
+        tags_class_by_owner = {
+            "antena3" : {"tag": "article", "class" : None},
+            "marca" : {"tag": "article", "class" : None},
+            "lasexta" : {"tag": "article", "class" : None},
+            "nytimes" : {"tag": "section", "class" : "story-wrapper"}
+        }
+
+        tags_class_to_categorize = {
+            "antena3" : {"tag": "li", "class" : 'menu-main__item menu-main__item--level2'},
+            "marca" : {"tag": "lu", "class" : 'main-nav-tabs main-second-menu'},
+            "lasexta" : {"tag": "div", "class" : "wrapper_links"},
+            "nytimes" : {"tag": 'lu', "class" : 'css-397oyn'}
+        }
+
+        tags_title = {
+            "antena3" : "a",
+            "marca" : "h2",
+            "lasexta" : "h2",
+            "nytimes" : "a"
+        }
+
+        self.owner = owner
+        self.general_url = url_general_by_type[owner]
+        self.news = []
+        self.date = datetime.now().strftime(f'%Y-%m-%d')
+        self.tag = tags_class_by_owner[owner]["tag"]
+        self._class = tags_class_by_owner[owner]["class"]
+        self.tag_to_categorize = tags_class_to_categorize[owner]["tag"]
+        self.class_to_categorize = tags_class_to_categorize[owner]["class"]
+        self.tag_title = tags_title[owner]
+        
+
+    # El único método que se debe utilizar
+    def get_news(self):
+        structure = BeautifulSoup(requests.get(self.general_url).text, 'lxml')
+        self._make_categories_news(structure)
+        self._make_news(structure, "general")
+        return self.news
+    
+
+    def _get_urls(self, articles) -> List[str]:
+        urls = []
+        for article in articles:
+            img_tag = article.find('a')
+            if img_tag is not None:
+                href = img_tag.get('href')
+                if href is not None:
+                    urls.append(href)
+        
+        return urls
+
+    '''
+    def _get_titles(self, articles) -> List[str]:
+        titles = []
+        for article in articles:
+            title_tags = article.find_all(self.tag_title)
+            texts = [title_tag.text.strip() for title_tag in title_tags]
+            if texts:
+                titles.append(texts)
+        
+        return titles
+    '''
+        
+    def _get_titles(self, articles) -> List[str]:
+        titles = []
+        for article in articles:
+            title_tags = article.find_all(self.tag_title)
+            for title_tag in title_tags:
+                title = title_tag.text.strip()
+                if title:
+                    titles.append(title)
+
+        return titles
+
+
+    def _get_images(self, articles) -> List[str]:
+        url_imgs = []
+        for article in articles:
+            img_tag = article.find('img')
+            if img_tag is not None:
+                src = img_tag.get('src')
+                if src is not None:
+                    url_imgs.append(src)
+            else:
+                url_imgs.append("static\\img\\no_image.jpg")
+        return url_imgs
+        
+
+    def _make_categories_news(self, structure: BeautifulSoup) -> None:
+        categories = structure.find_all(self.tag_to_categorize, self.class_to_categorize)
+
+        a_tags = [category.find('a') for category in categories]
+        urls: List[str] = [a_tag.get('href').strip() for a_tag in a_tags]
+        categories_names: List[str] = [a_tag.text.strip() for a_tag in a_tags]
+
+        # sol = []
+        for i in range(len(urls)):
+            # Fallo en esta línea por obj no iterable
+            soup = BeautifulSoup(requests.get(urls[i]).text, 'lxml')
+            name = categories_names[i]
+            self._make_news(soup, name)
+        
+        # return sol
+
+
+    def _build_news(self, titles: List[str], urls: List[str], imgs: List[str], category: str) -> None:
+        news = []
+
+        # print(f"titles: {len(titles)}\n urls: {len(urls)}")
+        if len(titles) == len(urls):
+            for i in range(len(urls)):
+
+                # id = -1, debido a que se asignará al subirse a la BBDD
+                # content = "", debido a que se asignará luego
+                # journalist = -1, debido a que se han sacado de un periódico y no de un escritor autonomo/periodista
+                # likes y views = 0, debido a que la noticia es nueva
+                # container_id = -1, debido a que se inicializará luego
+                # self, id: int, owner: str, title: str, image: str, url: str, content: str,  journalist: int, date: str, category: str, likes: int, views: int, container_id: int
+                news.append(cl.News(id=-1, owner=self.owner, title=titles[i], image=imgs[i],url=urls[i],content="",journalist=-1,date=self.date,category=category,likes=0,views=0, container_id=-1))
+
+        self.news = news
+
+
+    def _make_news(self, structure: BeautifulSoup, category: str) -> None:
+        if self._class:
+            articles = structure.find_all(self.tag, class_=self._class)
+        else:
+            articles = structure.find_all(self.tag)
+
+        urls = self._get_urls(articles)
+        titles = self._get_titles(articles)
+        images = self._get_images(articles)
+
+        self._build_news(titles, urls, images, category)
+    
+        
+

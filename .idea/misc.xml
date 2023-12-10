@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+<<<<<<< HEAD
   <component name="Black">
     <option name="sdkName" value="Python 3.9 (ing_sw_TruthPaper) (2)" />
   </component>
@@ -7,4 +8,7 @@
   <component name="PyCharmProfessionalAdvertiser">
     <option name="shown" value="true" />
   </component>
+=======
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9 (venv) (2)" project-jdk-type="Python SDK" />
+>>>>>>> 9e7e7324f4f6000744eb56c020c6b0d0ec051f93
 </project>
