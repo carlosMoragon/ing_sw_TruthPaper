@@ -273,7 +273,7 @@ def save_keyword():
         'likes': [new.get_likes() for new in filted_news],
         'views': [new.get_views() for new in filted_news]
     }
-    return render_template('categoriesFunc.html', data=data)
+    return render_template('categories.html', news = filted_news)
 
 
 def handle_user_registration(user_type):
