@@ -62,3 +62,11 @@ wordcloud
 PyPDF2
 pdf2image
 flask_bcrypt
+uuid
+flask_mail
+
+
+
+
+
+

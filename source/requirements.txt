@@ -63,3 +63,5 @@ pdf2image
 flask_bcrypt
 unidecode
 uuid
+spacy==3.2.1
+es-core-news-sm==3.2.0

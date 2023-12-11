@@ -1,6 +1,6 @@
 # Importar los módulos necesarios
 from flask import Flask, render_template, request, flash, redirect, url_for, send_file, session
-from modules import web_scrapping as ws, filter as f, classes as cl, graphs as gr, usermappers, entitymappers, session_data as ses
+from modules import web_scrapping as ws, filter as f, classes as cl, graphs as gr, usermappers, entitymappers, session_data as ses, summarize
 from database import DBManager as manager
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
@@ -10,6 +10,7 @@ from datetime import datetime
 from random import *
 from werkzeug.utils import secure_filename
 import os
+
 
 
 db = manager.db
@@ -459,6 +460,14 @@ def delete_news():
     news_id = request.form.get('news_id')
     entitymappers.UserSavedNews.user_deletes_a_new(id_user=ses.get_user_id(), id_new=news_id)
     return go_to_savedNews()
+
+# Función que resume una noticia
+@app.route('/summarize_news', methods=['POST'])
+def summarize_news():
+    news_content = request.form.get('news_content')
+    sumup= summarize.summarize_text(news_content)
+    news_title = request.form.get('news_title')
+    return render_template('summarize.html', summarize=sumup, news_title=news_title)
 
 
 

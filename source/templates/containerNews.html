@@ -157,6 +157,13 @@
                                                             </button>
                                                             <input type="hidden" name="news_id" value="{{ news_item.get_id() }}">
                                                          </form>
+                                                         <form method="post" action="{{ url_for('summarize_news') }}" class="summarize-form">
+                                                             <button type="submit" class="btn btn-primary summarize-btn" style="color: darkolivegreen; ">
+                                                                <i class="fas" style="border-color: black"> Resumen </i>
+                                                             </button>
+                                                             <input type="hidden" name="news_content" value="{{ news_item.get_content() }}">
+                                                             <input type="hidden" name="news_title" value="{{ news_item.get_title() }}">
+                                                         </form>
                                                       </div>
                                                 </div>
                                             </li>
@@ -277,6 +284,17 @@
                                 savedButton.addClass('btn-primary');
 
                                 savedButton.html('<i class="fa fa-save"></i>');
+                            });
+                        });
+
+                        $(document).ready(function() {
+                            $('.summarize-form').submit(function(e) {
+                                var sumButton = $(this).find('.summarize-btn');
+
+                                sumButton.removeClass('btn-outline-primary');
+                                sumButton.addClass('btn-primary');
+
+                                sumButton.html('<i class="fa"> Resumen </i>');
                             });
                         });
                     </script>
