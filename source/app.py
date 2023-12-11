@@ -255,21 +255,10 @@ def go_to_admin():
 def save_keyword():
     keyword = request.form['search']
     global news
-    filted_news = f.filter_by_words(keyword, news)
-    
-    data = {
-        'imgs': [new.get_image() for new in filted_news],
-        'titles': [new.get_title() for new in filted_news],
-        'urls': [new.get_url() for new in filted_news],
-        'keyword': keyword,
-        'dates': [new.get_date() for new in filted_news],
-        'categories': [new.get_category() for new in filted_news],
-        'likes': [new.get_likes() for new in filted_news],
-        'views': [new.get_views() for new in filted_news]
-    }
-    
-    return render_template('categoriesFunc.html', data=data)
-    # return render_template('categoriesFunc.html')
+    filtered_news = f.filter_by_words(keyword, news)
+
+    return render_template('categories.html', news = filtered_news)
+
 
 
 def handle_user_registration(user_type):
