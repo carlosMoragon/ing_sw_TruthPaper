@@ -21,10 +21,10 @@ docker-compose --version
 echo "La instalación de Docker en macOS se ha completado."
 
 # Descargar la imagen
-docker pull cmoragon/flaskapp:v3
+docker pull cmoragon/flaskapp:v4
 
 # Ejecutar la imagen
-docker run -it -p 4000:4000 -d cmoragon/flaskapp:v3
+docker run -it -p 4000:4000 -d cmoragon/flaskapp:v4
 
 clear
 
